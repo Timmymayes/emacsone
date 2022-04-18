@@ -13,7 +13,7 @@
 
 					;set font
 
-(set-face-attribute 'default nil :font "Fira Code Retina" :height 140)
+(set-face-attribute 'default nil :font "Fira Code Retina" :height 200)
 
 					; load theme note this passes an object denoted by a leading `
 
