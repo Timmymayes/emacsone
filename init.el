@@ -140,7 +140,10 @@
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
 
+					;TODO (setup Forge)
+					;https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
+					;https://youtu.be/INTu30BHZGk?t=3221
 
-
+;(use-package forge)
 
 
