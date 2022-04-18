@@ -1,0 +1,2 @@
+# emacsone
+First emacs config
