@@ -24,8 +24,7 @@
 
 
 
-					; Initialize package sources
-					; adding a comment for a commit test
+				       
 
 (require 'package)
 
