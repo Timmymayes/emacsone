@@ -160,6 +160,11 @@
 (use-package org
   :hook (org-mode . efs/org-mode-setup)
   :config
+  (setq org-agenda-files
+	'("~/Projects/emacsone/OrgFiles/tasks.org"))
+  (setq org-agenda-start-with-log-mode t)
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
   (setq org-ellipsis " ▾"
 	org-hide-emphasis-markers t))
 
@@ -207,6 +212,6 @@
 
 
 (use-package visual-fill-column
-  :hook (org-mode . org-mode-visual-fill))
+  :hook (org-mode . org-mode-visual-
 
 
