@@ -1,0 +1,43 @@
+* First Heading
+ 1. test
+ 2. two
+ 3. 
+* Right after
+
+ /Here/     is *some* 
+*test* this is *bold*  but not this *yeah*
+** Sub Heading
+stuff here
+* level one
+** level 2
+*** level 3
+**** Level 4
+***** Level 5
+* Next Section
+| Name  | Age | Use Emacs |
+| David |  30 | yes       |
+|       |     |           |
+* Inserted Heading!
+
+  Here is the org mode  [[https::orgmode.org][homepage]] 
+  [[~/html-boilerplate/index.html][index test]]
+* Second Heading
+
+
+
+* Bullet list
+  - [ ] First item
+  - [ ] second item
+  - [ ] third item
+  - [X] Test
+
+* Source section
+
+* TODO enter a todo
+
+* next section
+- test
+- test 2
+- test 3
+
+

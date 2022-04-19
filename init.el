@@ -54,6 +54,9 @@
   )
 (add-hook 'prog-mode-hook 'my-display-numbers-hook)
 (add-hook 'text-mode-hook 'my-display-numbers-hook)
+(dolist (mode '(org-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 					; setup command log mode which shows typed commands in a window to the right	  
 (use-package command-log-mode)
 
@@ -145,5 +148,65 @@
 					;https://youtu.be/INTu30BHZGk?t=3221
 
 ;(use-package forge)
+
+;;;;; Org mode setup ;;;;;
+
+(defun efs/org-mode-setup()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (auto-fill-mode 0)
+  (visual-line-mode 1))
+
+(use-package org
+  :hook (org-mode . efs/org-mode-setup)
+  :config
+  (setq org-ellipsis " ▾"
+	org-hide-emphasis-markers t))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+
+					;replace dashes with dots
+
+(font-lock-add-keywords 'org-mode
+                         '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))			   
+
+					;change fonts to be more readable
+
+(dolist (face '((org-level-1 . 1.2)
+		(org-level-2 . 1.1)
+		(org-level-3 . 1.05)
+		(org-level-4 . 1.0)
+		(org-level-5 . 1.1)
+		(org-level-6 . 1.1)
+		(org-level-7 . 1.1)
+		(org-level-8 . 1.1)))
+  (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+					; keep a few things fixed pitch as they should be for line ups
+
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+					; visual fill mode
+(defun org-mode-visual-fill()
+  (setq visual-fill-column-width 175
+	visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+
+(use-package visual-fill-column
+  :hook (org-mode . org-mode-visual-fill))
 
 
