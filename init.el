@@ -151,11 +151,14 @@
 
 ;;;;; Org mode setup ;;;;;
 
+					;require tempo
+
 (defun org-mode-setup()
   (org-indent-mode)
   (variable-pitch-mode 1)
   (auto-fill-mode 0)
   (visual-line-mode 1))
+
 
 (use-package org
   :hook (org-mode . org-mode-setup)
@@ -169,6 +172,7 @@
   (setq org-log-into-drawer t)
   (setq org-ellipsis " ▾"
 	org-hide-emphasis-markers t)
+  (setq org-capture-babel-evaluate t)
 					; org capture
   
   (setq org-capture-templates

@@ -1,0 +1,21 @@
+* Org Babel - Quick Intro
+To execute: C-c C-c (output, value results)
+#+begin_src emacs-lisp
+(message "Hello There!!")
+;sample here
+#+end_src
+
+#+RESULTS:
+: Hello There!!
+
+* Structure Templates
+#+begin_src emacs-lisp
+;; This is needed as of Org 9.2
+(require 'org-tempo)
+
+(add-tolist 'org-structure-template-alist '("sh" . "src shell"))
+(add-tolist 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-tolist 'org-structure-template-alist '("py" . "src python"))
+
+
+#+end_src
