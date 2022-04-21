@@ -1,0 +1,6 @@
+* TODO Brush Teeth
+SCHEDULED: <2022-04-19 Tue.+1d>
+:PROPERTIES:
+:STYLE:    habit
+:END:
+

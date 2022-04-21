@@ -151,22 +151,75 @@
 
 ;;;;; Org mode setup ;;;;;
 
-(defun efs/org-mode-setup()
+(defun org-mode-setup()
   (org-indent-mode)
   (variable-pitch-mode 1)
   (auto-fill-mode 0)
   (visual-line-mode 1))
 
 (use-package org
-  :hook (org-mode . efs/org-mode-setup)
+  :hook (org-mode . org-mode-setup)
   :config
   (setq org-agenda-files
-	'("~/Projects/emacsone/OrgFiles/tasks.org"))
+	'("~/Projects/emacsone/OrgFiles/tasks.org"
+	  "~/Projects/emacsone/OrgFiles/habits.org"))
+	
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
   (setq org-ellipsis " ▾"
-	org-hide-emphasis-markers t))
+	org-hide-emphasis-markers t)
+					; org capture
+  
+  (setq org-capture-templates
+	'(("t" "Tasks / Projects")
+	  ("tt" "Task" entry (file+olp "~/Projects/emacsone/OrgFiles/tasks.org" "Inbox")
+	   "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
+	  ("ts" "Clockked Entry Subtask" entry (clock)
+	   "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
+	  
+	  ("j" "Journal Entries")
+	  ("jj" "Journal" entry
+	   (file+olp+datetree "~/Projects/emacsone/OrgFiles/journal.org")
+	   "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+	   ;;
+	   :clock-in :clock-resume
+	   :empty-lines 1)
+	  ("jm" "Meeting" entry
+	   (file+olp+datetree "~/Projects/emacsone/OrgFiles/journal.org")
+	   "* %<%I:%M %P> - %a :meetings:\n\n%?\n\n"
+	   :clock-in :clock-resume
+	   :empty-lines 1)
+
+	  ("w" "Workflows")
+	  ("we" "Checking Email" entry (file+olp+datetree "~/Projects/emacsone/OrgFiles/journal.org")
+	   "* Checking Email :email:\n\n%?" :clockin :clock-resume :empty-lines 1)
+
+	  ("m" "Metrics Capture")
+	  ("mw" "Weight" table-line (file+headline "~/Projects/emacsone/OrgFiles/metrics.org" "Weight")
+	   "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
+
+					; hotkey bindings
+  (define-key global-map (kbd "C-c o")
+    (lambda () (interactive) (org-capture)))
+
+					; refile targets
+  
+
+  (setq org-refile-targets
+	'(("archive.org" :maxlevel . 1)
+	  ("tasks.org" :maxlevel . 1)))
+					; load org habits
+  (require 'org-habit)
+   (add-to-list 'org-modules 'org-habit)
+   (setq org-habit-graph-column 60)
+					
+
+
+;;;;; end org mode setup ;;;;; 
+  
+(advice-add 'org-refile :after 'org-save-all-org-buffers)
+					; change bullet art
 
 (use-package org-bullets
   :after org
@@ -212,6 +265,8 @@
 
 
 (use-package visual-fill-column
-  :hook (org-mode . org-mode-visual-
+  :hook (org-mode . org-mode-visual-fill)) 
+
+
 
 
