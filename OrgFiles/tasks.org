@@ -8,10 +8,12 @@
  [2022-04-19 Tue 09:03]
  [[file:~/Projects/emacsone/init.el::("j"%20"Journal%20Entries")]]
 
-* Active
+ Active
 ** TODO [#A] Merge the PR
 DEADLINE: <2022-04-20 Wed>
 
 * Backlog
+
+
 
 

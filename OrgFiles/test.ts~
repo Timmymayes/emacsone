@@ -1,0 +1,10 @@
+var num:number=19
+
+number
+
+async function authenticateClient(server: Server): Promise<OAuth2Client> {
+
+}
+
+a
+
