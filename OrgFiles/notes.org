@@ -1,0 +1,52 @@
+* The Odin Project Notes
+
+* Useful HTML Tags
+** Typography
+*** Quotations
+ Curly quotations look nice: 
+- &rsquo; for use in you're
+- &ldquo; and &rdquo for left and right "quote" markers
+
+* GIT
+** When To Commit?
+"Make a commit if you get a piece of code you are working on to function like you want it to, fix a typo or fix a bug." Note that as you become more experienced you'll get a feel for what should be commited. Your internal process on this will refine in a sense.
+
+/A commit message shows whether a developer is a good collaborator/
+
+** 7 Rules of a great GIT commit
+1. Seperate subject from body with a blank line
+2. Limit the subject to 50 characters
+3. Capitalize the subject
+4. Do not end hte subject line with a period
+5. Use the imperative modd in the subject line
+6. Wrap the body at 72 characters
+7. Use the body to explain what and why vs how
+*** Sample
+
+Summarize changes in around 50 characters or less
+
+More detailed explanatory text, if necessary. Wrap it to about 72
+characters or so. In some contexts, the first line is treated as the
+subject of the commit and the rest of the text as the body. The
+blank line separating the summary from the body is critical (unless
+you omit the body entirely); various tools like `log`, `shortlog`
+and `rebase` can get confused if you run the two together.
+
+Explain the problem that this commit is solving. Focus on why you
+are making this change as opposed to how (the code explains that).
+Are there side effects or other unintuitive consequences of this
+change? Here's the place to explain them.
+
+Further paragraphs come after blank lines.
+
+ - Bullet points are okay, too
+
+ - Typically a hyphen or asterisk is used for the bullet, preceded
+   by a single space, with blank lines in between, but conventions
+   vary here
+
+If you use an issue tracker, put references to them at the bottom,
+like this:
+
+Resolves: #123
+See also: #456, #789
