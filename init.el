@@ -129,6 +129,7 @@
            "* Checking Email :email:\n\n%?" :clockin :clock-resume :empty-lines 1)
 
           ("m" "Metrics Capture")
+
           ("mw" "Weight" table-line (file+headline "~/Projects/emacsone/OrgFiles/metrics.org" "Weight")
            "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
 
@@ -330,6 +331,18 @@
 ;  (use-package company-box
  ;   :hook (company-mode . company-box-mode))
 
+Learn more here: https://web-mode.org/
+(use-package web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto'mode'alist '("\\.html?\\'" . web-mode))
+(setq 'web-mode-enable-engine-detection t)
+
 (use-package term
 :config
 (setq explicit-shesll-file-name "bash")
@@ -343,3 +356,26 @@
 ; list directories first
 (setq dired-listing-switches "-agho --group-directories-first")
 (setq dired-dwim-target t)
+
+(use-package dired-single)
+
+(use-package all-the-icons-dired
+:hook (dired-mode . all-the-icons-dired-mode))
+
+;(use-package dired-open) look into this package if you end up needing it.
+
+(defun my-dired-mode-hook ()
+  "My `dired' mode hook."
+  ;; To hide dot-files by default
+  (dired-hide-dotfiles-mode))
+
+;; To toggle hiding
+(define-key dired-mode-map "." #'dired-hide-dotfiles-mode)
+(add-hook 'dired-mode-hook #'my-dired-mode-hook)
+
+(use-package dashboard
+:ensure t
+:config
+(dashboard-setup-startup-hook))
+
+

@@ -28,7 +28,12 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
   (require 'use-package)
   (setq use-package-always-ensure t)
 
+
+
 #+end_src
+
+#+RESULTS:
+: ((fullscreen . maximized) (vertical-scroll-bars) (left-fringe . 10) (right-fringe . 10))
 
 
 
@@ -162,6 +167,7 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
              "* Checking Email :email:\n\n%?" :clockin :clock-resume :empty-lines 1)
 
             ("m" "Metrics Capture")
+
             ("mw" "Weight" table-line (file+headline "~/Projects/emacsone/OrgFiles/metrics.org" "Weight")
              "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
 
@@ -430,6 +436,23 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
    ;   :hook (company-mode . company-box-mode))
 #+end_src
 
+** Debugging
+Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
+
+** Webmode
+#+BEGIN_SRC emacs-lisp
+Learn more here: https://web-mode.org/
+(use-package web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto'mode'alist '("\\.html?\\'" . web-mode))
+(setq 'web-mode-enable-engine-detection t)
+#+END_SRC
 * Terminals
 ** Term-mode
 #+begin_src emacs-lisp
@@ -444,7 +467,6 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
   (use-package eterm-256color
     :hook (term-mode . eterm-256color-mode))
 #+end_src
-
 ** Shell-mode
 #+begin_src emacs-lisp
 
@@ -461,6 +483,7 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
 - k : kill marked files ( will kill from view but not delete)
 - g : reload buffer
 - * t: invert marked files
+- S : create sym link
 ** config
 #+BEGIN_SRC emacs-lisp
 ; list directories first
@@ -469,6 +492,55 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
 
 
 #+END_SRC
+#+RESULTS:
+: t
+** SIngle Dired Buffer
+#+BEGIN_SRC emacs-lisp
+(use-package dired-single)
+#+END_SRC
+** Icons
+#+BEGIN_SRC emacs-lisp
+(use-package all-the-icons-dired
+:hook (dired-mode . all-the-icons-dired-mode))
+#+END_SRC
+
+#+RESULTS:
+| all-the-icons-dired-mode | dired-hide-dotfiles-mode | dired-hide-dotfiles | doom-modeline-set-project-modeline |
+** Dired-Open
+#+BEGIN_SRC emacs-lisp
+
+;(use-package dired-open) look into this package if you end up needing it.
+
+#+END_SRC
+** Hide Dot Files
+- hotkey: . (dot)
+#+BEGIN_SRC emacs-lisp
+(defun my-dired-mode-hook ()
+  "My `dired' mode hook."
+  ;; To hide dot-files by default
+  (dired-hide-dotfiles-mode))
+
+;; To toggle hiding
+(define-key dired-mode-map "." #'dired-hide-dotfiles-mode)
+(add-hook 'dired-mode-hook #'my-dired-mode-hook)
+
+#+END_SRC
+
+#+RESULTS:
+| my-dired-mode-hook | all-the-icons-dired-mode | dired-hide-dotfiles-mode | dired-hide-dotfiles | doom-modeline-set-project-modeline |
+* Dashboard
+#+BEGIN_SRC emacs-lisp
+(use-package dashboard
+:ensure t
+:config
+(dashboard-setup-startup-hook))
+
+#+END_SRC
 
 #+RESULTS:
 : t
+* Testing
+#+BEGIN_SRC emacs-lisp
+
+
+#+END_SRC

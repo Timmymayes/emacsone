@@ -15,12 +15,33 @@
 
 ** 7 Rules of a great GIT commit
 1. Seperate subject from body with a blank line
+   - Sometimes you do not even need a body. if the commit is specific enough such as simply addressing a typo.
+
 2. Limit the subject to 50 characters
+   - If you're having a hard time limiting the subject you might be commiting too many changes at once. Strive for atomic commits.
+   - Commit subjects over 72 chars will be truncated and have elipsis included. Consider this a hard limit according to git.
+
 3. Capitalize the subject
+
 4. Do not end hte subject line with a period
+
 5. Use the imperative modd in the subject line
+   - This just means spoken or written as if giving a command.
+
+    Think of this like these code changes you've made are "commanding" the code base to go in a different direction. 
+         i.e. "If applied, this commit will YOUR SUBJECT LINE HERE"
+
+    - Update function type
+    - Reorder prioritzation of substructre
+    - Remove typo in myFunctionNamedThis
+
 6. Wrap the body at 72 characters
+
 7. Use the body to explain what and why vs how
+   - The important thing here is to focus on making clear why you made a change. The way things worked before, the change (and what was wrong with that), the way they work now, and why you decided to solve it the way that you did. This is very much explaining your why not your how.
+
+
+
 *** Sample
 
 Summarize changes in around 50 characters or less
