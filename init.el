@@ -51,6 +51,22 @@
   :config 
   (setq doom-modeline-height 15))
 
+(set-frame-parameter (selected-frame) 'alpha '(85 . 50))
+(add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+
+(defun toggle-transparency ()
+  (interactive)
+  (let ((alpha (frame-parameter nil 'alpha)))
+    (set-frame-parameter
+     nil 'alpha
+     (if (eql (cond ((numberp alpha) alpha)
+                    ((numberp (cdr alpha)) (cdr alpha))
+                    ;; Also handle undocumented (<active> <inactive>) form.
+                    ((numberp (cadr alpha)) (cadr alpha)))
+              100)
+         '(85 . 50) '(100 . 100)))))
+(global-set-key (kbd "C-c t") 'toggle-transparency)
+
 (use-package helpful
   :custom
   (counsel-describe-function-function #'helpful-callable)
@@ -288,6 +304,43 @@
 (use-package evil-nerd-commenter
   :bind ("M-/" . evilnc-comment-or-uncomment-lines))
 
+(use-package web-mode)
+(setq web-mode-enable-current-column-highlight t)
+(setq web-mode-enable-current-element-highlight t)
+; hook into web mode for file types
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
+
+; set company completions vocab to css and html
+
+(use-package emmet-mode)
+; use emmet in all web-mode docs
+(add-hook 'web-mode-hook 'emmet-mode)
+
+; enable mode switching between css and java
+(add-hook 'web-mode-before-auto-complete-hooks
+    '(lambda ()
+     (let ((web-mode-cur-language
+  	    (web-mode-language-at-pos)))
+               (if (string= web-mode-cur-language "php")
+    	   (yas-activate-extra-mode 'php-mode)
+      	 (yas-deactivate-extra-mode 'php-mode))
+               (if (string= web-mode-cur-language "css")
+    	   (setq emmet-use-css-transform t)
+      	 (setq emmet-use-css-transform nil)))))
+(
+
 ; breadcrumb setup
 
 (defun lsp-mode-setup ()
@@ -318,18 +371,29 @@
   (setq typescript-indent-level 2))
 
 (use-package company
-  :after lsp-mode
-  :hook (lsp-mode . company-mode)
-  :bind (:map company-active-map
-              ( "<tab>" . company-complete-selection))
-  (:map lsp-mode-map
-        ("<tab>" . company-indent-or-complete-common)) 
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0))
+    :after lsp-mode
+    :hook ((lsp-mode web-mode) . company-mode)
+    :bind (:map company-active-map
+                ( "<tab>" . company-complete-selection))
+    (:map lsp-mode-map
+          ("<tab>" . company-indent-or-complete-common)) 
+)
+    (setq company-minimum-prefix-length 2)
 
-;  (use-package company-box
- ;   :hook (company-mode . company-box-mode))
+
+
+  (use-package company-web
+:after company)
+
+
+(defun my-web-mode-hook ()
+ (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
+
+(add-hook 'web-mode-hook 'my-web-mode-hook)
+
+    
+  ;  (use-package company-box
+   ;   :hook (company-mode . company-box-mode))
 
 Learn more here: https://web-mode.org/
 (use-package web-mode)
@@ -377,5 +441,14 @@ Learn more here: https://web-mode.org/
 :ensure t
 :config
 (dashboard-setup-startup-hook))
+
+(defun next-tag()
+  (interactive)
+    (web-mode-element-next)
+    (web-mode-tag-end))
+
+
+
+(global-set-key  (kbd "C-x t") 'next-tag)
 
 

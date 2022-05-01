@@ -1,6 +1,10 @@
 * TODO Brush Teeth
-SCHEDULED: <2022-04-19 Tue.+1d>
+SCHEDULED: <2022-05-01 Sun>
 :PROPERTIES:
 :STYLE:    habit
+:LAST_REPEAT: [2022-04-30 Sat 09:50]
+:END:
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-30 Sat 09:50]
 :END:
 
