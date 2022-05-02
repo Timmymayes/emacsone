@@ -318,7 +318,7 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
@@ -330,6 +330,7 @@
 (use-package emmet-mode)
 ; use emmet in all web-mode docs
 (add-hook 'web-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook 'emmet-mode)
 
 ; enable mode switching between css and java
 (add-hook 'web-mode-before-auto-complete-hooks
@@ -342,6 +343,8 @@
                (if (string= web-mode-cur-language "css")
     	   (setq emmet-use-css-transform t)
       	 (setq emmet-use-css-transform nil)))))
+
+
 
 ; breadcrumb setup
 
@@ -441,4 +444,12 @@
 
 (global-set-key  (kbd "C-x t") 'next-tag)
 
+;;set load path for person elisp
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
+;; load the package iy-go-to-char
+(load "iy-go-to-char")
+;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
+(global-set-key (kbd"M-i") 'back-to-indentation)
+;; rebind "M-m" iy-go-to-char
+(global-set-key (kbd"M-m") 'iy-go-to-char)

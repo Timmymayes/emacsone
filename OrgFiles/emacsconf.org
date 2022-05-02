@@ -428,7 +428,7 @@ http://xahlee.info/emacs/emacs/xah-css-mode.html
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
@@ -446,6 +446,7 @@ http://xahlee.info/emacs/emacs/xah-css-mode.html
 (use-package emmet-mode)
 ; use emmet in all web-mode docs
 (add-hook 'web-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook 'emmet-mode)
 
 ; enable mode switching between css and java
 (add-hook 'web-mode-before-auto-complete-hooks
@@ -463,9 +464,10 @@ http://xahlee.info/emacs/emacs/xah-css-mode.html
 
 #+RESULTS:
 | lambda | nil | (let ((web-mode-cur-language (web-mode-language-at-pos))) (if (string= web-mode-cur-language php) (yas-activate-extra-mode (quote php-mode)) (yas-deactivate-extra-mode (quote php-mode))) (if (string= web-mode-cur-language css) (setq emmet-use-css-transform t) (setq emmet-use-css-transform nil))) |
+**** css-mode
+#+BEGIN_SRC emacs-lisp
 
-
-
+#+END_SRC
 *** Language Server
 #+begin_src emacs-lisp
   ; breadcrumb setup
@@ -644,11 +646,24 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS::
 : next-tag
 
 * Testing
 #+BEGIN_SRC emacs-lisp
 
+;;set load path for person elisp
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
+;; load the package iy-go-to-char
+(load "iy-go-to-char")
+;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
+(global-set-key (kbd"M-i") 'back-to-indentation)
+;; rebind "M-m" iy-go-to-char
+(global-set-key (kbd"M-m") 'iy-go-to-char)
 #+END_SRC
+
+#+RESULTS:
+: iy-go-to-char
+
+ 
