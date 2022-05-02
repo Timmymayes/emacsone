@@ -1,13 +1,5 @@
-* Inbox
-** DONE Create a new repo for odin-recipies 
-CLOSED: [2022-04-29 Fri 08:49]
-** DONE Move the repo to local machine and hook up to projectile and magit
-CLOSED: [2022-04-29 Fri 08:49]
-** DONE Edit readme.md and write a breif intro describing the project and what skills you will have demonstrated once completed.
-CLOSED: [2022-04-29 Fri 08:56]
-** TODO Figure out some recipies to use and grab the images
-** TODO Build page
-
+* TODO Inbox
+**** TODO work through odin css
 * Backlog
 
 

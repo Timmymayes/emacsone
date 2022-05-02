@@ -237,6 +237,7 @@
   :commands (magit-status magit-get-current-branch)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+(setq magit-clone-default-directory "~/Projects/")
 
 (use-package forge)
 
@@ -317,12 +318,14 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
 
 ; set company completions vocab to css and html
+
+(setq web-mode-enable-engine-detection t)
 
 (use-package emmet-mode)
 ; use emmet in all web-mode docs
@@ -339,7 +342,6 @@
                (if (string= web-mode-cur-language "css")
     	   (setq emmet-use-css-transform t)
       	 (setq emmet-use-css-transform nil)))))
-(
 
 ; breadcrumb setup
 
@@ -394,18 +396,6 @@
     
   ;  (use-package company-box
    ;   :hook (company-mode . company-box-mode))
-
-Learn more here: https://web-mode.org/
-(use-package web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto'mode'alist '("\\.html?\\'" . web-mode))
-(setq 'web-mode-enable-engine-detection t)
 
 (use-package term
 :config

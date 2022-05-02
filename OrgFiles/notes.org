@@ -71,3 +71,47 @@ like this:
 
 Resolves: #123
 See also: #456, #789
+
+* CSS
+** The Cascade
+*** Specificity
+- A css decleration that is more specific will take precedence over less specific ones.
+- In-line style have the highest specificity compared to selectors
+- Each type of selector has its own specificity level that contributes to how specific a declaration is.
+  
+  1. ID Selectors - most specific
+  2. Class Selectors - medium specific
+  3. Type Selectors - low specific
+
+Think of specificity as a tie breaker. Also note that the *, +, ~, > operators do not add specificity in themselves.
+
+*** Inheritence
+
+Certain properties when applied to an element are inherited by their descendants, even  if you don't write a specific rule for it. 
+Typography based properties (color, font-size, font-family, etc) are ususally inherited, while most other properties aren't.
+
+The exception to this is w hen directly targeting an element, as this always overrules inheritence
+
+#+BEGIN_SRC html
+<div id="parent">
+ <div class="child"></div>
+</div>
+
+#+END_SRC
+
+#+BEGIN_SRC css
+
+  /* Here parent is inherited but the child call directly targets and supercedes.   */
+
+  #parent {
+    color: red;
+  }
+
+  .child {
+    color: blue; 
+  }
+#+END_SRC
+
+*** Rule Order
+
+The final factor, the ultimate tiebreaker is rule order. The rule that was last defined wins out if specificity and inhertence lead to a tie.

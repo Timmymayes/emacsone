@@ -313,8 +313,13 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
   :commands (magit-status magit-get-current-branch)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+(setq magit-clone-default-directory "~/Projects/")
 
 #+end_src
+
+#+RESULTS:
+: ~/Projects/
+
 ** Forge
 #+begin_src emacs-lisp
 (use-package forge)
@@ -405,6 +410,9 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
 
 ** Languages
 *** HTML & CSS
+Some possible html modes to look into:
+http://xahlee.info/emacs/emacs/emacs_html.html
+http://xahlee.info/emacs/emacs/xah-css-mode.html
 **** web-mode
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode)
@@ -420,22 +428,19 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
 
 ; set company completions vocab to css and html
 
-
+(setq web-mode-enable-engine-detection t)
 
 #+END_SRC
 
 #+RESULTS:
-: my-web-mode-hook
-
-
-
+: t
 **** emmet-mode
 #+BEGIN_SRC emacs-lisp
 (use-package emmet-mode)
@@ -453,7 +458,7 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
                (if (string= web-mode-cur-language "css")
     	   (setq emmet-use-css-transform t)
       	 (setq emmet-use-css-transform nil)))))
-(
+
 #+END_SRC
 
 #+RESULTS:
@@ -538,20 +543,7 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
 ** Debugging
 Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
-** Webmode
-#+BEGIN_SRC emacs-lisp
-Learn more here: https://web-mode.org/
-(use-package web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto'mode'alist '("\\.html?\\'" . web-mode))
-(setq 'web-mode-enable-engine-detection t)
-#+END_SRC
+
 * Terminals
 ** Term-mode
 #+begin_src emacs-lisp
