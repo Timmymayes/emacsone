@@ -94,6 +94,8 @@
   :init
   (ivy-rich-mode 1))
 
+(yas-global-mode 1)
+
 ;;;;; Org mode setup ;;;;;
 
                                         ;require tempo
@@ -450,6 +452,6 @@
 ;; load the package iy-go-to-char
 (load "iy-go-to-char")
 ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
-(global-set-key (kbd"M-i") 'back-to-indentation)
+(global-set-key (kbd "M-i") 'back-to-indentation)
 ;; rebind "M-m" iy-go-to-char
-(global-set-key (kbd"M-m") 'iy-go-to-char)
+(global-set-key (kbd "M-m") 'iy-go-to-char)

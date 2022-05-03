@@ -73,6 +73,38 @@ Resolves: #123
 See also: #456, #789
 
 * CSS
+** Tips!
+*** Nav bars, anchors and padding
+Commonly with navigation bars you want a larger hit are. This ca ne achieved with padding. The display: inline-block; property allows padding to be set on the a link properly.
+
+#+BEGIN_SRC css
+.links-list a {
+  background-color: rgb(179,57,81);
+  color: #fff;
+  text-decoration: none;
+  padding: 1em 2em;
+}
+
+.links-list a:hover {
+  background-color: rgb(66, 28, 40);
+  color: #fff;
+}
+    
+
+#+END_SRC
+
+#+BEGIN_SRC html
+<nav>
+  <ul class="links-list">
+    <li><a href="">Link one</a></li>
+    <li><a href="">Link two</a></li>
+    <li><a href="">Link three</a></li>
+  </ul>
+</nav>    
+    
+#+END_SRC
+
+#+END_SRC
 ** The Cascade
 *** Specificity
 - A css decleration that is more specific will take precedence over less specific ones.
@@ -115,3 +147,29 @@ The exception to this is w hen directly targeting an element, as this always ove
 *** Rule Order
 
 The final factor, the ultimate tiebreaker is rule order. The rule that was last defined wins out if specificity and inhertence lead to a tie.
+** The Box Model
+Everything in CSS is a box. 
+
+Three key attributes margin > border > padding
+
+Margin collapses between 2 elements. So el1 and el2 share a margin and the larger of the 2 is used.
+
+
+
+box-sizing: border-box; 
+the above setting makes it so that margin and padding eat into the height/width value of the element. This keeps sizing more consistent and is commonly used in the * selector to adjust alll elements to this sizing style.
+
+While you could use the * selector as suggested above there is another option below. 
+
+"This will give you the same result, and make it easier to change the box-sizing in plugins or other components that leverage other behavior."
+
+#+BEGIN_SRC html
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+#+END_SRC
+
