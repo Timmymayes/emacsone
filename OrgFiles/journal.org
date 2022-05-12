@@ -10,12 +10,17 @@ CLOCK: [2022-04-19 Tue 09:05]--[2022-04-19 Tue 09:05] =>  0:00
 
 Today was a great day! Learning more about org mode. 
 
-**** 09:11 AM - Journal                                          :journal:
+
+
+** 2022-05 May
+*** 2022-05-09 Monday
+
+**** 07:41 AM - Journal                                          :journal:
 :LOGBOOK:
-CLOCK: [2022-04-19 Tue 09:11]
+CLOCK: [2022-05-09 Mon 07:41]--[2022-05-09 Mon 07:48] =>  0:07
 :END:
 
-**** Checking Email                                                :email:
+*This is a journal entry*
 
-test of email logging
+Trying to get used to the Journal for org-mode. I'm not sure what I want to put here though. I think I need to setup a new file "devlog" for development notes on my projects. I need to focus this week on finishing out flexbox and my project. For diet I need to fast. We have a lot of busy times coming up this week. This journal is even an attempt at bringing back and restarting some habits. No matter how short. I need to make a journal entry every day
 
