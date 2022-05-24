@@ -307,6 +307,12 @@
 (use-package evil-nerd-commenter
   :bind ("M-/" . evilnc-comment-or-uncomment-lines))
 
+(use-package minimap)
+
+(setq minimap-window-location 1)
+
+(global-set-key [(super m)] 'minimap-mode)
+
 (use-package web-mode)
 (setq web-mode-enable-current-column-highlight t)
 (setq web-mode-enable-current-element-highlight t)
@@ -319,17 +325,22 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+;;using rsjx mode
+;;(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 ;(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+;; using rsjx mode
+;;(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
 
 ; set company completions vocab to css and html
 
 (setq web-mode-enable-engine-detection t)
 
-(use-package emmet-mode)
+(use-package emmet-mode
+:bind 
+("M-n" . emmet-next-edit-point)
+("M-p" . emmet-prev-edit-point))
 ; use emmet in all web-mode docs
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
@@ -352,10 +363,11 @@
 
 (defun lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  (lsp-headerline-breadcrumb-mode)
+  (lsp-headerline-breadcrumb-mode))
 
   (use-package lsp-mode
     :commands (lsp lsp-deffered)
+    :hook (lsp-mode . lsp-mode-setup)
     :init
     (setq lsp-keymap-prefix "C-c l")
     :config
@@ -376,6 +388,65 @@
   :hook (typescript-mode . lsp-deferred)
   :config
   (setq typescript-indent-level 2))
+
+(use-package rjsx-mode
+  :mode ("\\.js\\'"
+         "\\.jsx\\'")
+  :config
+  (setq js2-mode-show-parse-errors nil
+        js2-mode-show-strict-warnings nil
+        js2-basic-offset 2
+        js-indent-level 2)
+  (setq-local flycheck-disabled-checkers (cl-union flycheck-disabled-checkers
+                                                   '(javascript-jshint))) ; jshint doesn't work for JSX
+  (electric-pair-mode 1))
+;;  (evil-leader/set-key-for-mode 'rjsx-mode
+;;    "fu"  #'lsp-find-references          ; (f)ind (u)sages
+;;    "fp" 'prettier-js-mode))             ; (f)ormat (p)rettier
+;; 
+(use-package add-node-modules-path
+  :defer t
+  :hook (((js2-mode rjsx-mode) . add-node-modules-path)))
+
+;; prettify
+
+(use-package prettier-js
+  :defer t
+  :diminish prettier-js-mode
+  :hook (((js2-mode rjsx-mode) . prettier-js-mode)))
+
+;;  (evil-leader/set-key-for-mode 'rjsx-mode
+;;    "fp" 'prettier-js-mode)) ; (f)ormat (p)rettier
+
+;; setup lsp mode
+(use-package lsp-mode
+  :defer t
+  :diminish lsp-mode
+  :hook (((js2-mode rjsx-mode) . lsp))
+  :commands lsp
+  :config
+  (setq lsp-auto-configure t
+        lsp-auto-guess-root t
+        ;; don't set flymake or lsp-ui so the default linter doesn't get trampled
+        lsp-diagnostic-package :none))
+  ;;; keybinds after load
+  ;; (evil-leader/set-key
+    ;; "jd"  #'lsp-goto-type-definition ; (j)ump to (d)efinition
+  ;;  "jb"  #'xref-pop-marker-stack))  ; (j)ump (b)ack to marker
+
+
+(use-package lsp-ui
+  :defer t
+  :config
+  (setq lsp-ui-sideline-enable t
+        ;; disable flycheck setup so default linter isn't trampled
+        lsp-ui-flycheck-enable nil
+        lsp-ui-sideline-show-symbol nil
+        lsp-ui-sideline-show-hover nil
+        lsp-ui-sideline-show-code-actions nil
+        lsp-ui-peek-enable nil
+        lsp-ui-imenu-enable nil
+        lsp-ui-doc-enable nil))
 
 (use-package company
     :after lsp-mode
@@ -402,15 +473,23 @@
   ;  (use-package company-box
    ;   :hook (company-mode . company-box-mode))
 
-(use-package term
-:config
-(setq explicit-shesll-file-name "bash")
-(setq termp-prompt-regexp "^[^#$%>\n]*[#$%>] *"))
-
-(use-package eterm-256color
-  :hook (term-mode . eterm-256color-mode))
+(defun next-tag()
+  (interactive)
+    (web-mode-element-next)
+    (web-mode-tag-end))
 
 
+
+(global-set-key  (kbd "C-x t") 'next-tag)
+
+;; set ctrl z to undo
+(global-set-key (kbd "C-z") 'undo)
+
+(global-set-key (kbd "M-o") 'other-window)
+(global-set-key [(meta left)] 'windmove-left)
+(global-set-key [(meta right)] 'windmove-right)
+(global-set-key [(meta up)] 'windmove-up)
+(global-set-key [(meta down)] 'windmove-down)
 
 ; list directories first
 (setq dired-listing-switches "-agho --group-directories-first")
@@ -436,15 +515,6 @@
 :ensure t
 :config
 (dashboard-setup-startup-hook))
-
-(defun next-tag()
-  (interactive)
-    (web-mode-element-next)
-    (web-mode-tag-end))
-
-
-
-(global-set-key  (kbd "C-x t") 'next-tag)
 
 ;;set load path for person elisp
 (add-to-list 'load-path "~/.emacs.d/lisp")

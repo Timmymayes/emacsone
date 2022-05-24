@@ -173,3 +173,9 @@ html {
 
 #+END_SRC
 
+* JavaScript
+** Equality testing 
+null and undefined equal each other only 
+ strict equality ('=====') requres matched type
+Strings compared letter by letter dictionarialy i.e. b > a and alpha A > a. 
+
