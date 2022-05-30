@@ -409,7 +409,7 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
 ** Commenting
 #+begin_src emacs-lisp
   (use-package evil-nerd-commenter
-    :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+    :bind ("M-;" . evilnc-comment-or-uncomment-lines))
 #+end_src
 
 ** Mini-map
@@ -597,34 +597,35 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
 
 ** Better Completions
 #+begin_src emacs-lisp
-    (use-package company
-    :after lsp-mode
-    :hook ((lsp-mode web-mode) . company-mode)
-    :bind (:map company-active-map
-                ( "<tab>" . company-complete-selection))
-    (:map lsp-mode-map
-          ("<tab>" . company-indent-or-complete-common)) 
-)
-    (setq company-minimum-prefix-length 2)
+      (use-package company
+      :after lsp-mode
+      :hook ((lsp-mode web-mode) . company-mode)
+      :bind (:map company-active-map
+                  ( "<tab>" . company-complete-selection))
+      (:map lsp-mode-map
+            ("<tab>" . company-indent-or-complete-common)) 
+  )
+      (setq company-minimum-prefix-length 2)
 
 
 
-  (use-package company-web
-:after company)
+    (use-package company-web
+  :after company)
 
 
-(defun my-web-mode-hook ()
- (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
+  (defun my-web-mode-hook ()
+   (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
 
-(add-hook 'web-mode-hook 'my-web-mode-hook)
+  (add-hook 'web-mode-hook 'my-web-mode-hook)
 
-    
-  ;  (use-package company-box
-   ;   :hook (company-mode . company-box-mode))
+  ;; Company mode for yas
+  (global-set-key (kbd "<C-tab>") 'company-yasnippet)
+    ;  (use-package company-box
+     ;   :hook (company-mode . company-box-mode))
 #+end_src
 
 #+RESULTS:
-| my-web-mode-hook | company-mode | emmet-mode |
+: company-yasnippet
 
 
 
@@ -667,8 +668,15 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 #+RESULTS:
 : windmove-down
+** dabbrev
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-/") 'dabbrev-expand)
+#+END_SRC
 
-* Dired
+#+RESULTS:
+: dabbrev-expand
+
+* dired
 ** Hotkeys to remember
 - m: mark files
 - u: umark files

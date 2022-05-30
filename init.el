@@ -305,7 +305,7 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (use-package evil-nerd-commenter
-  :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+  :bind ("M-;" . evilnc-comment-or-uncomment-lines))
 
 (use-package minimap)
 
@@ -469,7 +469,8 @@
 
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 
-    
+;; Company mode for yas
+(global-set-key (kbd "<C-tab>") 'company-yasnippet)
   ;  (use-package company-box
    ;   :hook (company-mode . company-box-mode))
 
@@ -490,6 +491,8 @@
 (global-set-key [(meta right)] 'windmove-right)
 (global-set-key [(meta up)] 'windmove-up)
 (global-set-key [(meta down)] 'windmove-down)
+
+(global-set-key (kbd "M-/") 'dabbrev-expand)
 
 ; list directories first
 (setq dired-listing-switches "-agho --group-directories-first")
