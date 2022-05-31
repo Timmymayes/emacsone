@@ -155,6 +155,15 @@
   (define-key global-map (kbd "C-c o")
     (lambda () (interactive) (org-capture)))
 
+  (define-key global-map (kbd "C-c j")
+  (lambda () (interactive) (org-capture nil "jj")))
+
+  (define-key global-map (kbd "C-c t")
+  (lambda () (interactive) (org-capture nil "tt")))
+
+  (global-set-key (kbd "C-c a") 'org-agenda)
+
+
                                         ; refile targets
 
 
@@ -311,7 +320,7 @@
 
 (setq minimap-window-location 1)
 
-(global-set-key [(super m)] 'minimap-mode)
+(global-set-key (kbd "C-c m t")  'minimap-mode)
 
 (use-package web-mode)
 (setq web-mode-enable-current-column-highlight t)
@@ -447,6 +456,20 @@
         lsp-ui-peek-enable nil
         lsp-ui-imenu-enable nil
         lsp-ui-doc-enable nil))
+
+(use-package js-comint)
+(setq inferior-js-program-command "node --interactive")
+(setenv "NODE_NO_READLINE" "1")
+(add-hook 'rjsx-mode-hook '(lambda ()
+(local-set-key "C-x C-e"
+'js-send-last-sexp)
+(local-set-key "C-c b"
+'js-send-buffer)
+(local-set-key "C-c r" 
+'js-send-region)
+(local-set-key "C-c C-r"
+'js-send-region-and-go)
+))
 
 (use-package company
     :after lsp-mode

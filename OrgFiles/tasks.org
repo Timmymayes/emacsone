@@ -1,9 +1,8 @@
-* TODO Inbox
-**** TODO work through odin css
+* Inbox
 
-** TODO Test org-capture
-SCHEDULED: <2022-05-04 Wed>
- [2022-05-04 Wed 19:02]
+** TODO Create a guest list with a filter to learn looping
+ [2022-05-30 Mon 15:30]
+ [[file:~/Projects/live-practice/guest-list.js][file:~/Projects/live-practice/guest-list.js]]
 
 * Backlog
 

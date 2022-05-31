@@ -23,4 +23,17 @@ CLOCK: [2022-05-09 Mon 07:41]--[2022-05-09 Mon 07:48] =>  0:07
 *This is a journal entry*
 
 Trying to get used to the Journal for org-mode. I'm not sure what I want to put here though. I think I need to setup a new file "devlog" for development notes on my projects. I need to focus this week on finishing out flexbox and my project. For diet I need to fast. We have a lot of busy times coming up this week. This journal is even an attempt at bringing back and restarting some habits. No matter how short. I need to make a journal entry every day
+*** 2022-05-30 Monday
+
+**** 11:19 AM - Journal                                          :journal:
+:LOGBOOK:
+CLOCK: [2022-05-30 Mon 11:19]--[2022-05-30 Mon 11:21] =>  0:02
+:END:
+
+**** 11:21 AM - Journal                  :journal:devlog:odin:foundations:
+:LOGBOOK:
+CLOCK: [2022-05-30 Mon 11:21]--[2022-05-30 Mon 11:22] =>  0:01
+:END:
+
+Today's journal entry. I need to be using this more. Especially for "dev" work and logs.
 
