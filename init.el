@@ -537,7 +537,7 @@
 
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "M-[") 'ace-window)
-(global-set-key (kbd "M-]") 'ace-swap-window)
+(global-set-key (kbd "M-]") 'treemacs-select-window)
 (global-set-key [(meta left)] 'windmove-left)
 (global-set-key [(meta right)] 'windmove-right)
 (global-set-key [(meta up)] 'windmove-up)

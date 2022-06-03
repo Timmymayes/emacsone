@@ -19,6 +19,10 @@ CLOSED: [2022-06-02 Thu 20:37]
  [2022-06-01 Wed 13:18]
  [[file:~/Projects/emacsone/OrgFiles/tasks.org::*]]
 
+** TODO g
+ [2022-06-03 Fri 00:02]
+ [[file:~/Projects/javascript-exercises/04_removeFromArray/removeFromArray.spec.js::describe('removeFromArray',%20()%20=>%20{]]
+
 * Backlog
 
 
