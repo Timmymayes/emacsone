@@ -1,8 +1,23 @@
 * Inbox
 
-** TODO Create a guest list with a filter to learn looping
- [2022-05-30 Mon 15:30]
- [[file:~/Projects/live-practice/guest-list.js][file:~/Projects/live-practice/guest-list.js]]
+** TODO Fix the hotkey loading
+ [2022-05-30 Mon 20:27]
+ [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Javascript][Javascript]]
+
+** DONE 
+CLOSED: [2022-06-02 Thu 20:37]
+ [2022-06-01 Wed 13:17]
+ [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Mail%20with%20mu4e][Mail with mu4e]]
+
+** DONE 
+CLOSED: [2022-06-02 Thu 20:37]
+ [2022-06-01 Wed 13:18]
+ [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Mail%20with%20mu4e][Mail with mu4e]]
+
+** DONE 
+CLOSED: [2022-06-02 Thu 20:37]
+ [2022-06-01 Wed 13:18]
+ [[file:~/Projects/emacsone/OrgFiles/tasks.org::*]]
 
 * Backlog
 

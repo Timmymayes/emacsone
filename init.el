@@ -18,6 +18,29 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(use-package mu4e
+   :ensure nil
+   ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
+   :config
+   ;; this si set to t to avoid mail syncing issues
+   (setq mu4e-change-filenames-when-moving t)
+   ;; refresh mail using isync every 10 minutes
+   (setq mu4e-update-interval (* 10 60))
+   (setq mu4e-get-mail-command "mbsync -a")
+   (setq mu4e-maildir "~/Mail")
+
+   (setq mu4e-drafts-folder "/'[Gmail]'.Drafts")
+   (setq mu4e-sent-folder "/[Gmail].Sent Mail")
+   (setq mu4e-refile-folder "/[Gmail].All Mail")
+   (setq mu4e-trash-folder "/[Gmail].Trash")
+
+   (setq mu4e-maildir-shortcuts
+   '(("/Inbox"                   . ?i)
+     ("/[Gmail].Sent Mail"       . ?s)
+     ("/[Gmail].Trash"           . ?t)
+     ("/[Gmail].Drafts"          . ?d)
+     ("/[Gmail].All Mail"        . ?a))))
+
 (setq inhibit-startup-message t)
 
   (scroll-bar-mode -1) ;Disable visible scrollbar
@@ -65,7 +88,7 @@
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
          '(85 . 50) '(100 . 100)))))
-(global-set-key (kbd "C-c t") 'toggle-transparency)
+(global-set-key (kbd "C-c x t") 'toggle-transparency)
 
 (use-package helpful
   :custom
@@ -95,6 +118,14 @@
   (ivy-rich-mode 1))
 
 (yas-global-mode 1)
+
+(use-package ace-window)
+
+
+
+(custom-set-faces
+ '(aw-leading-char-face
+   ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
 ;;;;; Org mode setup ;;;;;
 
@@ -285,7 +316,7 @@
                                          (message "finished: %s" command)
                                          (dired project-dir))
                                      (user-error (format "%s\n%s" command output))))))
-    (set-process-filter proc #'comint-output-filter)))
+    (set-process-filter proc #'comintoutput-filter)))
 
 (use-package projectile
   :diminish projectile-mode
@@ -320,7 +351,7 @@
 
 (setq minimap-window-location 1)
 
-(global-set-key (kbd "C-c m t")  'minimap-mode)
+(global-set-key (kbd "C-c s m")  'minimap-mode)
 
 (use-package web-mode)
 (setq web-mode-enable-current-column-highlight t)
@@ -457,19 +488,14 @@
         lsp-ui-imenu-enable nil
         lsp-ui-doc-enable nil))
 
-(use-package js-comint)
+(require 'js-comint)
 (setq inferior-js-program-command "node --interactive")
 (setenv "NODE_NO_READLINE" "1")
 (add-hook 'rjsx-mode-hook '(lambda ()
-(local-set-key "C-x C-e"
-'js-send-last-sexp)
-(local-set-key "C-c b"
-'js-send-buffer)
-(local-set-key "C-c r" 
-'js-send-region)
-(local-set-key "C-c C-r"
-'js-send-region-and-go)
-))
+  (local-set-key "C-x\ C-e" 'js-send-last-sexp)
+  (local-set-key "C-c b" 'js-send-buffer)
+  (local-set-key "C-c r" 'js-send-region)
+  (local-set-key "C-c C-r" 'js-send-region-and-go)))
 
 (use-package company
     :after lsp-mode
@@ -510,10 +536,13 @@
 (global-set-key (kbd "C-z") 'undo)
 
 (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "M-[") 'ace-window)
+(global-set-key (kbd "M-]") 'ace-swap-window)
 (global-set-key [(meta left)] 'windmove-left)
 (global-set-key [(meta right)] 'windmove-right)
 (global-set-key [(meta up)] 'windmove-up)
 (global-set-key [(meta down)] 'windmove-down)
+(global-set-key (kbd "C-c s t") 'treemacs)
 
 (global-set-key (kbd "M-/") 'dabbrev-expand)
 

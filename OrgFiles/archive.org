@@ -55,3 +55,8 @@ CLOSED: [2022-05-30 Mon 15:31]
  [2022-05-30 Mon 15:30]
 
 * June - 2022
+** DONE Create a guest list with a filter to learn looping
+CLOSED: [2022-06-02 Thu 20:36]
+ [2022-05-30 Mon 15:30]
+ [[file:~/Projects/live-practice/guest-list.js][file:~/Projects/live-practice/guest-list.js]]
+
