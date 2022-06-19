@@ -119,6 +119,44 @@
 
 (yas-global-mode 1)
 
+(defun xah-select-text-in-quote ()
+  "Select text between the nearest left and right delimiters.
+Delimiters here includes the following chars: \"`<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕（）
+This command select between any bracket chars, does not consider nesting. For example, if text is
+(a(b)c▮)
+the selected char is “c”, not “a(b)c”.
+
+URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
+Version 2020-11-24 2021-07-11"
+  (interactive)
+  (let ( $skipChars $p1 )
+    (setq $skipChars "^\"`<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕（）〘〙")
+    (skip-chars-backward $skipChars)
+    (setq $p1 (point))
+    (skip-chars-forward $skipChars)
+    (set-mark $p1)))
+
+(global-set-key (kbd "C-M-<prior>") 'xah-select-text-in-quote)
+
+
+(defun xah-select-block ()
+  "Select the current/next block of text between blank lines.
+If region is active, extend selection downward by block.
+
+URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
+Version 2019-12-26"
+  (interactive)
+  (if (region-active-p)
+      (re-search-forward "\n[ \t]*\n" nil "move")
+    (progn
+      (skip-chars-forward " \n\t")
+      (when (re-search-backward "\n[ \t]*\n" nil "move")
+        (re-search-forward "\n[ \t]*\n"))
+      (push-mark (point) t t)
+      (re-search-forward "\n[ \t]*\n" nil "move"))))
+
+(global-set-key (kbd "C-M-<next>") 'xah-select-block)
+
 (use-package ace-window)
 
 
@@ -126,6 +164,27 @@
 (custom-set-faces
  '(aw-leading-char-face
    ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+
+(defun scroll-down-keep-cursor ()
+    ;; Scroll the text one line down while keeping the cursor  
+    (interactive) 
+
+    (scroll-down 1))
+
+(defun scroll-up-keep-cursor ()  
+    ;; Scroll the text one line up while keeping the cursor   
+    (interactive) 
+
+    (scroll-up 1))
+
+(global-set-key (kbd "<next>") 'scroll-down-keep-cursor)
+(global-set-key (kbd "<prior>") 'scroll-up-keep-cursor)
+
+(global-set-key (kbd "C-M-]") 'avy-goto-word-or-subword-1)
+;; unbund c-] from abort-recursive-edit
+(global-set-key (kbd "C-+") 'smartscan-symbol-go-backward)
+(global-set-key (kbd "C-=") 'smartscan-symbol-go-forward)
+(global-set-key (kbd "M-RET") 'counsel-ibuffer)
 
 ;;;;; Org mode setup ;;;;;
 
@@ -336,6 +395,11 @@
 
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(add-hook 'prog-mode-hook 'electric-pair-mode)
+(add-hook 'prog-mode-hook 'electric-indent-mode)
+
+(setq display-line-numbers-type 'relative)
+
 (defun my-display-numbers-hook ()
   (display-line-numbers-mode t)
   )
@@ -488,14 +552,21 @@
         lsp-ui-imenu-enable nil
         lsp-ui-doc-enable nil))
 
+(defun my-js-comint-keys ()
+  "My Keys for sending to the js-comint repl"
+  (interactive)
+  (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
+  (local-set-key (kbd"C-c b") 'js-send-buffer)
+  (local-set-key (kbd"C-c r") 'js-send-region)
+  (local-set-key (kbd"C-c C-r") 'js-send-region-and-go))
+
+
+
+
 (require 'js-comint)
 (setq inferior-js-program-command "node --interactive")
 (setenv "NODE_NO_READLINE" "1")
-(add-hook 'rjsx-mode-hook '(lambda ()
-  (local-set-key "C-x\ C-e" 'js-send-last-sexp)
-  (local-set-key "C-c b" 'js-send-buffer)
-  (local-set-key "C-c r" 'js-send-region)
-  (local-set-key "C-c C-r" 'js-send-region-and-go)))
+(add-hook 'rjsx-mode-hook 'my-js-comint-keys)
 
 (use-package company
     :after lsp-mode
@@ -535,7 +606,7 @@
 ;; set ctrl z to undo
 (global-set-key (kbd "C-z") 'undo)
 
-(global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "M-+") 'other-window)
 (global-set-key (kbd "M-[") 'ace-window)
 (global-set-key (kbd "M-]") 'treemacs-select-window)
 (global-set-key [(meta left)] 'windmove-left)
@@ -545,6 +616,27 @@
 (global-set-key (kbd "C-c s t") 'treemacs)
 
 (global-set-key (kbd "M-/") 'dabbrev-expand)
+
+(defun insert-line-above-and-go ()
+  ;;insert a line above the current one and move the cursor there
+  (interactive)
+  (previous-line nil)
+  (move-end-of-line nil)
+  (electric-newline-and-maybe-indent)
+  (indent-relative-first-indent-point))
+
+(global-set-key (kbd "M-o") 'insert-line-above-and-go)
+
+
+;; move C-j to C-; indent-new-comment-line
+(global-set-key (kbd "C-;") 'indent-new-comment-line)
+
+(defun kill-word-at-point()
+  (interactive)
+  (kill-word 1)
+  (backward-kill-word 1))
+
+  (global-set-key (kbd "M-DEL") 'kill-word-at-point)
 
 ; list directories first
 (setq dired-listing-switches "-agho --group-directories-first")
@@ -579,4 +671,8 @@
 ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
 (global-set-key (kbd "M-i") 'back-to-indentation)
 ;; rebind "M-m" iy-go-to-char
-(global-set-key (kbd "M-m") 'iy-go-to-char)
+(global-set-key (kbd "C-}") 'iy-go-to-char)
+;;unbind C-m from return  
+(global-set-key (kbd "C-)") 'iy-go-up-to-char)
+(global-set-key (kbd "C-{") 'iy-go-to-char-backward)
+(global-set-key (kbd "C-(") 'iy-go-up-to-char-backward)

@@ -206,6 +206,53 @@ CLOSED: [2022-06-01 Wed 13:18]
 
 (yas-global-mode 1)
 #+END_SRC
+
+* Region Control
+#+BEGIN_SRC emacs-lisp
+(defun xah-select-text-in-quote ()
+  "Select text between the nearest left and right delimiters.
+Delimiters here includes the following chars: \"`<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕（）
+This command select between any bracket chars, does not consider nesting. For example, if text is
+(a(b)c▮)
+the selected char is “c”, not “a(b)c”.
+
+URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
+Version 2020-11-24 2021-07-11"
+  (interactive)
+  (let ( $skipChars $p1 )
+    (setq $skipChars "^\"`<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕（）〘〙")
+    (skip-chars-backward $skipChars)
+    (setq $p1 (point))
+    (skip-chars-forward $skipChars)
+    (set-mark $p1)))
+
+(global-set-key (kbd "C-M-<prior>") 'xah-select-text-in-quote)
+
+
+(defun xah-select-block ()
+  "Select the current/next block of text between blank lines.
+If region is active, extend selection downward by block.
+
+URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
+Version 2019-12-26"
+  (interactive)
+  (if (region-active-p)
+      (re-search-forward "\n[ \t]*\n" nil "move")
+    (progn
+      (skip-chars-forward " \n\t")
+      (when (re-search-backward "\n[ \t]*\n" nil "move")
+        (re-search-forward "\n[ \t]*\n"))
+      (push-mark (point) t t)
+      (re-search-forward "\n[ \t]*\n" nil "move"))))
+
+(global-set-key (kbd "C-M-<next>") 'xah-select-block)
+
+
+#+END_SRC
+
+#+RESULTS:
+: xah-select-block
+
 * Window Control
 #+BEGIN_SRC emacs-lisp
 (use-package ace-window)
@@ -216,10 +263,33 @@ CLOSED: [2022-06-01 Wed 13:18]
  '(aw-leading-char-face
    ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
+(defun scroll-down-keep-cursor ()
+    ;; Scroll the text one line down while keeping the cursor  
+    (interactive) 
+
+    (scroll-down 1))
+
+(defun scroll-up-keep-cursor ()  
+    ;; Scroll the text one line up while keeping the cursor   
+    (interactive) 
+
+    (scroll-up 1))
+
+(global-set-key (kbd "<next>") 'scroll-down-keep-cursor)
+(global-set-key (kbd "<prior>") 'scroll-up-keep-cursor)
+
+(global-set-key (kbd "C-M-]") 'avy-goto-word-or-subword-1)
+;; unbund c-] from abort-recursive-edit
+(global-set-key (kbd "C-+") 'smartscan-symbol-go-backward)
+(global-set-key (kbd "C-=") 'smartscan-symbol-go-forward)
+(global-set-key (kbd "M-RET") 'counsel-ibuffer)
+
+
 
 #+END_SRC
 
-#+RESULTS:
+#+RESULTS:[]
+: counsel-ibuffer
 
 * Org Config Setup
 ** initial package setup
@@ -491,8 +561,19 @@ CLOSED: [2022-06-01 Wed 13:18]
   :hook (prog-mode . rainbow-delimiters-mode))
 
 #+end_src
+** Electric Pair mode
+#+BEGIN_SRC emacs-lisp
+(add-hook 'prog-mode-hook 'electric-pair-mode)
+(add-hook 'prog-mode-hook 'electric-indent-mode)
+#+END_SRC
+
+#+RESULTS:
+| electric-indent-mode | electric-pair-mode | my-display-numbers-hook | rainbow-delimiters-mode |
+
 ** Line Numbers
 #+begin_src emacs-lisp
+(setq display-line-numbers-type 'relative)
+
 (defun my-display-numbers-hook ()
   (display-line-numbers-mode t)
   )
@@ -501,6 +582,8 @@ CLOSED: [2022-06-01 Wed 13:18]
 (dolist (mode '(org-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
+
+#+RESULTS:
 
 ** Commenting
 #+begin_src emacs-lisp
@@ -688,21 +771,33 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
           lsp-ui-imenu-enable nil
           lsp-ui-doc-enable nil))
 
+  (defun my-js-comint-keys ()
+    "My Keys for sending to the js-comint repl"
+    (interactive)
+    (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
+    (local-set-key (kbd"C-c b") 'js-send-buffer)
+    (local-set-key (kbd"C-c r") 'js-send-region)
+    (local-set-key (kbd"C-c C-r") 'js-send-region-and-go))
+
+
+
+
   (require 'js-comint)
   (setq inferior-js-program-command "node --interactive")
   (setenv "NODE_NO_READLINE" "1")
-  (add-hook 'rjsx-mode-hook '(lambda ()
-    (local-set-key "C-x\ C-e" 'js-send-last-sexp)
-    (local-set-key "C-c b" 'js-send-buffer)
-    (local-set-key "C-c r" 'js-send-region)
-    (local-set-key "C-c C-r" 'js-send-region-and-go)))
+  (add-hook 'rjsx-mode-hook 'my-js-comint-keys)
+
+    
+
+
+
 
 
 #+END_SRC
 
 #+RESULTS:
-| (lambda nil (local-set-key C-xC-e (quote js-send-last-sexp)) (local-set-key C-c b (quote js-send-buffer)) (local-set-key C-c r (quote js-send-region)) (local-set-key C-c C-r (quote js-send-region-and-go))) | (lambda nil (local-set-key C-x C-e (quote js-send-last-sexp)) (local-set-key C-c b (quote js-send-buffer)) (local-set-key C-c r (quote js-send-region)) (local-set-key C-c C-r (quote js-send-region-and-go))) | lsp | prettier-js-mode | add-node-modules-path |
-
+| my-js-comint-keys | lsp | prettier-js-mode | add-node-modules-path |
+*** 
 ** Better Completions
 #+begin_src emacs-lisp
       (use-package company
@@ -765,7 +860,7 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 : next-tag
 ** Window Movement
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "M-+") 'other-window)
 (global-set-key (kbd "M-[") 'ace-window)
 (global-set-key (kbd "M-]") 'treemacs-select-window)
 (global-set-key [(meta left)] 'windmove-left)
@@ -786,6 +881,45 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 #+RESULTS:
 : dabbrev-expand
+** Cursor Movement
+#+BEGIN_SRC emacs-lisp
+(defun insert-line-above-and-go ()
+  ;;insert a line above the current one and move the cursor there
+  (interactive)
+  (previous-line nil)
+  (move-end-of-line nil)
+  (electric-newline-and-maybe-indent)
+  (indent-relative-first-indent-point))
+
+(global-set-key (kbd "M-o") 'insert-line-above-and-go)
+
+
+;; move C-j to C-; indent-new-comment-line
+(global-set-key (kbd "C-;") 'indent-new-comment-line)
+
+
+
+
+
+  
+#+End_SRC
+
+#+RESULTS:
+: indent-new-comment-line
+** Delete word at cursor
+#+BEGIN_SRC emacs-lisp
+(defun kill-word-at-point()
+  (interactive)
+  (kill-word 1)
+  (backward-kill-word 1))
+
+  (global-set-key (kbd "M-DEL") 'kill-word-at-point)
+#+END_SRC
+
+#+RESULTS:
+: --at-
+
+
 
 * dired
 ** Hotkeys to remember
@@ -866,10 +1000,14 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
 (global-set-key (kbd "M-i") 'back-to-indentation)
 ;; rebind "M-m" iy-go-to-char
-(global-set-key (kbd "M-m") 'iy-go-to-char)
+(global-set-key (kbd "C-}") 'iy-go-to-char)
+;;unbind C-m from return  
+(global-set-key (kbd "C-)") 'iy-go-up-to-char)
+(global-set-key (kbd "C-{") 'iy-go-to-char-backward)
+(global-set-key (kbd "C-(") 'iy-go-up-to-char-backward)
 #+END_SRC
 
 #+RESULTS:
-: iy-go-to-char
+: iy-go-up-to-char-backward
 
  
