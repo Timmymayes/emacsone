@@ -397,6 +397,7 @@ Version 2019-12-26"
 
 (add-hook 'prog-mode-hook 'electric-pair-mode)
 (add-hook 'prog-mode-hook 'electric-indent-mode)
+(global-set-key (kbd "C-c s (") 'electric-pair-mode)
 
 (setq display-line-numbers-type 'relative)
 
@@ -615,7 +616,7 @@ Version 2019-12-26"
 (global-set-key [(meta down)] 'windmove-down)
 (global-set-key (kbd "C-c s t") 'treemacs)
 
-(global-set-key (kbd "M-/") 'dabbrev-expand)
+(global-set-key (kbd "M-m") 'dabbrev-expand)
 
 (defun insert-line-above-and-go ()
   ;;insert a line above the current one and move the cursor there

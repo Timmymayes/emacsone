@@ -1,4 +1,4 @@
-#+title: Emacs US Config
+#+Title: Emacs US Config
 #+PROPERTY: header-args:emacs-lisp :tangle ~/Projects/emacsone/init.el
 
 
@@ -565,11 +565,13 @@ Version 2019-12-26"
 #+BEGIN_SRC emacs-lisp
 (add-hook 'prog-mode-hook 'electric-pair-mode)
 (add-hook 'prog-mode-hook 'electric-indent-mode)
+(global-set-key (kbd "C-c s (") 'electric-pair-mode)
+
+
 #+END_SRC
 
 #+RESULTS:
 | electric-indent-mode | electric-pair-mode | my-display-numbers-hook | rainbow-delimiters-mode |
-
 ** Line Numbers
 #+begin_src emacs-lisp
 (setq display-line-numbers-type 'relative)
@@ -875,7 +877,7 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 : treemacs
 ** dabbrev
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-/") 'dabbrev-expand)
+ (global-set-key (kbd "M-m") 'dabbrev-expand)
 
 #+END_SRC
 
