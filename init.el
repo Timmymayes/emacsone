@@ -505,10 +505,7 @@ Version 2019-12-26"
   (setq-local flycheck-disabled-checkers (cl-union flycheck-disabled-checkers
                                                    '(javascript-jshint))) ; jshint doesn't work for JSX
   (electric-pair-mode 1))
-;;  (evil-leader/set-key-for-mode 'rjsx-mode
-;;    "fu"  #'lsp-find-references          ; (f)ind (u)sages
-;;    "fp" 'prettier-js-mode))             ; (f)ormat (p)rettier
-;; 
+
 (use-package add-node-modules-path
   :defer t
   :hook (((js2-mode rjsx-mode) . add-node-modules-path)))
@@ -519,9 +516,6 @@ Version 2019-12-26"
   :defer t
   :diminish prettier-js-mode
   :hook (((js2-mode rjsx-mode) . prettier-js-mode)))
-
-;;  (evil-leader/set-key-for-mode 'rjsx-mode
-;;    "fp" 'prettier-js-mode)) ; (f)ormat (p)rettier
 
 ;; setup lsp mode
 (use-package lsp-mode
@@ -534,10 +528,7 @@ Version 2019-12-26"
         lsp-auto-guess-root t
         ;; don't set flymake or lsp-ui so the default linter doesn't get trampled
         lsp-diagnostic-package :none))
-  ;;; keybinds after load
-  ;; (evil-leader/set-key
-    ;; "jd"  #'lsp-goto-type-definition ; (j)ump to (d)efinition
-  ;;  "jb"  #'xref-pop-marker-stack))  ; (j)ump (b)ack to marker
+
 
 
 (use-package lsp-ui
@@ -552,6 +543,7 @@ Version 2019-12-26"
         lsp-ui-peek-enable nil
         lsp-ui-imenu-enable nil
         lsp-ui-doc-enable nil))
+
 
 (defun my-js-comint-keys ()
   "My Keys for sending to the js-comint repl"
@@ -638,6 +630,17 @@ Version 2019-12-26"
   (backward-kill-word 1))
 
   (global-set-key (kbd "M-DEL") 'kill-word-at-point)
+
+(defun duplicate-current-line()
+  (interactive)
+  (back-to-indentation)
+  (kill-line)
+  (yank)
+  (newline)
+  (indent-for-tab-command)
+  (yank))
+
+(global-set-key (kbd "C-c C-d") 'duplicate-current-line)
 
 ; list directories first
 (setq dired-listing-switches "-agho --group-directories-first")
