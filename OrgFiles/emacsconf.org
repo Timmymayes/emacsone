@@ -831,6 +831,10 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
 ** Debugging
 Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 * Macros and rebind
+
+#+RESULTS:
+: event-apply-hyper-modifier
+
 ** next-tag - "C-x t" - Move inside the next tag set in web-mode
 #+BEGIN_SRC emacs-lisp
 (defun next-tag()
@@ -891,6 +895,9 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 ;; move C-j to C-; indent-new-comment-line
 (global-set-key (kbd "C-;") 'indent-new-comment-line)
 
+(global-set-key (kbd "H-]") 'xref-find-definitions)
+(global-set-key (kbd "H-[") 'xref-go-back)
+
 
 
 
@@ -899,7 +906,7 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 #+End_SRC
 
 #+RESULTS:
-: indent-new-comment-line
+: xref-go-back
 ** Delete word at cursor
 #+BEGIN_SRC emacs-lisp
 (defun kill-word-at-point()
@@ -923,12 +930,22 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
   (indent-for-tab-command)
   (yank))
 
-(global-set-key (kbd "C-c C-d") 'duplicate-current-line)
+(global-set-key (kbd "H-d") 'duplicate-current-line)
+
+
+
+
+(progn
+  ;; some Hyper keys to insert Unicode chars
+  (define-key key-translation-map (kbd "H-3") (kbd "•")) ; bullet
+  (define-key key-translation-map (kbd "H-4") (kbd "◇")) ; white diamond
+  (define-key key-translation-map (kbd "H-5") (kbd "†")) ; dagger
+  )
 
 #+END_SRC
 
 #+RESULTS:
-: duplicate-current-line
+: [8224]
 
 * dired
 ** Hotkeys to remember

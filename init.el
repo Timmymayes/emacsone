@@ -624,6 +624,9 @@ Version 2019-12-26"
 ;; move C-j to C-; indent-new-comment-line
 (global-set-key (kbd "C-;") 'indent-new-comment-line)
 
+(global-set-key (kbd "H-]") 'xref-find-definitions)
+(global-set-key (kbd "H-[") 'xref-go-back)
+
 (defun kill-word-at-point()
   (interactive)
   (kill-word 1)
@@ -640,7 +643,17 @@ Version 2019-12-26"
   (indent-for-tab-command)
   (yank))
 
-(global-set-key (kbd "C-c C-d") 'duplicate-current-line)
+(global-set-key (kbd "H-d") 'duplicate-current-line)
+
+
+
+
+(progn
+  ;; some Hyper keys to insert Unicode chars
+  (define-key key-translation-map (kbd "H-3") (kbd "•")) ; bullet
+  (define-key key-translation-map (kbd "H-4") (kbd "◇")) ; white diamond
+  (define-key key-translation-map (kbd "H-5") (kbd "†")) ; dagger
+  )
 
 ; list directories first
 (setq dired-listing-switches "-agho --group-directories-first")
