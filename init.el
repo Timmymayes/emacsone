@@ -3,10 +3,15 @@
 
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
+                         ;;("org" . "https://orgmode.org/elpa/")
+                         ("gnu" . "https://elpa.gnu.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
+(assq-delete-all 'org package--builtins)
+(assq-delete-all 'org package--builtin-versions)
 (unless package-archive-contents
  (package-refresh-contents))
 
@@ -334,6 +339,16 @@ Version 2019-12-26"
 
 (setq org-clock-sound "~/Downloads/cheer.wav")
 
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory "~/RoamNotes")
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert))
+  :config
+  (org-roam-setup))
+
 (use-package magit
   :commands (magit-status magit-get-current-branch)
   :custom
@@ -561,6 +576,10 @@ Version 2019-12-26"
 (setenv "NODE_NO_READLINE" "1")
 (add-hook 'rjsx-mode-hook 'my-js-comint-keys)
 
+
+(with-eval-after-load 'flycheck
+  (flycheck-add-next-checker 'javascript-eslint '(t . javascript-jscs)))
+
 (use-package company
     :after lsp-mode
     :hook ((lsp-mode web-mode) . company-mode)
@@ -620,12 +639,28 @@ Version 2019-12-26"
 
 (global-set-key (kbd "M-o") 'insert-line-above-and-go)
 
+;;
+;
+
+; ;
 
 ;; move C-j to C-; indent-new-comment-line
 (global-set-key (kbd "C-;") 'indent-new-comment-line)
 
-(global-set-key (kbd "H-]") 'xref-find-definitions)
+(global-set-key (kbd "H-]") 'xref-find-references)
 (global-set-key (kbd "H-[") 'xref-go-back)
+(global-set-key (kbd "H-g") 'goto-line)
+
+(defun wrap-sexp-backward-with-parenthesis()
+  (interactive)
+  (backward-sexp)
+  (mark-sexp) 
+  (insert-parentheses))
+
+  (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
+
+
+(global-set-key (kbd "s-a") 'ace-jump-word-mode)
 
 (defun kill-word-at-point()
   (interactive)
@@ -634,16 +669,48 @@ Version 2019-12-26"
 
   (global-set-key (kbd "M-DEL") 'kill-word-at-point)
 
+(defun kill-line-at-point()
+  (interactive)
+  (back-to-indentation)
+  (kill-line))
+  
+  (global-set-key (kbd "s-l") 'kill-line-at-point)
+
 (defun duplicate-current-line()
+  "Duplicates the entire line under point. Repetable with 'd' "
   (interactive)
   (back-to-indentation)
   (kill-line)
   (yank)
   (newline)
   (indent-for-tab-command)
-  (yank))
+  (yank)
+  (set-temporary-overlay-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map (kbd "d") 'duplicate-current-line)
+      map)))
 
-(global-set-key (kbd "H-d") 'duplicate-current-line)
+(defun duplicate-line-up-to-point()
+ "Duplicates a line from start of indentation up to point. May be repeated with single 'd' presses."
+  (interactive)
+  (set-mark-command nil)
+  (back-to-indentation)
+  (kill-ring-save (region-beginning) (region-end))
+  (end-of-line)
+  (newline)
+;; example of single key repeat functionality
+  (yank)
+  (set-temporary-overlay-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map (kbd "d") 'duplicate-line-up-to-point)
+      map)))
+
+
+(global-set-key (kbd "H-s-d") 'duplicate-current-line)
+(global-set-key (kbd "H-d") 'duplicate-line-up-to-point)
+
+
+
 
 
 
@@ -654,6 +721,11 @@ Version 2019-12-26"
   (define-key key-translation-map (kbd "H-4") (kbd "◇")) ; white diamond
   (define-key key-translation-map (kbd "H-5") (kbd "†")) ; dagger
   )
+
+(global-set-key (kbd "s-s") 'point-to-register)
+(global-set-key (kbd "s-j") 'jump-to-register)
+(global-set-key (kbd "H-s") 'bookmark-set)
+(global-set-key (kbd "H-j") 'bookmark-jump)
 
 ; list directories first
 (setq dired-listing-switches "-agho --group-directories-first")
@@ -688,8 +760,8 @@ Version 2019-12-26"
 ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
 (global-set-key (kbd "M-i") 'back-to-indentation)
 ;; rebind "M-m" iy-go-to-char
-(global-set-key (kbd "C-}") 'iy-go-to-char)
+(global-set-key (kbd "s-n") 'iy-go-to-char)
 ;;unbind C-m from return  
-(global-set-key (kbd "C-)") 'iy-go-up-to-char)
-(global-set-key (kbd "C-{") 'iy-go-to-char-backward)
-(global-set-key (kbd "C-(") 'iy-go-up-to-char-backward)
+(global-set-key (kbd "s-h") 'iy-go-up-to-char)
+(global-set-key (kbd "s-b") 'iy-go-to-char-backward)
+(global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)

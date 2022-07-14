@@ -3,8 +3,7 @@
 
 
 * Resume point
-`TODO https://youtu.be/kkqVTDbfYp4?t=2737
-TODO setup multiple cursors and add to config file https://github.com/magnars/multiple-cursors.el
+
 
 * Package Setup
 #+begin_src emacs-lisp
@@ -13,10 +12,15 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
 
 
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")
+                           ;;("org" . "https://orgmode.org/elpa/")
+                           ("gnu" . "https://elpa.gnu.org/packages/")
+                           ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+
                            ("elpa" . "https://elpa.gnu.org/packages/")))
 
   (package-initialize)
+  (assq-delete-all 'org package--builtins)
+  (assq-delete-all 'org package--builtin-versions)
   (unless package-archive-contents
    (package-refresh-contents))
 
@@ -33,7 +37,7 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
 #+end_src
 
 #+RESULTS:
-: ((fullscreen . maximized) (vertical-scroll-bars) (left-fringe . 10) (right-fringe . 10))
+: t
 
 * Mail with mu4e
 ** Config
@@ -125,7 +129,11 @@ TODO setup multiple cursors and add to config file https://github.com/magnars/mu
 
     (load-theme 'tango-dark)
 
+
 #+end_src
+
+#+RESULTS:
+: t
 
 ** Themes
 #+begin_src emacs-lisp
@@ -472,6 +480,23 @@ Version 2019-12-26"
 #+RESULTS:
 : ~/Downloads/cheer.wav
 
+* Org-Roam Setup
+#+BEGIN_SRC emacs-lisp
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory "~/RoamNotes")
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert))
+  :config
+  (org-roam-setup))
+
+#+END_SRC
+
+#+RESULTS:
+: org-roam-node-insert
+
 * IDE Setup
 ** To add
 *** TODO auto load web-mode
@@ -782,6 +807,8 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
   (add-hook 'rjsx-mode-hook 'my-js-comint-keys)
 
     
+  (with-eval-after-load 'flycheck
+    (flycheck-add-next-checker 'javascript-eslint '(t . javascript-jscs)))
 
 
 
@@ -790,7 +817,6 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
 #+END_SRC
 
 #+RESULTS:
-| my-js-comint-keys | lsp | prettier-js-mode | add-node-modules-path |
 *** 
 ** Better Completions
 #+begin_src emacs-lisp
@@ -832,8 +858,8 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
 Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 * Macros and rebind
 
-#+RESULTS:
-: event-apply-hyper-modifier
+
+
 
 ** next-tag - "C-x t" - Move inside the next tag set in web-mode
 #+BEGIN_SRC emacs-lisp
@@ -879,35 +905,49 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 #+RESULTS:
 : dabbrev-expand
-** Cursor Movement
+** TODO Cursor Movement
 #+BEGIN_SRC emacs-lisp
-(defun insert-line-above-and-go ()
-  ;;insert a line above the current one and move the cursor there
-  (interactive)
-  (previous-line nil)
-  (move-end-of-line nil)
-  (electric-newline-and-maybe-indent)
-  (indent-relative-first-indent-point))
+  (defun insert-line-above-and-go ()
+    ;;insert a line above the current one and move the cursor there
+    (interactive)
+    (previous-line nil)
+    (move-end-of-line nil)
+    (electric-newline-and-maybe-indent)
+    (indent-relative-first-indent-point))
 
-(global-set-key (kbd "M-o") 'insert-line-above-and-go)
+  (global-set-key (kbd "M-o") 'insert-line-above-and-go)
+
+  ;;
+  ;
+
+  ; ;
+
+  ;; move C-j to C-; indent-new-comment-line
+  (global-set-key (kbd "C-;") 'indent-new-comment-line)
+
+  (global-set-key (kbd "H-]") 'xref-find-references)
+  (global-set-key (kbd "H-[") 'xref-go-back)
+  (global-set-key (kbd "H-g") 'goto-line)
+
+  (defun wrap-sexp-backward-with-parenthesis()
+    (interactive)
+    (backward-sexp)
+    (mark-sexp) 
+    (insert-parentheses))
+
+    (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
 
 
-;; move C-j to C-; indent-new-comment-line
-(global-set-key (kbd "C-;") 'indent-new-comment-line)
-
-(global-set-key (kbd "H-]") 'xref-find-definitions)
-(global-set-key (kbd "H-[") 'xref-go-back)
+  (global-set-key (kbd "s-a") 'ace-jump-word-mode)
 
 
 
 
-
-  
 #+End_SRC
 
 #+RESULTS:
-: xref-go-back
-** Delete word at cursor
+: ace-jump-word-mode
+** Delete at cursor
 #+BEGIN_SRC emacs-lisp
 (defun kill-word-at-point()
   (interactive)
@@ -915,22 +955,58 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
   (backward-kill-word 1))
 
   (global-set-key (kbd "M-DEL") 'kill-word-at-point)
+
+(defun kill-line-at-point()
+  (interactive)
+  (back-to-indentation)
+  (kill-line))
+  
+  (global-set-key (kbd "s-l") 'kill-line-at-point)
+
+
 #+END_SRC
 
 #+RESULTS:
-: --at-
-**  Duplicate Line
+: kill-line-at-point
+
+#+-
+**  Duplicate Lines
 #+BEGIN_SRC emacs-lisp
 (defun duplicate-current-line()
+  "Duplicates the entire line under point. Repetable with 'd' "
   (interactive)
   (back-to-indentation)
   (kill-line)
   (yank)
   (newline)
   (indent-for-tab-command)
-  (yank))
+  (yank)
+  (set-temporary-overlay-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map (kbd "d") 'duplicate-current-line)
+      map)))
 
-(global-set-key (kbd "H-d") 'duplicate-current-line)
+(defun duplicate-line-up-to-point()
+ "Duplicates a line from start of indentation up to point. May be repeated with single 'd' presses."
+  (interactive)
+  (set-mark-command nil)
+  (back-to-indentation)
+  (kill-ring-save (region-beginning) (region-end))
+  (end-of-line)
+  (newline)
+;; example of single key repeat functionality
+  (yank)
+  (set-temporary-overlay-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map (kbd "d") 'duplicate-line-up-to-point)
+      map)))
+
+
+(global-set-key (kbd "H-s-d") 'duplicate-current-line)
+(global-set-key (kbd "H-d") 'duplicate-line-up-to-point)
+
+
+
 
 
 
@@ -946,7 +1022,19 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 #+RESULTS:
 : [8224]
+** Register manipulation
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "s-s") 'point-to-register)
+(global-set-key (kbd "s-j") 'jump-to-register)
+(global-set-key (kbd "H-s") 'bookmark-set)
+(global-set-key (kbd "H-j") 'bookmark-jump)
 
+
+
+#+END_SRC
+
+#+RESULTS:
+: bookmark-jump
 * dired
 ** Hotkeys to remember
 - m: mark files
@@ -1026,11 +1114,11 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
 (global-set-key (kbd "M-i") 'back-to-indentation)
 ;; rebind "M-m" iy-go-to-char
-(global-set-key (kbd "C-}") 'iy-go-to-char)
+(global-set-key (kbd "s-n") 'iy-go-to-char)
 ;;unbind C-m from return  
-(global-set-key (kbd "C-)") 'iy-go-up-to-char)
-(global-set-key (kbd "C-{") 'iy-go-to-char-backward)
-(global-set-key (kbd "C-(") 'iy-go-up-to-char-backward)
+(global-set-key (kbd "s-h") 'iy-go-up-to-char)
+(global-set-key (kbd "s-b") 'iy-go-to-char-backward)
+(global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
 #+END_SRC
 
 #+RESULTS:
