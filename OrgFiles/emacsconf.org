@@ -2,6 +2,7 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ~/Projects/emacsone/init.el
 
 
+
 * Resume point
 
 
@@ -137,19 +138,22 @@
 
 ** Themes
 #+begin_src emacs-lisp
-					  ;set doom themes
-    (use-package doom-themes
-      :ensure t
-      :config
-      (load-theme 'doom-gruvbox t))
-					  ;use doom mode
-    (use-package doom-modeline
-      :ensure t
-      :init (doom-modeline-mode 1)
-      :config 
-      (setq doom-modeline-height 15))
+                                            ;set doom themes
+      (use-package doom-themes
+        :ensure t
+        :config
+        (load-theme 'doom-gruvbox t))
+                                            ;use doom mode
+      (use-package doom-modeline
+        :ensure t
+        :init (doom-modeline-mode 1)
+        :config 
+        (setq doom-modeline-height 15))
 
 #+end_src
+
+#+RESULTS:
+: t
 
 ** DONE Transparency
 CLOSED: [2022-06-01 Wed 13:18]
@@ -198,68 +202,49 @@ CLOSED: [2022-06-01 Wed 13:18]
 #+end_src
 ** Completion
 #+begin_src emacs-lisp
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
-	 ("C-x C-f" . counsel-find-file)
-	 :map minibuffer-local-map
-	 ("C-r" . 'counsel-minibuffer-history)))
+  
+;;           (use-package counsel
+;;             :bind (("M-x" . counsel-M-x)
+;;                    ("C-x b" . counsel-ibuffer)
 
-(use-package ivy-rich
-  :init
-  (ivy-rich-mode 1))
+
+;; story)))
+
+  ;;        (use-package ivy-richt
+    ;;        :init
+      ;;      (ivy-rich-mode 1))
+
+          (use-package vertico
+            :ensure t
+            :custom
+            (vertico-cycle t)
+            :init
+            (vertico-mode))
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  (use-package marginalia
+    :after vertico
+    :ensure t
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+
+
+
 #+end_src
+
+#+RESULTS:
+
 ** Yas Mode
 #+BEGIN_SRC emacs-lisp
 
 (yas-global-mode 1)
 #+END_SRC
 
-* Region Control
-#+BEGIN_SRC emacs-lisp
-(defun xah-select-text-in-quote ()
-  "Select text between the nearest left and right delimiters.
-Delimiters here includes the following chars: \"`<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕（）
-This command select between any bracket chars, does not consider nesting. For example, if text is
-(a(b)c▮)
-the selected char is “c”, not “a(b)c”.
 
-URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
-Version 2020-11-24 2021-07-11"
-  (interactive)
-  (let ( $skipChars $p1 )
-    (setq $skipChars "^\"`<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕（）〘〙")
-    (skip-chars-backward $skipChars)
-    (setq $p1 (point))
-    (skip-chars-forward $skipChars)
-    (set-mark $p1)))
-
-(global-set-key (kbd "C-M-<prior>") 'xah-select-text-in-quote)
-
-
-(defun xah-select-block ()
-  "Select the current/next block of text between blank lines.
-If region is active, extend selection downward by block.
-
-URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
-Version 2019-12-26"
-  (interactive)
-  (if (region-active-p)
-      (re-search-forward "\n[ \t]*\n" nil "move")
-    (progn
-      (skip-chars-forward " \n\t")
-      (when (re-search-backward "\n[ \t]*\n" nil "move")
-        (re-search-forward "\n[ \t]*\n"))
-      (push-mark (point) t t)
-      (re-search-forward "\n[ \t]*\n" nil "move"))))
-
-(global-set-key (kbd "C-M-<next>") 'xah-select-block)
-
-
-#+END_SRC
-
-#+RESULTS:
-: xah-select-block
 
 * Window Control
 #+BEGIN_SRC emacs-lisp
@@ -368,7 +353,7 @@ Version 2019-12-26"
     (lambda () (interactive) (org-capture nil "tt")))
 
     (global-set-key (kbd "C-c a") 'org-agenda)
-    
+
 
                                           ; refile targets
 
@@ -392,26 +377,26 @@ Version 2019-12-26"
 
 ** Font Configuration
 #+begin_src emacs-lisp
-  (dolist (face '((org-level-1 . 1.2)
-		  (org-level-2 . 1.1)
-		  (org-level-3 . 1.05)
-		  (org-level-4 . 1.0)
-		  (org-level-5 . 1.1)
-		  (org-level-6 . 1.1)
-		  (org-level-7 . 1.1)
-		  (org-level-8 . 1.1)))
-    (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
-					  ; keep a few things fixed pitch as they should be for line ups
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.1)
+                    (org-level-6 . 1.1)
+                    (org-level-7 . 1.1)
+                    (org-level-8 . 1.1)))
+      (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+                                            ; keep a few things fixed pitch as they should be for line ups
 
   (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-;  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+    (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+  ;  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
 
 #+end_src
 ** bullets and dashes
@@ -482,27 +467,57 @@ Version 2019-12-26"
 
 * Org-Roam Setup
 #+BEGIN_SRC emacs-lisp
-(use-package org-roam
-  :ensure t
-  :custom
-  (org-roam-directory "~/RoamNotes")
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert))
-  :config
-  (org-roam-setup))
+  (use-package org-roam
+    :ensure t
+    :custom
+    (org-roam-directory "~/RoamNotes")
+    (org-roam-completion-everywhere t)
+
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-id-get-create)
+           ("C-c n a" . org-roam-alias-add)
+           ("C-c n r" . org-roam-alias-remove)
+           :map org-mode-map
+           ("C-M-i" . completion-at-point)
+           ("C-c n b" . org-mark-ring-goto))
+          :config
+          (org-roam-setup)
+
+    )
+
+  (with-eval-after-load "org-roam" 
+          (setq org-roam-capture-templates
+                '(("d" "default" plain
+                   "%?"
+                   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                   :unnarrowed t)
+                ;; programming language
+                ("l" "programming language" plain
+                 "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
+                 :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                 :unnarrowed t)
+                ("b" "book notes" plain
+                 "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
+                 :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
+                 :unnarrowed t))))
+
+
+
+  (use-package org-roam-ui
+    :bind ("s-r" . org-roam-ui-open))
+
 
 #+END_SRC
 
 #+RESULTS:
-: org-roam-node-insert
+: org-roam-ui-open
+
 
 * IDE Setup
 ** To add
-*** TODO auto load web-mode
-*** TODO auto load emmet mode
-*** TODO auto load html-autoview-mode
-*** 
+
 ** Magit
 #+begin_src emacs-lisp
 (use-package magit
@@ -515,6 +530,23 @@ Version 2019-12-26"
 
 #+RESULTS:
 : ~/Projects/
+
+** Git Gutter
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter
+    :hook (prog-mode . git-gutter-mode)
+    :config
+    (setq git-gutter:update-interval 0.02))
+  (use-package git-gutter-fringe
+    :config
+    (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
+
+#+END_SRC
+
+#+RESULTS:
+: t
 
 ** Forge
 #+begin_src emacs-lisp
@@ -582,10 +614,13 @@ Version 2019-12-26"
 ** Rainbow Deliminators
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
-
   :hook (prog-mode . rainbow-delimiters-mode))
 
 #+end_src
+
+#+RESULTS:
+| rainbow-delimiters-mode |
+
 ** Electric Pair mode
 #+BEGIN_SRC emacs-lisp
 (add-hook 'prog-mode-hook 'electric-pair-mode)
@@ -806,7 +841,7 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
   (setenv "NODE_NO_READLINE" "1")
   (add-hook 'rjsx-mode-hook 'my-js-comint-keys)
 
-    
+
   (with-eval-after-load 'flycheck
     (flycheck-add-next-checker 'javascript-eslint '(t . javascript-jscs)))
 
@@ -837,13 +872,13 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
 
 
   (defun my-web-mode-hook ()
-   (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
+    (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
 
   (add-hook 'web-mode-hook 'my-web-mode-hook)
 
   ;; Company mode for yas
   (global-set-key (kbd "<C-tab>") 'company-yasnippet)
-    ;  (use-package company-box
+    ;  (use-ackage company-box
      ;   :hook (company-mode . company-box-mode))
 #+end_src
 
@@ -897,56 +932,51 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 #+RESULTS:
 : treemacs
-** dabbrev
-#+BEGIN_SRC emacs-lisp
- (global-set-key (kbd "M-m") 'dabbrev-expand)
 
-#+END_SRC
-
-#+RESULTS:
-: dabbrev-expand
 ** TODO Cursor Movement
 #+BEGIN_SRC emacs-lisp
-  (defun insert-line-above-and-go ()
-    ;;insert a line above the current one and move the cursor there
-    (interactive)
-    (previous-line nil)
-    (move-end-of-line nil)
-    (electric-newline-and-maybe-indent)
-    (indent-relative-first-indent-point))
+    (defun insert-line-above-and-go ()
+      ;;insert a line above the current one and move the cursor there
+      (interactive)
+      (previous-line nil)
+      (move-end-of-line nil)
+      (electric-newline-and-maybe-indent)
+      (indent-relative-first-indent-point))
 
-  (global-set-key (kbd "M-o") 'insert-line-above-and-go)
+    (global-set-key (kbd "M-o") 'insert-line-above-and-go)
 
-  ;;
-  ;
+    ;;
+    ;
 
-  ; ;
+    ; ;
 
-  ;; move C-j to C-; indent-new-comment-line
-  (global-set-key (kbd "C-;") 'indent-new-comment-line)
+    ;; move C-j to C-; indent-new-comment-line
+    (global-set-key (kbd "C-;") 'indent-new-comment-line)
 
-  (global-set-key (kbd "H-]") 'xref-find-references)
-  (global-set-key (kbd "H-[") 'xref-go-back)
-  (global-set-key (kbd "H-g") 'goto-line)
+    (global-set-key (kbd "H-]") 'xref-find-references)
+    (global-set-key (kbd "H-[") 'xref-go-back)
+    (global-set-key (kbd "H-g") 'goto-line)
 
-  (defun wrap-sexp-backward-with-parenthesis()
-    (interactive)
-    (backward-sexp)
-    (mark-sexp) 
-    (insert-parentheses))
+    (defun wrap-sexp-backward-with-parenthesis()
+      (interactive)
+      (backward-sexp)
+      (mark-sexp) 
+      (insert-parentheses))
 
-    (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
+      (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
 
 
-  (global-set-key (kbd "s-a") 'ace-jump-word-mode)
+    (global-set-key (kbd "s-a") 'ace-jump-word-mode)
 
+
+    (global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
 
 
 
 #+End_SRC
 
 #+RESULTS:
-: ace-jump-word-mode
+| lambda | (&optional arg) | Keyboard macro. | (interactive p) | (kmacro-exec-ring-item '([21 24 24] 0 %d) arg) |
 ** Delete at cursor
 #+BEGIN_SRC emacs-lisp
 (defun kill-word-at-point()
@@ -972,51 +1002,52 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 #+-
 **  Duplicate Lines
 #+BEGIN_SRC emacs-lisp
-(defun duplicate-current-line()
-  "Duplicates the entire line under point. Repetable with 'd' "
-  (interactive)
-  (back-to-indentation)
-  (kill-line)
-  (yank)
-  (newline)
-  (indent-for-tab-command)
-  (yank)
-  (set-temporary-overlay-map
-    (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "d") 'duplicate-current-line)
-      map)))
+  (defun duplicate-current-line()
+    "Duplicates the entire line under point. Repetable with 'd' "
+    (interactive)
+    (back-to-indentation)
+    (kill-line)
+    (yank)
+    (newline)
+    (indent-for-tab-command)
+    (yank)
+    (set-temporary-overlay-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map (kbd "d") 'duplicate-current-line)
+        map)))
 
-(defun duplicate-line-up-to-point()
- "Duplicates a line from start of indentation up to point. May be repeated with single 'd' presses."
-  (interactive)
-  (set-mark-command nil)
-  (back-to-indentation)
-  (kill-ring-save (region-beginning) (region-end))
-  (end-of-line)
-  (newline)
-;; example of single key repeat functionality
-  (yank)
-  (set-temporary-overlay-map
-    (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "d") 'duplicate-line-up-to-point)
-      map)))
-
-
-(global-set-key (kbd "H-s-d") 'duplicate-current-line)
-(global-set-key (kbd "H-d") 'duplicate-line-up-to-point)
+  (defun duplicate-line-up-to-point()
+   "Duplicates a line from start of indentation up to point. May be repeated with single 'd' presses."
+    (interactive)
+    (set-mark-command nil)
+    (back-to-indentation)
+    (kill-ring-save (region-beginning) (region-end))
+    (end-of-line)
+    (newline)
+  ;; example of single key repeat functionality
+    (yank)
+    (set-temporary-overlay-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map (kbd "d") 'duplicate-line-up-to-point)
+        map)))
 
 
-
+  (global-set-key (kbd "H-s-d") 'duplicate-current-line
+                  )
+  (global-set-key (kbd "H-d") 'duplicate-line-up-to-point)
 
 
 
 
-(progn
-  ;; some Hyper keys to insert Unicode chars
-  (define-key key-translation-map (kbd "H-3") (kbd "•")) ; bullet
-  (define-key key-translation-map (kbd "H-4") (kbd "◇")) ; white diamond
-  (define-key key-translation-map (kbd "H-5") (kbd "†")) ; dagger
-  )
+
+
+
+  (progn
+    ;; some Hyper keys to insert Unicode chars
+    (define-key key-translation-map (kbd "H-3") (kbd "•")) ; bullet
+    (define-key key-translation-map (kbd "H-4") (kbd "◇")) ; white diamond
+    (define-key key-translation-map (kbd "H-5") (kbd "†")) ; dagger
+    )
 
 #+END_SRC
 

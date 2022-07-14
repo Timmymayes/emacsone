@@ -72,7 +72,7 @@
   :ensure t
   :config
   (load-theme 'doom-gruvbox t))
-				      ;use doom mode
+                                      ;use doom mode
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1)
@@ -111,56 +111,36 @@
   :config
   (setq which-key-idle-delay 1))
 
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
-	 ("C-x C-f" . counsel-find-file)
-	 :map minibuffer-local-map
-	 ("C-r" . 'counsel-minibuffer-history)))
+;;           (use-package counsel
+;;             :bind (("M-x" . counsel-M-x)
+;;                    ("C-x b" . counsel-ibuffer)
 
-(use-package ivy-rich
-  :init
-  (ivy-rich-mode 1))
+
+;; story)))
+
+  ;;        (use-package ivy-richt
+    ;;        :init
+      ;;      (ivy-rich-mode 1))
+
+          (use-package vertico
+            :ensure t
+            :custom
+            (vertico-cycle t)
+            :init
+            (vertico-mode))
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  (use-package marginalia
+    :after vertico
+    :ensure t
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
 
 (yas-global-mode 1)
-
-(defun xah-select-text-in-quote ()
-  "Select text between the nearest left and right delimiters.
-Delimiters here includes the following chars: \"`<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕（）
-This command select between any bracket chars, does not consider nesting. For example, if text is
-(a(b)c▮)
-the selected char is “c”, not “a(b)c”.
-
-URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
-Version 2020-11-24 2021-07-11"
-  (interactive)
-  (let ( $skipChars $p1 )
-    (setq $skipChars "^\"`<>(){}[]“”‘’‹›«»「」『』【】〖〗《》〈〉〔〕（）〘〙")
-    (skip-chars-backward $skipChars)
-    (setq $p1 (point))
-    (skip-chars-forward $skipChars)
-    (set-mark $p1)))
-
-(global-set-key (kbd "C-M-<prior>") 'xah-select-text-in-quote)
-
-
-(defun xah-select-block ()
-  "Select the current/next block of text between blank lines.
-If region is active, extend selection downward by block.
-
-URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
-Version 2019-12-26"
-  (interactive)
-  (if (region-active-p)
-      (re-search-forward "\n[ \t]*\n" nil "move")
-    (progn
-      (skip-chars-forward " \n\t")
-      (when (re-search-backward "\n[ \t]*\n" nil "move")
-        (re-search-forward "\n[ \t]*\n"))
-      (push-mark (point) t t)
-      (re-search-forward "\n[ \t]*\n" nil "move"))))
-
-(global-set-key (kbd "C-M-<next>") 'xah-select-block)
 
 (use-package ace-window)
 
@@ -275,17 +255,17 @@ Version 2019-12-26"
 ;;;;; end org mode setup ;;;;;
 
 (dolist (face '((org-level-1 . 1.2)
-		  (org-level-2 . 1.1)
-		  (org-level-3 . 1.05)
-		  (org-level-4 . 1.0)
-		  (org-level-5 . 1.1)
-		  (org-level-6 . 1.1)
-		  (org-level-7 . 1.1)
-		  (org-level-8 . 1.1)))
+                  (org-level-2 . 1.1)
+                  (org-level-3 . 1.05)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 1.1)
+                  (org-level-6 . 1.1)
+                  (org-level-7 . 1.1)
+                  (org-level-8 . 1.1)))
     (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
-					  ; keep a few things fixed pitch as they should be for line ups
+                                          ; keep a few things fixed pitch as they should be for line ups
 
-  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
   (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
   (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
@@ -343,17 +323,58 @@ Version 2019-12-26"
   :ensure t
   :custom
   (org-roam-directory "~/RoamNotes")
+  (org-roam-completion-everywhere t)
+
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert))
-  :config
-  (org-roam-setup))
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-id-get-create)
+         ("C-c n a" . org-roam-alias-add)
+         ("C-c n r" . org-roam-alias-remove)
+         :map org-mode-map
+         ("C-M-i" . completion-at-point)
+         ("C-c n b" . org-mark-ring-goto))
+        :config
+        (org-roam-setup)
+
+  )
+
+(with-eval-after-load "org-roam" 
+        (setq org-roam-capture-templates
+              '(("d" "default" plain
+                 "%?"
+                 :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                 :unnarrowed t)
+              ;; programming language
+              ("l" "programming language" plain
+               "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
+               :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+               :unnarrowed t)
+              ("b" "book notes" plain
+               "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
+               :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
+               :unnarrowed t))))
+
+
+
+(use-package org-roam-ui
+  :bind ("s-r" . org-roam-ui-open))
 
 (use-package magit
   :commands (magit-status magit-get-current-branch)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 (setq magit-clone-default-directory "~/Projects/")
+
+(use-package git-gutter
+  :hook (prog-mode . git-gutter-mode)
+  :config
+  (setq git-gutter:update-interval 0.02))
+(use-package git-gutter-fringe
+  :config
+  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
 (use-package forge)
 
@@ -407,7 +428,6 @@ Version 2019-12-26"
   :config (counsel-projectile-mode))
 
 (use-package rainbow-delimiters
-
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (add-hook 'prog-mode-hook 'electric-pair-mode)
@@ -597,13 +617,13 @@ Version 2019-12-26"
 
 
 (defun my-web-mode-hook ()
- (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
+  (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
 
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 
 ;; Company mode for yas
 (global-set-key (kbd "<C-tab>") 'company-yasnippet)
-  ;  (use-package company-box
+  ;  (use-ackage company-box
    ;   :hook (company-mode . company-box-mode))
 
 (defun next-tag()
@@ -626,8 +646,6 @@ Version 2019-12-26"
 (global-set-key [(meta up)] 'windmove-up)
 (global-set-key [(meta down)] 'windmove-down)
 (global-set-key (kbd "C-c s t") 'treemacs)
-
-(global-set-key (kbd "M-m") 'dabbrev-expand)
 
 (defun insert-line-above-and-go ()
   ;;insert a line above the current one and move the cursor there
@@ -661,6 +679,9 @@ Version 2019-12-26"
 
 
 (global-set-key (kbd "s-a") 'ace-jump-word-mode)
+
+
+(global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
 
 (defun kill-word-at-point()
   (interactive)
@@ -706,7 +727,8 @@ Version 2019-12-26"
       map)))
 
 
-(global-set-key (kbd "H-s-d") 'duplicate-current-line)
+(global-set-key (kbd "H-s-d") 'duplicate-current-line
+                )
 (global-set-key (kbd "H-d") 'duplicate-line-up-to-point)
 
 
