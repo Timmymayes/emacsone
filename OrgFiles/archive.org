@@ -1,4 +1,5 @@
-* Aprilt - 2022
+       
+* April - 2022
 ** DONE Finish documentation
 CLOSED: [2022-04-18 Mon 20:57] SCHEDULED: <2022-04-19 Tue>
 ** DONE Remember to commit configuration updtes
@@ -16,8 +17,7 @@ CLOSED: [2022-04-29 Fri 08:39]
 CLOSED: [2022-04-29 Fri 08:39] DEADLINE: <2022-04-20 Wed>
 
 ** DONE this is a test todo
-CLOSED: [2022-04-29 Fri 08:45]
-
+CLOSED: [2022-04-29 Fri 08:45
 * May - 2022
 ** DONE Test org-capture
 CLOSED: [2022-05-30 Mon 11:13] SCHEDULED: <2022-05-04 Wed>
@@ -54,9 +54,63 @@ CLOSED: [2022-05-30 Mon 12:24]
 CLOSED: [2022-05-30 Mon 15:31]
  [2022-05-30 Mon 15:30]
 
+** DONE 
+CLOSED: [2022-06-02 Thu 20:37]
+ [2022-06-01 Wed 13:17]
+ [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Mail%20with%20mu4e][Mail with mu4e]]
+
+** DONE 
+CLOSED: [2022-06-02 Thu 20:37]
+ [2022-06-01 Wed 13:18]
+ [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Mail%20with%20mu4e][Mail with mu4e]]
+
+** DONE 
+CLOSED: [2022-06-02 Thu 20:37]
+ [2022-06-01 Wed 13:18]
+ [[file:~/Projects/emacsone/OrgFiles/tasks.org::*]]
+
 * June - 2022
 ** DONE Create a guest list with a filter to learn looping
 CLOSED: [2022-06-02 Thu 20:36]
  [2022-05-30 Mon 15:30]
  [[file:~/Projects/live-practice/guest-list.js][file:~/Projects/live-practice/guest-list.js]]
+
+* July - 2022
+
+
+** DONE Fix the hotkey loading
+CLOSED: [2022-07-14 Thu 14:25]
+ [2022-05-30 Mon 20:27]
+ [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Javascript][Javascript]]
+
+** DONE g
+CLOSED: [2022-07-14 Thu 14:25]
+ [2022-06-03 Fri 00:02]
+ [[file:~/Projects/javascript-exercises/04_removeFromArray/removeFromArray.spec.js::describe('removeFromArray',%20()%20=>%20{]]
+
+** DONE 
+CLOSED: [2022-07-14 Thu 14:26]
+ [2022-06-04 Sat 17:33]
+
+** DONE 
+CLOSED: [2022-07-14 Thu 14:26]
+ [2022-07-14 Thu 13:43]
+ [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Visual Fill Mode][Visual Fill Mode]]
+
+** DONE 
+CLOSED: [2022-07-14 Thu 14:26]
+ [2022-07-14 Thu 14:18]
+test capture
+
+** DONE this is a test todo 
+CLOSED: [2022-07-14 Thu 14:26]
+ [2022-07-14 Thu 14:19]
+
+** DONE scheduled
+CLOSED: [2022-07-14 Thu 14:30] SCHEDULED: <2022-07-14 Thu>
+ [2022-07-14 Thu 14:19]
+
+** DONE Send Front email regarding missing emails to Issac
+CLOSED: [2022-07-15 Fri 13:31] DEADLINE: <2022-07-15 Fri> SCHEDULED: <2022-07-14 Thu>
+ [2022-07-14 Thu 14:30]
 

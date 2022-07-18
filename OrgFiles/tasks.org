@@ -1,30 +1,79 @@
 * Inbox
 
-** TODO Fix the hotkey loading
- [2022-05-30 Mon 20:27]
- [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Javascript][Javascript]]
+** DONE Setup bullet journal
+CLOSED: [2022-07-15 Fri 15:47] SCHEDULED: <2022-07-15 Fri>
+ [2022-07-15 Fri 13:32]
 
-** DONE 
-CLOSED: [2022-06-02 Thu 20:37]
- [2022-06-01 Wed 13:17]
- [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Mail%20with%20mu4e][Mail with mu4e]]
+** DONE Design time capture template for Ipad
+CLOSED: [2022-07-17 Sun 20:28] SCHEDULED: <2022-07-17 Sun>
+ [2022-07-15 Fri 13:33]
 
-** DONE 
-CLOSED: [2022-06-02 Thu 20:37]
- [2022-06-01 Wed 13:18]
- [[file:~/Projects/emacsone/OrgFiles/emacsconf.org::*Mail%20with%20mu4e][Mail with mu4e]]
+** DONE Do Dishes
+CLOSED: [2022-07-15 Fri 18:19]
+ [2022-07-15 Fri 00:00]
 
-** DONE 
-CLOSED: [2022-06-02 Thu 20:37]
- [2022-06-01 Wed 13:18]
- [[file:~/Projects/emacsone/OrgFiles/tasks.org::*]]
+** DONE Go for walk
+CLOSED: [2022-07-15 Fri 15:47]
+ [2022-07-15 Fri 13:37]
 
-** TODO g
- [2022-06-03 Fri 00:02]
- [[file:~/Projects/javascript-exercises/04_removeFromArray/removeFromArray.spec.js::describe('removeFromArray',%20()%20=>%20{]]
+** TODO drive up to irvine
+ [2022-07-15 Fri 13:37]
 
-** TODO 
- [2022-06-04 Sat 17:33]
+** DONE spend 1 hour reading Tom's book and making some notes for marketing todos
+CLOSED: [2022-07-15 Fri 15:47]
+ [2022-07-15 Fri 13:38]
+
+** TODO meditate
+ [2022-07-15 Fri 13:38]
+
+** DONE pack for going to irvine
+CLOSED: [2022-07-15 Fri 18:19]
+ [2022-07-15 Fri 13:39]
+
+** DONE confirm what jess needs andpack it
+CLOSED: [2022-07-15 Fri 18:19]
+ [2022-07-15 Fri 13:39]
+
+** TODO brush teeth
+ [2022-07-15 Fri 13:39]
+
+** DONE take a short nap
+CLOSED: [2022-07-15 Fri 15:47]
+ [2022-07-15 Fri 00:00]
+
+** TODO Look up and read the couch to 5k program and create an outline of doing that [16%]
+SCHEDULED: <2022-07-17 Sun>
+:PROPERTIES:
+:COOKIE_DATA: recursive
+:END:
+
+ [2022-07-15 Fri 13:42]
+
+
+** DONE charge watch
+CLOSED: [2022-07-15 Fri 15:47]
+ [2022-07-15 Fri 13:43]
+
+** DONE Pay credit card
+CLOSED: [2022-07-15 Fri 15:47]
+ [2022-07-15 Fri 13:43]
+
+** TODO look into subscriptions and cancel what you can
+SCHEDULED: <2022-07-17 Sun>
+ [2022-07-15 Fri 13:43]
+
+** TODO Finish Andrew Huberman Dopamine Podcast Notes
+SCHEDULED: <2022-07-17 Sun>
+ [2022-07-15 Fri 18:20]
+https://youtu.be/QmOF0crdyRU?t=4562
+
+** TODO Figure out how to setup habits again and add them in
+SCHEDULED: <2022-07-17 Sun>
+ [2022-07-15 Fri 00:00]
+
+** TODO Take a look at finance & budget. Maybe setup a file for it in Org-mode
+SCHEDULED: <2022-07-17 Sun>
+ [2022-07-15 Fri 18:24]
 
 * Backlog
 

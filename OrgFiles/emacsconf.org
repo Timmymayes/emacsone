@@ -2,7 +2,6 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ~/Projects/emacsone/init.el
 
 
-
 * Resume point
 
 
@@ -109,26 +108,39 @@
 
 * Basic UI Config
 #+begin_src emacs-lisp
-    (setq inhibit-startup-message t)
+      (setq inhibit-startup-message t)
 
-    (scroll-bar-mode -1) ;Disable visible scrollbar
-    (tool-bar-mode -1)   ;DIsable toolbar
-    (tooltip-mode -1)    ;disable tooltips11
-    (set-fringe-mode 10) ;give some breathing room
+      (scroll-bar-mode -1) ;Disable visible scrollbar
+      (tool-bar-mode -1)   ;DIsable toolbar
+      (tooltip-mode -1)    ;disable tooltips11
+      (set-fringe-mode 10) ;give some breathing room
 
-    (menu-bar-mode -1)   ;disable menu bar
+      (menu-bar-mode -1)   ;disable menu bar
 
-  ; setup the visible bell
+    ; setup the visible bell
 
-    (setq visible-bell t)
+      (setq visible-bell t)
 
-  ;set font
+    ;set font
 
-    (set-face-attribute 'default nil :font "Fira Code Retina" :height 140)
-  ; load theme note this passes an object denoted by a leading `
-  
+      (set-face-attribute 'default nil :font "Fira Code Retina" :height 140)
+    ; load theme note this passes an object denoted by a leading `
 
-    (load-theme 'tango-dark)
+
+      (load-theme 'tango-dark)
+    (desktop-save-mode 1)
+    (setq desktop-path '("~/Projects/emacsone"))
+    (desktop-read)
+
+
+
+
+
+
+
+
+
+
 
 
 #+end_src
@@ -256,20 +268,7 @@ CLOSED: [2022-06-01 Wed 13:18]
  '(aw-leading-char-face
    ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
-(defun scroll-down-keep-cursor ()
-    ;; Scroll the text one line down while keeping the cursor  
-    (interactive) 
 
-    (scroll-down 1))
-
-(defun scroll-up-keep-cursor ()  
-    ;; Scroll the text one line up while keeping the cursor   
-    (interactive) 
-
-    (scroll-up 1))
-
-(global-set-key (kbd "<next>") 'scroll-down-keep-cursor)
-(global-set-key (kbd "<prior>") 'scroll-up-keep-cursor)
 
 (global-set-key (kbd "C-M-]") 'avy-goto-word-or-subword-1)
 ;; unbund c-] from abort-recursive-edit
@@ -436,7 +435,7 @@ CLOSED: [2022-06-01 Wed 13:18]
 #+end_src
 ** Auto-Tangle Config Files
 #+begin_src emacs-lisp
-    ;;auto tangle my emacs config file
+;;auto tangle my emacs config file
   (defun emacsone/org-babel-tangle-config()
     (when (string-equal (buffer-file-name)
 		        (expand-file-name "~/Projects/emacsone/OrgFiles/emacsconf.org"))
@@ -445,6 +444,10 @@ CLOSED: [2022-06-01 Wed 13:18]
 	(org-babel-tangle))))
     (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'emacsone/org-babel-tangle-config)))
 #+end_src
+
+#+RESULTS:
+| (lambda nil (add-hook 'after-save-hook #'emacsone/org-babel-tangle-config)) | (closure (org--rds reftex-docstruct-symbol org-element-greater-elements visual-fill-column-width org-clock-history org-agenda-current-date org-with-time org-defdecode org-def org-read-date-inactive org-ans2 org-ans1 org-columns-current-fmt-compiled org-clock-current-task org-clock-effort org-agenda-skip-function org-agenda-skip-comment-trees org-agenda-archives-mode org-end-time-was-given org-time-was-given org-log-note-extra org-log-note-purpose org-log-post-message org-last-inserted-timestamp org-last-changed-timestamp org-entry-property-inherited-from org-blocked-by-checkboxes org-state org-agenda-headline-snapshot-before-repeat org-agenda-buffer-name org-agenda-start-on-weekday org-agenda-buffer-tmp-name org-priority-regexp org-mode-abbrev-table org-mode-syntax-table buffer-face-mode-face org-tbl-menu org-org-menu org-struct-menu org-entities org-last-state org-id-track-globally org-clock-start-time texmathp-why remember-data-file org-agenda-tags-todo-honor-ignore-options iswitchb-temp-buflist calc-embedded-open-mode calc-embedded-open-formula calc-embedded-close-formula align-mode-rules-list org-emphasis-alist org-emphasis-regexp-components org-export-registered-backends org-modules crm-separator org-babel-load-languages org-id-overriding-file-name org-indent-indentation-per-level org-element--timestamp-regexp org-element-paragraph-separate org-inlinetask-min-level t) nil (add-hook 'change-major-mode-hook 'org-show-all 'append 'local)) | (closure (org-src-window-setup *this* org-babel-confirm-evaluate-answer-no org-babel-tangle-uncomment-comments org-src-preserve-indentation org-src-lang-modes org-edit-src-content-indentation org-babel-library-of-babel t) nil (add-hook 'change-major-mode-hook #'org-babel-show-result-all 'append 'local)) | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+
 ** Visual Fill Mode
 #+begin_src emacs-lisp
     (defun org-mode-visual-fill()
@@ -467,46 +470,71 @@ CLOSED: [2022-06-01 Wed 13:18]
 
 * Org-Roam Setup
 #+BEGIN_SRC emacs-lisp
-  (use-package org-roam
-    :ensure t
-    :custom
-    (org-roam-directory "~/RoamNotes")
-    (org-roam-completion-everywhere t)
 
-    :bind (("C-c n l" . org-roam-buffer-toggle)
+
+        (use-package org-roam
+          :ensure t
+          :init
+          (setq org-roam-v2-act t)
+          :custom
+          (org-roam-directory "~/RoamNotes")
+          (org-roam-completion-everywhere t)
+
+          :bind
+          (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n i" . org-roam-node-insert)
            ("C-c n c" . org-id-get-create)
            ("C-c n a" . org-roam-alias-add)
-           ("C-c n r" . org-roam-alias-remove)
+           ("C-c n r" . org-roam-ref-add)
+           ("C-c n x a" . org-roam-alias-remove)
+           ("C-c n x r" . org-roam-ref-remove)
+         
+           ("C-c n I" . org-roam-node-insert-immediate)
            :map org-mode-map
            ("C-M-i" . completion-at-point)
-           ("C-c n b" . org-mark-ring-goto))
-          :config
-          (org-roam-setup)
+           ("C-c n b" . org-mark-ring-goto)
+           :map org-roam-dailies-map
+           ("Y" . org-roam-dailies-capture-yesterday)
+           ("T" . org-roam-dailies-capture-tomorrow))
 
-    )
+           :bind-keymap
+           ("C-c n d" . org-roam-dailies-map)
+           :config
+           (require 'org-roam-dailies)
+           (org-roam-db-autosync-mode))
 
-  (with-eval-after-load "org-roam" 
-          (setq org-roam-capture-templates
-                '(("d" "default" plain
-                   "%?"
-                   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                   :unnarrowed t)
-                ;; programming language
-                ("l" "programming language" plain
-                 "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
-                 :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                 :unnarrowed t)
-                ("b" "book notes" plain
-                 "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
-                 :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
-                 :unnarrowed t))))
+    ;;  Bind this to C-c n I
+      (defun org-roam-node-insert-immediate (arg &rest args)
+        (interactive "P")
+        (let ((args (cons arg args))
+              (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                        '(:immediate-finish t)))))
+          (apply #'org-roam-node-insert args)))  
 
 
 
-  (use-package org-roam-ui
-    :bind ("s-r" . org-roam-ui-open))
+          (with-eval-after-load "org-roam" 
+            (setq org-roam-capture-templates
+                  '(("d" "default" plain
+                     "%?"
+                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                     :unnarrowed t)
+                    ;; programming language
+                    ("l" "programming language" plain
+                     "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
+                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                     :unnarrowed t)
+                    ("b" "book notes" plain
+                     "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
+                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
+                     :unnarrowed t))))
+
+
+
+
+          (use-package org-roam-ui
+            :bind ("s-r" . org-roam-ui-open))
 
 
 #+END_SRC
@@ -514,6 +542,20 @@ CLOSED: [2022-06-01 Wed 13:18]
 #+RESULTS:
 : org-roam-ui-open
 
+* Ledger-Mode
+#+BEGIN_SRC emacs-lisp
+  (use-package ledger-mode
+  :ensure t
+  :init
+  (setq ledger-clear-whole-transactions 1)
+  :mode "\\.dat\\'")
+
+  
+
+#+END_SRC
+
+#+RESULTS:
+| ledger-mode-clean-buffer |
 
 * IDE Setup
 ** To add
@@ -758,11 +800,15 @@ http://xahlee.info/emacs/emacs/xah-css-mode.html
 
     (use-package lsp-treemacs
       :after lsp)
+    (setq treemacs-select-when-already-in-treemacs 'close)
+
+
 
 
 #+end_src
 
 #+RESULTS:
+: close
 *** TypeScript
 #+begin_src emacs-lisp
   (use-package typescript-mode
@@ -927,7 +973,6 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 (global-set-key [(meta up)] 'windmove-up)
 (global-set-key [(meta down)] 'windmove-down)
 (global-set-key (kbd "C-c s t") 'treemacs)
-
 #+END_SRC
 
 #+RESULTS:
@@ -1055,8 +1100,8 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 : [8224]
 ** Register manipulation
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "s-s") 'point-to-register)
-(global-set-key (kbd "s-j") 'jump-to-register)
+(global-set-key (kbd "C-,") 'point-to-register)
+(global-set-key (kbd "C-.") 'jump-to-register)
 (global-set-key (kbd "H-s") 'bookmark-set)
 (global-set-key (kbd "H-j") 'bookmark-jump)
 
@@ -1150,9 +1195,12 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 (global-set-key (kbd "s-h") 'iy-go-up-to-char)
 (global-set-key (kbd "s-b") 'iy-go-to-char-backward)
 (global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
+
+
+
 #+END_SRC
 
 #+RESULTS:
-: iy-go-up-to-char-backward
+| org-agenda-list | #[0 \303\211\235\203 \304"\301\305!\210\210	\205 \306 \210\307\211\207 [command-line-args desktop-save-mode inhibit-startup-screen --no-desktop delete 0 desktop-read t] 4] | x-wm-set-size-hint | tramp-register-archive-file-name-handler |
 
  
