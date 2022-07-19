@@ -2,7 +2,15 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ~/Projects/emacsone/init.el
 
 
-* Resume point
+* Init
+#+BEGIN_SRC emacs-lisp
+  (fset 'encode-utf-8
+   (kmacro-lambda-form [?\M-x ?r ?e ?v ?e ?r ?t ?- ?b ?u ?f ?f ?e ?r ?- ?w ?i ?t ?h ?- ?c ?o ?d tab return ?u ?t ?f ?- ?8 return ?y ?e ?s return] 0 "%d"))
+(global-set-key (kbd "C-c x e") 'encode-utf-8)
+#+END_SRC
+
+#+RESULTS:
+: encode-utf-8
 
 
 * Package Setup
@@ -108,29 +116,29 @@
 
 * Basic UI Config
 #+begin_src emacs-lisp
-      (setq inhibit-startup-message t)
+    (setq inhibit-startup-message t)
 
-      (scroll-bar-mode -1) ;Disable visible scrollbar
-      (tool-bar-mode -1)   ;DIsable toolbar
-      (tooltip-mode -1)    ;disable tooltips11
-      (set-fringe-mode 10) ;give some breathing room
+    (scroll-bar-mode -1) ;Disable visible scrollbar
+    (tool-bar-mode -1)   ;DIsable toolbar
+    (tooltip-mode -1)    ;disable tooltips11
+    (set-fringe-mode 10) ;give some breathing room
 
-      (menu-bar-mode -1)   ;disable menu bar
+    (menu-bar-mode -1)   ;disable menu bar
 
-    ; setup the visible bell
+  ; setup the visible bell
 
-      (setq visible-bell t)
+    (setq visible-bell t)
 
-    ;set font
+  ;set font
 
-      (set-face-attribute 'default nil :font "Fira Code Retina" :height 140)
-    ; load theme note this passes an object denoted by a leading `
+    (set-face-attribute 'default nil :font "Fira Code Retina" :height 140)
+  ; load theme note this passes an object denoted by a leading `
 
 
-      (load-theme 'tango-dark)
-    (desktop-save-mode 1)
-    (setq desktop-path '("~/Projects/emacsone"))
-    (desktop-read)
+    (load-theme 'tango-dark)
+
+
+
 
 
 
