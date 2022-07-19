@@ -211,6 +211,10 @@ CLOSED: [2022-06-01 Wed 13:18]
     ([remap describe-variable] . counsel-describe-variable)
     ([remap describe-key] . helpful-key))
 #+end_src
+
+#+RESULTS:
+: helpful-key
+
 ** Whichkey
 #+begin_src emacs-lisp
 (use-package which-key
@@ -220,6 +224,10 @@ CLOSED: [2022-06-01 Wed 13:18]
   (setq which-key-idle-delay 1))
 
 #+end_src
+
+#+RESULTS:
+: t
+
 ** Completion
 #+begin_src emacs-lisp
   
@@ -264,6 +272,9 @@ CLOSED: [2022-06-01 Wed 13:18]
 (yas-global-mode 1)
 #+END_SRC
 
+#+RESULTS:
+: t
+
 
 
 * Window Control
@@ -287,6 +298,9 @@ CLOSED: [2022-06-01 Wed 13:18]
 
 
 #+END_SRC
+
+#+RESULTS:
+: counsel-ibuffer
 
 #+RESULTS:[]
 : counsel-ibuffer
@@ -945,11 +959,14 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
 
 ** Debugging
 Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
+
 * Macros and rebind
 
-
-
-
+** Dabbrev
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-=") 'dabbrev-expand)
+(global-set-key (kbd "M-C-=") 'dabbrev-completion)
+#+END_SRC
 ** next-tag - "C-x t" - Move inside the next tag set in web-mode
 #+BEGIN_SRC emacs-lisp
 (defun next-tag()
