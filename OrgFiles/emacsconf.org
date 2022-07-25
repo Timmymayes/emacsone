@@ -323,8 +323,8 @@ CLOSED: [2022-06-01 Wed 13:18]
     :hook (org-mode . org-mode-setup)
     :config
     (setq org-agenda-files
-          '("~/Projects/emacsone/OrgFiles/tasks.org"
-            "~/Projects/emacsone/OrgFiles/habits.org"))
+          '("~/Orgfiles/tasks.org"
+            "~/Orgfiles/habits.org"))
 
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
@@ -336,31 +336,31 @@ CLOSED: [2022-06-01 Wed 13:18]
 
     (setq org-capture-templates
           '(("t" "Tasks / Projects")
-            ("tt" "Task" entry (file+olp "~/Projects/emacsone/OrgFiles/tasks.org" "Inbox")
+            ("tt" "Task" entry (file+olp "~/Orgfiles/tasks.org" "Inbox")
              "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
             ("ts" "Clockked Entry Subtask" entry (clock)
              "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
 
             ("j" "Journal Entries")
             ("jj" "Journal" entry
-             (file+olp+datetree "~/Projects/emacsone/OrgFiles/journal.org")
+             (file+olp+datetree "~/Orgfiles/journal.org")
              "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
              ;;
              :clock-in :clock-resume
              :empty-lines 1)
             ("jm" "Meeting" entry
-             (file+olp+datetree "~/Projects/emacsone/OrgFiles/journal.org")
+             (file+olp+datetree "~/Orgfiles/journal.org")
              "* %<%I:%M %P> - %a :meetings:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
 
             ("w" "Workflows")
-            ("we" "Checking Email" entry (file+olp+datetree "~/Projects/emacsone/OrgFiles/journal.org")
+            ("we" "Checking Email" entry (file+olp+datetree "~/Orgfiles/journal.org")
              "* Checking Email :email:\n\n%?" :clockin :clock-resume :empty-lines 1)
 
             ("m" "Metrics Capture")
 
-            ("mw" "Weight" table-line (file+headline "~/Projects/emacsone/OrgFiles/metrics.org" "Weight")
+            ("mw" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
              "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
 
                                           ; hotkey bindings
@@ -494,69 +494,74 @@ CLOSED: [2022-06-01 Wed 13:18]
 #+BEGIN_SRC emacs-lisp
 
 
-        (use-package org-roam
-          :ensure t
-          :init
-          (setq org-roam-v2-act t)
-          :custom
-          (org-roam-directory "~/RoamNotes")
-          (org-roam-completion-everywhere t)
+      (use-package org-roam
+        :ensure t
+        :init
+        (setq org-roam-v2-act t)
+        :custom
+        (org-roam-directory "~/RoamNotes")
+        (org-roam-completion-everywhere t)
 
-          :bind
-          (("C-c n l" . org-roam-buffer-toggle)
-           ("C-c n f" . org-roam-node-find)
-           ("C-c n i" . org-roam-node-insert)
-           ("C-c n c" . org-id-get-create)
-           ("C-c n a" . org-roam-alias-add)
-           ("C-c n r" . org-roam-ref-add)
-           ("C-c n x a" . org-roam-alias-remove)
-           ("C-c n x r" . org-roam-ref-remove)
-         
-           ("C-c n I" . org-roam-node-insert-immediate)
-           :map org-mode-map
-           ("C-M-i" . completion-at-point)
-           ("C-c n b" . org-mark-ring-goto)
-           :map org-roam-dailies-map
-           ("Y" . org-roam-dailies-capture-yesterday)
-           ("T" . org-roam-dailies-capture-tomorrow))
+        :bind
+        (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-id-get-create)
+         ("C-c n a" . org-roam-alias-add)
+         ("C-c n r" . org-roam-ref-add)
+         ("C-c n x a" . org-roam-alias-remove)
+         ("C-c n x r" . org-roam-ref-remove)
 
-           :bind-keymap
-           ("C-c n d" . org-roam-dailies-map)
-           :config
-           (require 'org-roam-dailies)
-           (org-roam-db-autosync-mode))
+         ("C-c n I" . org-roam-node-insert-immediate)
+         :map org-mode-map
+         ("C-M-i" . completion-at-point)
+         ("C-c n b" . org-mark-ring-goto)
+         :map org-roam-dailies-map
+         ("Y" . org-roam-dailies-capture-yesterday)
+         ("T" . org-roam-dailies-capture-tomorrow))
 
-    ;;  Bind this to C-c n I
-      (defun org-roam-node-insert-immediate (arg &rest args)
-        (interactive "P")
-        (let ((args (cons arg args))
-              (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                        '(:immediate-finish t)))))
-          (apply #'org-roam-node-insert args)))  
+         :bind-keymap
+         ("C-c n d" . org-roam-dailies-map)
+         :config
+         (require 'org-roam-dailies)
+         (org-roam-db-autosync-mode))
 
-
-
-          (with-eval-after-load "org-roam" 
-            (setq org-roam-capture-templates
-                  '(("d" "default" plain
-                     "%?"
-                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                     :unnarrowed t)
-                    ;; programming language
-                    ("l" "programming language" plain
-                     "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
-                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                     :unnarrowed t)
-                    ("b" "book notes" plain
-                     "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
-                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
-                     :unnarrowed t))))
+  ;;  Bind this to C-c n I
+    (defun org-roam-node-insert-immediate (arg &rest args)
+      (interactive "P")
+      (let ((args (cons arg args))
+            (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                      '(:immediate-finish t)))))
+        (apply #'org-roam-node-insert args)))  
 
 
 
+        (with-eval-after-load "org-roam" 
+          (setq org-roam-capture-templates
+                '(("d" "default" plain
+                   "%?"
+                   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                   :unnarrowed t)
+                  ;; programming language
+                  ("l" "programming language" plain
+                   "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
+                   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                   :unnarrowed t)
+                  ;; programming insight - javascript
+                  ("i" "Programming Insights" plain
+                  "* Problem\n\n* Insight:\n\n* Solution:\n\n* Refactoring:\n\n* Fig1:\n\n#+BEGIN_SRC javascript\n\n\n#+END_SRC"
+                   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                   :unnarrowed t)
+                  ("b" "book notes" plain
+                   "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
+                   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
+                   :unnarrowed t))))
 
-          (use-package org-roam-ui
-            :bind ("s-r" . org-roam-ui-open))
+
+
+
+        (use-package org-roam-ui
+          :bind ("s-r" . org-roam-ui-open))
 
 
 #+END_SRC
@@ -584,11 +589,20 @@ CLOSED: [2022-06-01 Wed 13:18]
 
 ** Magit
 #+begin_src emacs-lisp
-(use-package magit
-  :commands (magit-status magit-get-current-branch)
-  :custom
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-(setq magit-clone-default-directory "~/Projects/")
+  (use-package magit
+    :commands (magit-status magit-get-current-branch)
+    :bind (("s-m m" . magit-status)
+           ("s-m j" . magit-dispatch)
+           ("s-m k" . magit-file-dispatch)
+           ("s-m l" . magit-log-buffer-file)
+           ("s-m b" . magit-blame))
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+  (setq magit-clone-default-directory "~/Projects/")
+
+  ;; Bindings
+
+
 
 #+end_src
 
@@ -710,6 +724,13 @@ CLOSED: [2022-06-01 Wed 13:18]
 #+end_src
 
 #+RESULTS:
+** subword mode
+#+BEGIN_SRC emacs-lisp
+(add-hook 'prog-mode-hook 'subword-mode)
+#+END_SRC
+
+#+RESULTS:
+| subword-mode | my-display-numbers-hook | electric-indent-mode | electric-pair-mode | rainbow-delimiters-mode | git-gutter-mode |
 
 ** Commenting
 #+begin_src emacs-lisp
@@ -940,7 +961,8 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
 
 
   (defun my-web-mode-hook ()
-    (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
+    (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files))
+    (html-autoview-mode 1))  
 
   (add-hook 'web-mode-hook 'my-web-mode-hook)
 
@@ -964,8 +986,9 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 ** Dabbrev
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-=") 'dabbrev-expand)
-(global-set-key (kbd "M-C-=") 'dabbrev-completion)
+  (global-set-key (kbd "M-=") 'dabbrev-expand
+                  )
+  (global-set-key (kbd "M-C-=") 'dabbrev-completion)
 #+END_SRC
 ** next-tag - "C-x t" - Move inside the next tag set in web-mode
 #+BEGIN_SRC emacs-lisp
@@ -1207,25 +1230,33 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 * Testing
 #+BEGIN_SRC emacs-lisp
 
-;;set load path for person elisp
-(add-to-list 'load-path "~/.emacs.d/lisp")
+  ;;set load path for person elisp
+  (add-to-list 'load-path "~/.emacs.d/lisp")
 
-;; load the package iy-go-to-char
-(load "iy-go-to-char")
-;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
-(global-set-key (kbd "M-i") 'back-to-indentation)
-;; rebind "M-m" iy-go-to-char
-(global-set-key (kbd "s-n") 'iy-go-to-char)
-;;unbind C-m from return  
-(global-set-key (kbd "s-h") 'iy-go-up-to-char)
-(global-set-key (kbd "s-b") 'iy-go-to-char-backward)
-(global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
+  ;; load the package iy-go-to-char
+  (load "iy-go-to-char")
+  ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
+  (global-set-key (kbd "M-i") 'back-to-indentation)
+  ;; rebind "M-m" iy-go-to-char
+  (global-set-key (kbd "s-n") 'iy-go-to-char)
+  ;;unbind C-m from return  
+  (global-set-key (kbd "s-h") 'iy-go-up-to-char)
+  (global-set-key (kbd "s-b") 'iy-go-to-char-backward)
+  (global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
+
+  ;; Line to copy - start with a macro
+  ;; eventually make this your first fully functional lisp
+  (fset 'yank-and-add-line-numbers
+   (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
+  (global-set-key (kbd "s-k") 'yank-and-add-line-numbers) 
+
+asdf
 
 
 
 #+END_SRC
 
 #+RESULTS:
-| org-agenda-list | #[0 \303\211\235\203 \304"\301\305!\210\210	\205 \306 \210\307\211\207 [command-line-args desktop-save-mode inhibit-startup-screen --no-desktop delete 0 desktop-read t] 4] | x-wm-set-size-hint | tramp-register-archive-file-name-handler |
+: yank-and-add-line-numbers
 
  

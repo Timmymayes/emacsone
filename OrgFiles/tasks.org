@@ -1,48 +1,18 @@
+
+#+BEGIN: clocktable :scope file :maxlevel 2
+#+CAPTION: Clock summary at [2022-07-24 Sun 18:06]
+| Headline                               | Time |      |
+|----------------------------------------+------+------|
+| *Total time*                             | *0:48* |      |
+|----------------------------------------+------+------|
+| Inbox                                  | 0:48 |      |
+| \_  Finish Andrew Huberman Dopamine... |      | 0:06 |
+| \_  Create Etch A Sketch Project [20%] |      | 0:42 |
+#+END
 * Inbox
 
-** DONE Setup bullet journal
-CLOSED: [2022-07-15 Fri 15:47] SCHEDULED: <2022-07-15 Fri>
- [2022-07-15 Fri 13:32]
-
-** DONE Design time capture template for Ipad
-CLOSED: [2022-07-17 Sun 20:28] SCHEDULED: <2022-07-17 Sun>
- [2022-07-15 Fri 13:33]
-
-** DONE Do Dishes
-CLOSED: [2022-07-15 Fri 18:19]
- [2022-07-15 Fri 00:00]
-
-** DONE Go for walk
-CLOSED: [2022-07-15 Fri 15:47]
- [2022-07-15 Fri 13:37]
-
-** TODO drive up to irvine
- [2022-07-15 Fri 13:37]
-
-** DONE spend 1 hour reading Tom's book and making some notes for marketing todos
-CLOSED: [2022-07-15 Fri 15:47]
- [2022-07-15 Fri 13:38]
-
-** TODO meditate
- [2022-07-15 Fri 13:38]
-
-** DONE pack for going to irvine
-CLOSED: [2022-07-15 Fri 18:19]
- [2022-07-15 Fri 13:39]
-
-** DONE confirm what jess needs andpack it
-CLOSED: [2022-07-15 Fri 18:19]
- [2022-07-15 Fri 13:39]
-
-** TODO brush teeth
- [2022-07-15 Fri 13:39]
-
-** DONE take a short nap
-CLOSED: [2022-07-15 Fri 15:47]
- [2022-07-15 Fri 00:00]
-
-** TODO Look up and read the couch to 5k program and create an outline of doing that [16%]
-SCHEDULED: <2022-07-17 Sun>
+** DONE Look up and read the couch to 5k program and create an outline of doing that [16%]
+CLOSED: [2022-07-22 Fri 15:04] SCHEDULED: <2022-07-17 Sun>
 :PROPERTIES:
 :COOKIE_DATA: recursive
 :END:
@@ -50,32 +20,68 @@ SCHEDULED: <2022-07-17 Sun>
  [2022-07-15 Fri 13:42]
 
 
-** DONE charge watch
-CLOSED: [2022-07-15 Fri 15:47]
- [2022-07-15 Fri 13:43]
-
-** DONE Pay credit card
-CLOSED: [2022-07-15 Fri 15:47]
- [2022-07-15 Fri 13:43]
-
 ** TODO look into subscriptions and cancel what you can
 SCHEDULED: <2022-07-17 Sun>
  [2022-07-15 Fri 13:43]
 
 ** TODO Finish Andrew Huberman Dopamine Podcast Notes
-SCHEDULED: <2022-07-17 Sun>
+SCHEDULED: <2022-07-20 Wed>
+:LOGBOOK:
+CLOCK: [2022-07-22 Fri 13:46]--[2022-07-22 Fri 13:52] =>  0:00
+:END:
  [2022-07-15 Fri 18:20]
 https://youtu.be/QmOF0crdyRU?t=4562
 
-** TODO Figure out how to setup habits again and add them in
-SCHEDULED: <2022-07-17 Sun>
- [2022-07-15 Fri 00:00]
+** TODO Create Etch A Sketch Project [20%]
+:PROPERTIES:
+:COOKIE_DATA: todo recursive
+:END:
+:LOGBOOK:
+CLOCK: [2022-07-24 Sun 17:57]--[2022-07-24 Sun 18:02] => 0:05
+CLOCK: [2022-07-24 Sun 13:27]--[2022-07-24 Sun 13:49] =>  0:22
+CLOCK: [2022-07-24 Sun 12:33]--[2022-07-24 Sun 12:48] =>  0:15
+:END:
+ [2022-07-24 Sun 12:30]
+ [[file:~/Projects/rps-etch/README.org][file:~/Projects/rps-etch/README.org]]
 
-** TODO Take a look at finance & budget. Maybe setup a file for it in Org-mode
-SCHEDULED: <2022-07-17 Sun>
- [2022-07-15 Fri 18:24]
+*** DONE Create repository, clone and make initial commit
+CLOSED: [2022-07-24 Sun 13:27]
+
+*** TODO Create a webpage with a 16x16 grid of square divs
+- Create divs using javascript. Don't make by hand with copy/past
+- Put grid squares inside another 'container' div (direct in html not js)
+- For alignment may may use any of the following methods:
+  - Float/clear
+  - Inline-block
+  - FlexBox
+  - cssgrid
+#+BEGIN_QUOTE
+Be careful with borders and Margins, as they can adjust the size of squares!
+
+“OMG, why isn’t my grid being created???”:
+- Did you link your CSS stylesheet?
+- Open your browser’s developer tools.
+- Check if there are any errors in the JavaScript console.
+- Check your “elements” pane to see if the elements have actually shown up but are somehow hidden.
+- Go willy-nilly and add console.log statements in your JavaScript to see if it’s actually being loaded.
+#+END_QUOTE
+
+*** TODO Setup a "hover" effect so the div changes color as you pass over them, leaving  apixel trail like a pen
+
+*** TODO Add a button to the top of the screen that will send the user a popup asking for the number of squares for the new grid.
+This should remove the old grid and make a new grid *in the same total space as before* (i.e. 960 px wide). This is a new sketchpad.
+Set the limmit for the user input to a maximum of 100.
+- Research button tags in HTML and how you can make a javascript function run when one is clicked
+- check out prompts
+- You should be able to enter 64 and have a new 64x64 grid pop up without changing total amount of pixels used
+
+*** TODO Push project to github
+- Extra Credit:
+  Instead of just changing the color of a square from black to white (for example), have each pass through with the mouse change it to a completely random RGB value. Then try having each pass just add another 10% of black to it so that only after 10 passes is the square completely black.
+
 
 * Backlog
+
 
 
 

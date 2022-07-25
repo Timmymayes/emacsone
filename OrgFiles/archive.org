@@ -114,3 +114,13 @@ CLOSED: [2022-07-14 Thu 14:30] SCHEDULED: <2022-07-14 Thu>
 CLOSED: [2022-07-15 Fri 13:31] DEADLINE: <2022-07-15 Fri> SCHEDULED: <2022-07-14 Thu>
  [2022-07-14 Thu 14:30]
 
+** DONE Do Dishes
+CLOSED: [2022-07-24 Sun 11:59]
+ [2022-07-18 Mon 09:35]
+
+
+** DONE Figure out why the removeChild function is not working.
+CLOSED: [2022-07-24 Sun 10:29]
+ [2022-07-19 Tue 18:14]
+ [[file:~/Projects/odin-rps/rps.js::const resultDiv = document.createElement("div");]]
+

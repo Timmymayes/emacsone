@@ -2,42 +2,42 @@
 ;; --------------------------------------------------------------------------
 ;; Desktop File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Sun Jul 17 23:12:52 2022
+;; Created Thu Jul 21 08:38:00 2022
 ;; Desktop file format version 208
 ;; Emacs version 27.1
 
 ;; Global section:
-(setq desktop-saved-frameset [frameset 1 (25300 63972 344134 722000) (desktop . "208") "tyler@tyler-linux" nil nil ((((minibuffer . t) (undecorated) (override-redirect) (font . "-CTDB-Fira Code-normal-normal-normal-*-19-*-*-*-d-0-iso10646-1") (font-parameter) (border-width . 0) (internal-border-width . 0) (right-divider-width . 0) (bottom-divider-width . 0) (vertical-scroll-bars) (horizontal-scroll-bars) (foreground-color . "#ebdbb2") (background-color . "#282828") (mouse-color . "black") (border-color . "black") (screen-gamma) (line-spacing) (left-fringe . 10) (right-fringe . 10) (no-special-glyphs) (scroll-bar-foreground) (scroll-bar-background) (menu-bar-lines . 0) (tab-bar-lines . 0) (height . 58) (tool-bar-lines . 0) (title) (wait-for-wm . t) (tool-bar-position . top) (inhibit-double-buffering) (icon-type . t) (auto-raise) (auto-lower) (cursor-type . box) (scroll-bar-width . 16) (scroll-bar-height . 16) (alpha 100 . 100) (no-focus-on-map) (no-accept-focus) (fullscreen . maximized) (visibility . t) (skip-taskbar) (z-group) (display-type . color) (background-mode . dark) (cursor-color . "white") (sticky) (environment) (last-focus-update) (frameset--id . "D80F-45E0-36E5-710D") (frameset--mini t . t) (modeline . t) (unsplittable) (icon-name) (display . ":1") (explicit-name) (width . 285) (left . 1439) (top . 1439)) ((min-height . 4) (min-width . 20) (min-height-ignore . 4) (min-width-ignore . 8) (min-height-safe . 1) (min-width-safe . 4) (min-pixel-height . 96) (min-pixel-width . 240) (min-pixel-height-ignore . 96) (min-pixel-width-ignore . 96) (min-pixel-height-safe . 24) (min-pixel-width-safe . 48)) hc (pixel-width . 3440) (pixel-height . 1379) (total-width . 287) (total-height . 57) (normal-height . 1.0) (normal-width . 1.0) (combination-limit) (leaf (pixel-width . 1724) (pixel-height . 1379) (total-width . 144) (total-height . 57) (normal-height . 1.0) (normal-width . 0.5) (buffer "*info*" (selected . t) (hscroll . 0) (fringes 10 10 nil nil) (margins nil) (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0) (dedicated) (point . 399127) (start . 397263)) (prev-buffers ("magit: emacsone" 1 1) ("emacsconf.org" 1 105) ("magit-diff: emacsone" 1 1))) (leaf (last . t) (pixel-width . 1716) (pixel-height . 1379) (total-width . 143) (total-height . 57) (normal-height . 1.0) (normal-width . 0.5) (buffer "magit-refs: emacsone" (selected) (hscroll . 0) (fringes 10 10 nil nil) (margins nil) (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0) (dedicated) (point . 1) (start . 1)) (prev-buffers ("magit-refs: emacsone" 1 1) ("magit: emacsone" 1 1)))))])
+(setq desktop-saved-frameset [frameset 1 (25305 29400 103502 656000) (desktop . "208") "tyler@tyler-linux" nil nil ((((minibuffer . t) (undecorated) (override-redirect) (font . "-CTDB-Fira Code-normal-normal-normal-*-19-*-*-*-d-0-iso10646-1") (font-parameter . "-CTDB-Fira Code-normal-normal-normal-*-19-*-*-*-d-0-iso10646-1") (border-width . 0) (internal-border-width . 0) (right-divider-width . 0) (bottom-divider-width . 0) (vertical-scroll-bars) (horizontal-scroll-bars) (foreground-color . "#ebdbb2") (background-color . "#282828") (mouse-color . "black") (border-color . "black") (screen-gamma) (line-spacing) (left-fringe . 10) (right-fringe . 10) (no-special-glyphs) (scroll-bar-foreground) (scroll-bar-background) (menu-bar-lines . 0) (tab-bar-lines . 0) (height . 58) (tool-bar-lines . 0) (title) (wait-for-wm . t) (tool-bar-position . top) (inhibit-double-buffering) (icon-type . t) (auto-raise) (auto-lower) (cursor-type . box) (scroll-bar-width . 16) (scroll-bar-height . 16) (alpha) (no-focus-on-map) (no-accept-focus) (fullscreen . maximized) (visibility . t) (skip-taskbar) (z-group) (display-type . color) (background-mode . dark) (cursor-color . "white") (sticky) (environment) (last-focus-update . t) (frameset--id . "2659-2A57-6C84-C350") (frameset--mini t . t) (width . 285) (modeline . t) (unsplittable) (left . 1439) (top . 1439) (icon-name) (display . ":1") (explicit-name)) ((min-height . 4) (min-width . 20) (min-height-ignore . 3) (min-width-ignore . 8) (min-height-safe . 1) (min-width-safe . 4) (min-pixel-height . 96) (min-pixel-width . 240) (min-pixel-height-ignore . 72) (min-pixel-width-ignore . 96) (min-pixel-height-safe . 24) (min-pixel-width-safe . 48)) hc (pixel-width . 3440) (pixel-height . 1379) (total-width . 287) (total-height . 57) (normal-height . 1.0) (normal-width . 1.0) (combination-limit) (leaf (pixel-width . 1724) (pixel-height . 1379) (total-width . 144) (total-height . 57) (normal-height . 1.0) (normal-width . 0.5) (buffer "emacsconf.org" (selected . t) (hscroll . 0) (fringes 10 10 nil nil) (margins nil) (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0) (dedicated) (point . 6856) (start . 6811)) (prev-buffers ("init.el" 1 2119) ("emacsconf.org" 6811 6856) ("*scratch*" 1 1))) (leaf (last . t) (pixel-width . 1716) (pixel-height . 1379) (total-width . 143) (total-height . 57) (normal-height . 1.0) (normal-width . 0.5) (buffer "*Warnings*" (selected) (hscroll . 0) (fringes 10 10 nil nil) (margins nil) (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0) (dedicated) (point . 133) (start . 1)) (prev-buffers ("*Warnings*" 1 133)))))])
 (setq desktop-missing-file-warning nil)
 (setq tags-file-name nil)
 (setq tags-table-list nil)
-(setq search-ring '(#("scroll" 0 6 (isearch-regexp-function nil isearch-case-fold-search t)) #("ledger" 0 6 (isearch-case-fold-search t isearch-regexp-function nil)) #("//" 0 2 (isearch-regexp-function nil isearch-case-fold-search t)) #("tangle" 0 6 (isearch-case-fold-search t isearch-regexp-function nil)) #("desktop" 0 7 (isearch-case-fold-search t isearch-regexp-function nil)) #("testing" 0 7 (isearch-case-fold-search t isearch-regexp-function nil))))
+(setq search-ring '(#("encode" 0 6 (isearch-case-fold-search t isearch-regexp-function nil)) #("enc" 0 3 (isearch-case-fold-search t isearch-regexp-function nil)) #("desktop" 0 7 (isearch-regexp-function nil isearch-case-fold-search t)) #("tang" 0 4 (isearch-case-fold-search t isearch-regexp-function nil)) #("org" 0 3 (isearch-case-fold-search t isearch-regexp-function nil)) #("iy" 0 2 (isearch-regexp-function nil isearch-case-fold-search t)) #("ligat" 0 5 (isearch-case-fold-search t isearch-regexp-function nil)) #("enco" 0 4 (isearch-case-fold-search t isearch-regexp-function nil)) #("liga" 0 4 (isearch-case-fold-search t isearch-regexp-function nil)) #("iyly" 0 4 (isearch-case-fold-search t isearch-regexp-function nil)) #("tangle" 0 6 (isearch-regexp-function nil isearch-case-fold-search t)) #("theme" 0 5 (isearch-regexp-function nil isearch-case-fold-search t)) #("habit" 0 5 (isearch-case-fold-search t isearch-regexp-function nil)) #(" \274" 0 2 (isearch-regexp-function nil isearch-case-fold-search t)) #("ellip" 0 5 (isearch-case-fold-search t isearch-regexp-function nil)) #("bullets" 0 7 (isearch-case-fold-search t isearch-regexp-function nil))))
 (setq regexp-search-ring nil)
-(setq register-alist nil)
-(setq file-name-history '("~/Ledgers/2022.dat" "~/Ledgers/" "~/Ledgers/ledger.dat" "~/Projects/emacsone/" "~/.emacs.d" "~/Projects/emacsone/"))
+(setq register-alist '((111 . "brush test ")))
+(setq file-name-history '("~/Projects/emacsone/init.el" "~/Projects/emacsone/" "~/Projects/emacsone/init.el" "~/.emacs.d/lisp/ligature.el" "~/Projects/sample.js" "~/Projects/emacsone/init.el" "~/Orgfiles/Scratch/" "~/Orgfiles/Scratch/notion.org" "~/Game Designs/Supply Chains/Design Doc.org" "~/Game Designs/Supply Chains/" "~/Game Designs/Zombie Rebuild/Design Doc.org" "~/Game Designs/Market Share" "~/Game Designs/Supply Chains" "~/Game Designs/Bagged & Boardaed" "~/Game Designs/Zombie Rebuild" "~/Game Designs" "~/RoamNotes/" "~/Projects/emacsone/OrgFiles/archive.org" "~/Projects/emacsone/OrgFiles/tasks.org" "~/test.org" "~/Projects/emacsone/OrgFiles/habits.org" "~/Ledgers/2022.dat" "~/Ledgers/" "~/Ledgers/ledger.dat" "~/Projects/emacsone/" "~/.emacs.d" "~/Projects/emacsone/"))
 
 ;; Buffer section -- buffers listed in same order as in buffer list:
-(desktop-create-buffer 208
-  nil
-  "*info*"
-  'Info-mode
-  '(override-global-mode which-key-mode yas-minor-mode)
-  399127
-  '(nil nil)
-  t
-  '("/home/tyler/.emacs.d/elpa/magit-20220706.148/magit" "Debugging Tools" ((history ("/home/tyler/.emacs.d/elpa/magit-20220706.148/magit" "Top" 2126))))
-  '((tab-width . 8) (buffer-display-time 25300 63925 712162 552000) (buffer-file-coding-system . utf-8-unix) (case-fold-search . t))
-  '((mark-ring nil)))
-
 (desktop-create-buffer 208
   "/home/tyler/Projects/emacsone/OrgFiles/emacsconf.org"
   "emacsconf.org"
   'org-mode
-  '(visual-line-mode override-global-mode which-key-mode yas-minor-mode org-indent-mode buffer-face-mode auto-revert-mode)
-  105
-  '(8218 nil)
+  '(override-global-mode which-key-mode projectile-mode org-roam-ui-mode auto-revert-mode yas-minor-mode)
+  6856
+  '(99 nil)
   nil
   nil
-  '((indent-tabs-mode) (buffer-display-time 25300 63880 89160 352000) (buffer-file-coding-system . no-conversion) (truncate-lines))
-  '((mark-ring (8218 8218 19172 30376 19087 19172 8218 8218 8218 8218 8218 8045))))
+  '((buffer-display-time 25305 29399 8058 238000) (buffer-file-coding-system . utf-8-unix) (truncate-lines . t))
+  '((mark-ring (30294 30251 962 26395 30357 4910 30519 175 389))))
+
+(desktop-create-buffer 208
+  "/home/tyler/Projects/emacsone/init.el"
+  "init.el"
+  'emacs-lisp-mode
+  '(eldoc-mode override-global-mode which-key-mode projectile-mode org-roam-ui-mode)
+  366
+  '(630 nil)
+  nil
+  nil
+  '((buffer-display-time 25305 29331 497682 783000) (buffer-file-coding-system . prefer-utf-8-unix))
+  '((mark-ring (366))))
 
