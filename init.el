@@ -71,12 +71,16 @@
 
   (load-theme 'tango-dark)
 
+
+  (desktop-save-mode 1)
+
 ;set doom themes
 (use-package doom-themes
   :ensure t
   :config
-  (load-theme 'doom-gruvbox t))
-                                      ;use doom mode
+  ;;(load-theme 'doom-gruvbox t))
+  (load-theme 'doom-sourcerer t))
+
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1)
@@ -186,6 +190,8 @@
   (setq org-ellipsis " ▾"
         org-hide-emphasis-markers t)
   (setq org-capture-babel-evaluate t)
+  (setq org-startup-with-inline-images t)
+
                                         ; org capture
 
   (setq org-capture-templates
@@ -311,79 +317,93 @@
 (setq org-clock-sound "~/Downloads/cheer.wav")
 
 (use-package org-roam
-      :ensure t
-      :init
-      (setq org-roam-v2-act t)
-      :custom
-      (org-roam-directory "~/RoamNotes")
-      (org-roam-completion-everywhere t)
+          :ensure t
+          :init
+          (setq org-roam-v2-act t)
+          :custom
+          (org-roam-directory "~/RoamNotes")
+          (org-roam-completion-everywhere t)
+          ( org-agenda-todo-list-sublevels nil)        
 
-      :bind
-      (("C-c n l" . org-roam-buffer-toggle)
-       ("C-c n f" . org-roam-node-find)
-       ("C-c n i" . org-roam-node-insert)
-       ("C-c n c" . org-id-get-create)
-       ("C-c n a" . org-roam-alias-add)
-       ("C-c n r" . org-roam-ref-add)
-       ("C-c n x a" . org-roam-alias-remove)
-       ("C-c n x r" . org-roam-ref-remove)
+          :bind
+          (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n i" . org-id-get-create)
+           ("C-c n a" . org-roam-alias-add)
+           ("C-c n t" . org-roam-tag-add)
+           ("C-c n r" . org-roam-ref-add)
+           ("C-c n x a" . org-roam-alias-remove)
+           ("C-c n x r" . org-roam-ref-remove)
+           ("C-c n x t" . org-roam-tag-remove)
 
-       ("C-c n I" . org-roam-node-insert-immediate)
-       :map org-mode-map
-       ("C-M-i" . completion-at-point)
-       ("C-c n b" . org-mark-ring-goto)
-       :map org-roam-dailies-map
-       ("Y" . org-roam-dailies-capture-yesterday)
-       ("T" . org-roam-dailies-capture-tomorrow))
+           ("C-c n I" . org-roam-node-insert-immediate)
+           :map org-mode-map
+           ("C-M-i" . completion-at-point)
+           ("C-c n b" . org-mark-ring-goto)
+           :map org-roam-dailies-map
+           ("Y" . org-roam-dailies-capture-yesterday)
+           ("T" . org-roam-dailies-capture-tomorrow))
 
-       :bind-keymap
-       ("C-c n d" . org-roam-dailies-map)
-       :config
-       (require 'org-roam-dailies)
-       (org-roam-db-autosync-mode))
+           :bind-keymap
+           ("C-c n d" . org-roam-dailies-map)
+           :config
+           (require 'org-roam-dailies)
+           (org-roam-db-autosync-mode))
 
-;;  Bind this to C-c n I
-  (defun org-roam-node-insert-immediate (arg &rest args)
-    (interactive "P")
-    (let ((args (cons arg args))
-          (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                    '(:immediate-finish t)))))
-      (apply #'org-roam-node-insert args)))  
-
-
-
-      (with-eval-after-load "org-roam" 
-        (setq org-roam-capture-templates
-              '(("d" "default" plain
-                 "%?"
-                 :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                 :unnarrowed t)
-                ;; programming language
-                ("l" "programming language" plain
-                 "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
-                 :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                 :unnarrowed t)
-                ;; programming insight - javascript
-                ("i" "Programming Insights" plain
-                "* Problem\n\n* Insight:\n\n* Solution:\n\n* Refactoring:\n\n* Fig1:\n\n#+BEGIN_SRC javascript\n\n\n#+END_SRC"
-                 :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                 :unnarrowed t)
-                ("b" "book notes" plain
-                 "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
-                 :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
-                 :unnarrowed t))))
+    ;;  Bind this to C-c n I
+      (defun org-roam-node-insert-immediate (arg &rest args)
+        (interactive "P")
+        (let ((args (cons arg args))
+              (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                        '(:immediate-finish t)))))
+          (apply #'org-roam-node-insert args)))  
 
 
 
+          (with-eval-after-load "org-roam" 
+            (setq org-roam-capture-templates
+                  '(("d" "default" plain
+                     "%?"
+                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                     :unnarrowed t)
+                    ;; programming language
+                    ("l" "programming language" plain
+                     "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
+                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                     :unnarrowed t)
+                    ;; programming insight - javascript
+                    ("i" "Programming Insights" plain
+                    "* Problem\n\n* Insight:\n\n* Solution:\n\n* Refactoring:\n\n* Fig1:\n\n#+BEGIN_SRC javascript\n\n\n#+END_SRC"
+                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+                     :unnarrowed t)
+                    ("b" "book notes" plain
+                     "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
+                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
+                     :unnarrowed t))))
 
-      (use-package org-roam-ui
-        :bind ("s-r" . org-roam-ui-open))
+
+(setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:15}" 'face 'org-tag)))
+
+          (use-package org-roam-ui
+            :bind ("s-r" . org-roam-ui-open))
 
 (use-package ledger-mode
-:ensure t
-:init
-(setq ledger-clear-whole-transactions 1)
-:mode "\\.dat\\'")
+  :ensure t
+  :init
+  (setq ledger-clear-whole-transactions 1)
+  :bind (
+         :map ledger-mode-map
+          ("s-n" . ledger-navigate-next-uncleared)
+          ("s-p" . ledger-navigate-previous-uncleared))
+  :mode "\\.dat\\'")
+
+  (setq ledger-reports
+        '(("bal"            "%(binary) -f %(ledger-file) bal")
+          ("bal this month" "%(binary) -f %(ledger-file) bal -p %(month) -S amount")
+          ("bal this year"  "%(binary) -f %(ledger-file) bal -p 'this year'")
+          ("net worth"      "%(binary) -f %(ledger-file) bal Assets Liabilities")
+          ("account"        "%(binary) -f %(ledger-file) reg %(account)")))
 
 (use-package magit
   :commands (magit-status magit-get-current-branch)
@@ -815,23 +835,33 @@
 (dashboard-setup-startup-hook))
 
 ;;set load path for person elisp
-  (add-to-list 'load-path "~/.emacs.d/lisp")
+       (add-to-list 'load-path "~/.emacs.d/lisp")
 
-  ;; load the package iy-go-to-char
-  (load "iy-go-to-char")
-  ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
-  (global-set-key (kbd "M-i") 'back-to-indentation)
-  ;; rebind "M-m" iy-go-to-char
-  (global-set-key (kbd "s-n") 'iy-go-to-char)
-  ;;unbind C-m from return  
-  (global-set-key (kbd "s-h") 'iy-go-up-to-char)
-  (global-set-key (kbd "s-b") 'iy-go-to-char-backward)
-  (global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
+       ;; load the package iy-go-to-char
+       (load "iy-go-to-char")
+       ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
+       (global-set-key (kbd "M-i") 'back-to-indentation)
+       ;; rebind "M-m" iy-go-to-char
+       (global-set-key (kbd "s-n") 'iy-go-to-char)
+       ;;unbind C-m from return  
+       (global-set-key (kbd "s-h") 'iy-go-up-to-char)
+       (global-set-key (kbd "s-b") 'iy-go-to-char-backward)
+       (global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
 
-  ;; Line to copy - start with a macro
-  ;; eventually make this your first fully functional lisp
-  (fset 'yank-and-add-line-numbers
-   (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
-  (global-set-key (kbd "s-k") 'yank-and-add-line-numbers) 
+       ;; Line to copy - start with a macro
+       ;; eventually make this your first fully functional lisp
+       (fset 'yank-and-add-line-numbers
+        (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
+       (global-set-key (kbd "s-k") 'yank-and-add-line-numbers) 
 
-asdf
+ ;; insert todays date
+
+
+(fset 'agenda-fullscreen
+      (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
+
+  (global-set-key (kbd "<f13>") 'agenda-fullscreen)
+
+(require 'calfw-org)
+
+(desktop-read)
