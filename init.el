@@ -672,8 +672,7 @@
 
 
 (defun my-web-mode-hook ()
-  (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files))
-  (html-autoview-mode 1))  
+  (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
 
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 
@@ -687,16 +686,23 @@
 (global-set-key (kbd "M-C-=") 'dabbrev-completion)
 
 (defun next-tag()
-  (interactive)
-    (web-mode-element-next)
-    (web-mode-tag-end))
+    (interactive)
+      (web-mode-element-next)
+      (web-mode-tag-end))
 
 
 
-(global-set-key  (kbd "C-x t") 'next-tag)
+  (global-set-key  (kbd "C-x t") 'next-tag)
 
-;; set ctrl z to undo
-(global-set-key (kbd "C-z") 'undo)
+;; timer controls
+(global-set-key (kbd "H-t t") 'org-timer-set-timer)
+(global-set-key (kbd "H-t s") 'org-timer-start)
+(global-set-key (kbd "H-t x") 'org-timer-stop)
+(global-set-key (kbd "H-t z") 'org-timer-pause-or-continue)
+
+
+  ;; set ctrl z to undo
+  (global-set-key (kbd "C-z") 'undo)
 
 (global-set-key (kbd "M-+") 'other-window)
 (global-set-key (kbd "M-[") 'ace-window)
@@ -835,33 +841,34 @@
 (dashboard-setup-startup-hook))
 
 ;;set load path for person elisp
-       (add-to-list 'load-path "~/.emacs.d/lisp")
+         (add-to-list 'load-path "~/.emacs.d/lisp")
 
-       ;; load the package iy-go-to-char
-       (load "iy-go-to-char")
-       ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
-       (global-set-key (kbd "M-i") 'back-to-indentation)
-       ;; rebind "M-m" iy-go-to-char
-       (global-set-key (kbd "s-n") 'iy-go-to-char)
-       ;;unbind C-m from return  
-       (global-set-key (kbd "s-h") 'iy-go-up-to-char)
-       (global-set-key (kbd "s-b") 'iy-go-to-char-backward)
-       (global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
+         ;; load the package iy-go-to-char
+         (load "iy-go-to-char")
+         ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
+         (global-set-key (kbd "M-i") 'back-to-indentation)
+         ;; rebind "M-m" iy-go-to-char
+         (global-set-key (kbd "s-n") 'iy-go-to-char)
+         ;;unbind C-m from return  
+         (global-set-key (kbd "s-h") 'iy-go-up-to-char)
+         (global-set-key (kbd "s-b") 'iy-go-to-char-backward)
+         (global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
 
-       ;; Line to copy - start with a macro
-       ;; eventually make this your first fully functional lisp
-       (fset 'yank-and-add-line-numbers
-        (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
-       (global-set-key (kbd "s-k") 'yank-and-add-line-numbers) 
+         ;; Line to copy - start with a macro
+         ;; eventually make this your first fully functional lisp
+         (fset 'yank-and-add-line-numbers
+          (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
+         (global-set-key (kbd "s-k") 'yank-and-add-line-numbers) 
 
- ;; insert todays date
+   ;; insert todays date
 
 
-(fset 'agenda-fullscreen
-      (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
+  (fset 'agenda-fullscreen
+        (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
 
-  (global-set-key (kbd "<f13>") 'agenda-fullscreen)
+    (global-set-key (kbd "<f13>") 'agenda-fullscreen)
 
-(require 'calfw-org)
+  (require 'calfw-org)
+(global-set-key (kbd "H-a") 'avy-goto-char-timer)
 
 (desktop-read)

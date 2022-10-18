@@ -983,8 +983,7 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
 
 
   (defun my-web-mode-hook ()
-    (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files))
-    (html-autoview-mode 1))  
+    (set (make-local-variable 'company-backends) '(company-css company-web-html company-yasnippet company-files)))  
 
   (add-hook 'web-mode-hook 'my-web-mode-hook)
 
@@ -1014,17 +1013,24 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 #+END_SRC
 ** next-tag - "C-x t" - Move inside the next tag set in web-mode
 #+BEGIN_SRC emacs-lisp
-(defun next-tag()
-  (interactive)
-    (web-mode-element-next)
-    (web-mode-tag-end))
+    (defun next-tag()
+      (interactive)
+        (web-mode-element-next)
+        (web-mode-tag-end))
 
 
 
-(global-set-key  (kbd "C-x t") 'next-tag)
+    (global-set-key  (kbd "C-x t") 'next-tag)
 
-;; set ctrl z to undo
-(global-set-key (kbd "C-z") 'undo)
+  ;; timer controls
+  (global-set-key (kbd "H-t t") 'org-timer-set-timer)
+  (global-set-key (kbd "H-t s") 'org-timer-start)
+  (global-set-key (kbd "H-t x") 'org-timer-stop)
+  (global-set-key (kbd "H-t z") 'org-timer-pause-or-continue)
+
+
+    ;; set ctrl z to undo
+    (global-set-key (kbd "C-z") 'undo)
 
 #+END_SRC
 
@@ -1281,7 +1287,7 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
     (global-set-key (kbd "<f13>") 'agenda-fullscreen)
 
   (require 'calfw-org)
-
+(global-set-key (kbd "H-a") 'avy-goto-char-timer)
 
 #+END_SRC
 
