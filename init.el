@@ -295,6 +295,7 @@
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp .t )
+   (js .t)
    (python .t)))
 
 ;;auto tangle my emacs config file
@@ -339,7 +340,6 @@
 
            ("C-c n I" . org-roam-node-insert-immediate)
            :map org-mode-map
-           ("C-M-i" . completion-at-point)
            ("C-c n b" . org-mark-ring-goto)
            :map org-roam-dailies-map
            ("Y" . org-roam-dailies-capture-yesterday)
@@ -592,9 +592,9 @@
         js2-mode-show-strict-warnings nil
         js2-basic-offset 2
         js-indent-level 2)
-  (setq-local flycheck-disabled-checkers (cl-union flycheck-disabled-checkers
-                                                   '(javascript-jshint))) ; jshint doesn't work for JSX
-  (electric-pair-mode 1))
+  ;; (setq-local flycheck-disabled-checkers (cl-union flycheck-disabled-checkers
+  ;;                                                  '(javascript-jshint))) ; jshint doesn't work for JSX
+   (electric-pair-mode 1))
 
 (use-package add-node-modules-path
   :defer t
@@ -650,6 +650,7 @@
 (setq inferior-js-program-command "node --interactive")
 (setenv "NODE_NO_READLINE" "1")
 (add-hook 'rjsx-mode-hook 'my-js-comint-keys)
+(add-hook 'rjsx-mode-hook 'emmet-mode)
 
 
 (with-eval-after-load 'flycheck
@@ -841,34 +842,35 @@
 (dashboard-setup-startup-hook))
 
 ;;set load path for person elisp
-         (add-to-list 'load-path "~/.emacs.d/lisp")
+(add-to-list 'load-path "~/.emacs.d/lisp")
+(global-set-key (kbd "C-M-i") 'indent-region)
+;; load the package iy-go-to-char
+(load "iy-go-to-char")
+;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
+(global-set-key (kbd "M-i") 'back-to-indentation)
+;; rebind "M-m" iy-go-to-char
+(global-set-key (kbd "s-n") 'iy-go-to-char)
+;;unbind C-m from return  
+(global-set-key (kbd "s-h") 'iy-go-up-to-char)
+(global-set-key (kbd "s-b") 'iy-go-to-char-backward)
+(global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
 
-         ;; load the package iy-go-to-char
-         (load "iy-go-to-char")
-         ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
-         (global-set-key (kbd "M-i") 'back-to-indentation)
-         ;; rebind "M-m" iy-go-to-char
-         (global-set-key (kbd "s-n") 'iy-go-to-char)
-         ;;unbind C-m from return  
-         (global-set-key (kbd "s-h") 'iy-go-up-to-char)
-         (global-set-key (kbd "s-b") 'iy-go-to-char-backward)
-         (global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
+;; Line to copy - start with a macro
+;; eventually make this your first fully functional lisp
+(fset 'yank-and-add-line-numbers
+      (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
+(global-set-key (kbd "s-k") 'yank-and-add-line-numbers) 
 
-         ;; Line to copy - start with a macro
-         ;; eventually make this your first fully functional lisp
-         (fset 'yank-and-add-line-numbers
-          (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
-         (global-set-key (kbd "s-k") 'yank-and-add-line-numbers) 
-
-   ;; insert todays date
+;; insert todays date
 
 
-  (fset 'agenda-fullscreen
-        (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
+(fset 'agenda-fullscreen
+      (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
 
-    (global-set-key (kbd "<f13>") 'agenda-fullscreen)
+(global-set-key (kbd "<f13>") 'agenda-fullscreen)
+(global-set-key (kbd "<f14>") 'browse-url-of-buffer)
 
-  (require 'calfw-org)
+(require 'calfw-org)
 (global-set-key (kbd "H-a") 'avy-goto-char-timer)
 
 (desktop-read)
