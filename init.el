@@ -532,7 +532,7 @@
 (setq web-mode-enable-engine-detection t)
 
 (use-package emmet-mode
-:bind 
+:bind
 ("M-n" . emmet-next-edit-point)
 ("M-p" . emmet-prev-edit-point))
 ; use emmet in all web-mode docs
@@ -655,6 +655,25 @@
 
 (with-eval-after-load 'flycheck
   (flycheck-add-next-checker 'javascript-eslint '(t . javascript-jscs)))
+
+;; This isn't really a package, it just provides a `haxe-mode' to work with
+(use-package haxe-mode
+  :mode ("\\.hx\\'" . haxe-mode)
+  :no-require t
+  :init
+  (require 'js)
+  (define-derived-mode haxe-mode js-mode "Haxe"
+    "Haxe syntax highlighting mode. This is simply using js-mode for now."))
+
+(use-package battle-haxe
+  :hook (haxe-mode . battle-haxe-mode)
+  :bind (("S-<f4>" . #'pop-global-mark) ;To get back after visiting a definition
+         :map battle-haxe-mode-map
+         ("<f5>" . #'battle-haxe-goto-definition)
+         ("<f12>" . #'battle-haxe-helm-find-references))
+  :custom
+  (battle-haxe-yasnippet-completion-expansion t "Keep this if you want yasnippet to expand completions when it's available.")
+  (battle-haxe-immediate-completion nil "Toggle this if you want to immediately trigger completion when typing '.' and other relevant prefixes."))
 
 (use-package company
     :after lsp-mode
@@ -872,5 +891,62 @@
 
 (require 'calfw-org)
 (global-set-key (kbd "H-a") 'avy-goto-char-timer)
+
+(defun harpoon-f ()
+    (interactive)
+  (unless (get-register 102) ((point-to-register active-harpoon) (setq active-harpoon 102)))
+  (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
+  (jump-to-register 102)
+  (setq active-harpoon 102))
+
+(defun set-harpoon-f ()
+  (interactive)
+  (point-to-register 102)
+  )
+
+(defun harpoon-d ()
+    (interactive)
+  (unless (get-register 100) ((point-to-register active-harpoon) (setq active-harpoon 100)))
+  (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
+  (jump-to-register 100)
+  (setq active-harpoon 100))
+
+(defun set-harpoon-d ()
+  (interactive)
+  (point-to-register 100)
+  )
+
+(defun harpoon-a ()
+    (interactive)
+  (unless (get-register 97) ((point-to-register active-harpoon) (setq active-harpoon 97)))
+  (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
+  (jump-to-register 97)
+  (setq active-harpoon 97))
+
+(defun set-harpoon-a ()
+  (interactive)
+  (point-to-register 97)
+  )
+
+(defun harpoon-s ()
+    (interactive)
+  (unless (get-register 115) ((point-to-register active-harpoon) (setq active-harpoon 115)))
+  (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
+  (jump-to-register 115)
+  (setq active-harpoon 115))
+
+ (defun set-harpoon-s ()
+  (interactive)
+  (point-to-register 115)
+  )
+
+(global-set-key (kbd "H-a") 'harpoon-a)
+(global-set-key (kbd "C-H-a") 'set-harpoon-a)
+(global-set-key (kbd "H-s") 'harpoon-s)
+(global-set-key (kbd "C-H-s") 'set-harpoon-s)
+(global-set-key (kbd "H-d") 'harpoon-d)
+(global-set-key (kbd "C-H-d") 'set-harpoon-d)
+(global-set-key (kbd "H-f") 'harpoon-f)
+(global-set-key (kbd "C-H-f") 'set-harpoon-f)
 
 (desktop-read)

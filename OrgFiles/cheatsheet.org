@@ -1,0 +1,9 @@
+* Movement
+** Global
+| Command Group (and command notes)  | Command          | Description                          | Primary key |
+|------------------------------------+------------------+--------------------------------------+-------------|
+| Mark Ring Based Movement           | ---              | ---                                  | ---         |
+|------------------------------------+------------------+--------------------------------------+-------------|
+| *Do 2x to mark and remove highlight* | set-mark-command | Set Mark                             | "C-SPC"     |
+|                                    | set-mark-command | Move to Previous Mark In same Buffer | "C-U C-SPC" |
+|                                    |                  |                                      |             |
