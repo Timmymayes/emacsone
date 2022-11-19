@@ -727,12 +727,10 @@
 (global-set-key (kbd "M-+") 'other-window)
 (global-set-key (kbd "M-[") 'ace-window)
 (global-set-key (kbd "M-]") 'treemacs-select-window)
-(global-set-key [(meta left)] 'windmove-left)
-(global-set-key [(meta right)] 'windmove-right)
-(global-set-key [(meta up)] 'windmove-up)
-(global-set-key [(meta down)] 'windmove-down)
 (global-set-key (kbd "C-c s t") 'treemacs)
 (global-set-key (kbd "H-1") 'delete-other-windows)
+(global-set-key (kbd "H-2") 'split-window-below)
+(global-set-key (kbd "H-3") 'split-window-right)
 
 (defun insert-line-above-and-go ()
   ;;insert a line above the current one and move the cursor there
@@ -818,19 +816,6 @@
                 )
 (global-set-key (kbd "H-d") 'duplicate-line-up-to-point)
 
-
-
-
-
-
-
-(progn
-  ;; some Hyper keys to insert Unicode chars
-  (define-key key-translation-map (kbd "H-3") (kbd "•")) ; bullet
-  (define-key key-translation-map (kbd "H-4") (kbd "◇")) ; white diamond
-  (define-key key-translation-map (kbd "H-5") (kbd "†")) ; dagger
-  )
-
 (global-set-key (kbd "C-,") 'point-to-register)
 (global-set-key (kbd "C-.") 'jump-to-register)
 (global-set-key (kbd "H-s") 'bookmark-set)
@@ -893,9 +878,14 @@
 (require 'calfw-org)
 (global-set-key (kbd "H-a") 'avy-goto-char-timer)
 
+(defvar active-harpoon)
+(setq active-harpoon 102)
+
+(defun current-buffer-is-harpooned (marker)
+  (and (eq (marker-buffer marker) (current-buffer))))  
+
 (defun harpoon-f ()
-    (interactive)
-  (unless (get-register 102) ((point-to-register active-harpoon) (setq active-harpoon 102)))
+  (interactive)
   (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
   (jump-to-register 102)
   (setq active-harpoon 102))
@@ -903,11 +893,11 @@
 (defun set-harpoon-f ()
   (interactive)
   (point-to-register 102)
+  (setq active-harpoon 102)    
   )
 
 (defun harpoon-d ()
-    (interactive)
-  (unless (get-register 100) ((point-to-register active-harpoon) (setq active-harpoon 100)))
+  (interactive)
   (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
   (jump-to-register 100)
   (setq active-harpoon 100))
@@ -915,11 +905,11 @@
 (defun set-harpoon-d ()
   (interactive)
   (point-to-register 100)
+  (setq active-harpoon 100)    
   )
 
 (defun harpoon-a ()
-    (interactive)
-  (unless (get-register 97) ((point-to-register active-harpoon) (setq active-harpoon 97)))
+  (interactive)
   (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
   (jump-to-register 97)
   (setq active-harpoon 97))
@@ -927,18 +917,19 @@
 (defun set-harpoon-a ()
   (interactive)
   (point-to-register 97)
+  (setq active-harpoon 97)    
   )
 
 (defun harpoon-s ()
-    (interactive)
-  (unless (get-register 115) ((point-to-register active-harpoon) (setq active-harpoon 115)))
+  (interactive)
   (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
   (jump-to-register 115)
   (setq active-harpoon 115))
 
- (defun set-harpoon-s ()
+(defun set-harpoon-s ()
   (interactive)
   (point-to-register 115)
+  (setq active-harpoon 115)
   )
 
 (global-set-key (kbd "H-a") 'harpoon-a)
