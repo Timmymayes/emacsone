@@ -1,9 +1,26 @@
 * Movement
 ** Global
-| Command Group (and command notes)  | Command          | Description                          | Primary key |
-|------------------------------------+------------------+--------------------------------------+-------------|
-| Mark Ring Based Movement           | ---              | ---                                  | ---         |
-|------------------------------------+------------------+--------------------------------------+-------------|
-| *Do 2x to mark and remove highlight* | set-mark-command | Set Mark                             | "C-SPC"     |
-|                                    | set-mark-command | Move to Previous Mark In same Buffer | "C-U C-SPC" |
-|                                    |                  |                                      |             |
+| Command Group (and command notes)  | Command             | Description                          | Primary key |
+|------------------------------------+---------------------+--------------------------------------+-------------|
+| Mark Ring Based Movement           | ---                 | ---                                  | ---         |
+|------------------------------------+---------------------+--------------------------------------+-------------|
+| *Do 2x to mark and remove highlight* | set-mark-command    | Set Mark                             | "C-SPC"     |
+|                                    | set-mark-command    | Move to Previous Mark In same Buffer | "C-U C-SPC" |
+| Harpoon Control                    | ---                 | ---                                  | ---         |
+|                                    | harpoon-a           | Update active harpoon and move to a  | "H-a"       |
+|                                    | harpoon-s           | Update active harpoon and move to s  | "H-s"       |
+|                                    | harpoon-d           | Update active harpoon and move to d  | "H-d"       |
+|                                    | harpoon-f           | Update active harpoon and move to f  | "H-f"       |
+|                                    | set-harpoon-a       | Set a file to harpoon slot a         | "C-H-a"     |
+|                                    | set-harpoon-s       | Set a file to harpoon slot s         | "C-H-s"     |
+|                                    | set-harpoon-d       | Set a file to harpoon slot d         | "C-H-d"     |
+|                                    | set-harpoon-f       | Set a file to harpoon slot f         | "C-H-f"     |
+| Buffer Movement                    | ---                 | ---                                  | ---         |
+|                                    | buffer-quick-switch | Swap to last buffer                  | "H-b"       |
+|                                    | buffer-menu         | Load buffer Menu                     | "C-H-b"     |
+|                                    | list-bookmarks      | Load list of bookmarks               | "C-H-g"     |
+|                                    |                     |                                      |             |
+
+
+
+

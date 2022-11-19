@@ -724,6 +724,12 @@
   ;; set ctrl z to undo
   (global-set-key (kbd "C-z") 'undo)
 
+;; Macros
+(fset 'buffer-quick-switch
+ (kmacro-lambda-form [?\C-x ?b return] 0 "%d"))
+
+
+;; Bindings
 (global-set-key (kbd "M-+") 'other-window)
 (global-set-key (kbd "M-[") 'ace-window)
 (global-set-key (kbd "M-]") 'treemacs-select-window)
@@ -731,6 +737,9 @@
 (global-set-key (kbd "H-1") 'delete-other-windows)
 (global-set-key (kbd "H-2") 'split-window-below)
 (global-set-key (kbd "H-3") 'split-window-right)
+(global-set-key (kbd "C-H-b") 'buffer-menu)
+(global-set-key (kbd "H-b") 'buffer-quick-switch)
+(global-set-key (kbd "C-H-g") 'list-bookmarks)
 
 (defun insert-line-above-and-go ()
   ;;insert a line above the current one and move the cursor there
