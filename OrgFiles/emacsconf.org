@@ -1064,18 +1064,19 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 : next-tag
 ** Window Movement
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-+") 'other-window)
-(global-set-key (kbd "M-[") 'ace-window)
-(global-set-key (kbd "M-]") 'treemacs-select-window)
-(global-set-key [(meta left)] 'windmove-left)
-(global-set-key [(meta right)] 'windmove-right)
-(global-set-key [(meta up)] 'windmove-up)
-(global-set-key [(meta down)] 'windmove-down)
-(global-set-key (kbd "C-c s t") 'treemacs)
+  (global-set-key (kbd "M-+") 'other-window)
+  (global-set-key (kbd "M-[") 'ace-window)
+  (global-set-key (kbd "M-]") 'treemacs-select-window)
+  (global-set-key [(meta left)] 'windmove-left)
+  (global-set-key [(meta right)] 'windmove-right)
+  (global-set-key [(meta up)] 'windmove-up)
+  (global-set-key [(meta down)] 'windmove-down)
+  (global-set-key (kbd "C-c s t") 'treemacs)
+  (global-set-key (kbd "H-1") 'delete-other-windows)
 #+END_SRC
 
 #+RESULTS:
-: treemacs
+: delete-other-windows
 
 ** TODO Cursor Movement
 #+BEGIN_SRC emacs-lisp

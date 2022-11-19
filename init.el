@@ -732,6 +732,7 @@
 (global-set-key [(meta up)] 'windmove-up)
 (global-set-key [(meta down)] 'windmove-down)
 (global-set-key (kbd "C-c s t") 'treemacs)
+(global-set-key (kbd "H-1") 'delete-other-windows)
 
 (defun insert-line-above-and-go ()
   ;;insert a line above the current one and move the cursor there
