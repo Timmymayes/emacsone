@@ -3,10 +3,8 @@
 (global-set-key (kbd "C-c x e") 'encode-utf-8)
 
 (require 'package)
-
-
-
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ;; old org link commented out for deprication 
                          ;;("org" . "https://orgmode.org/elpa/")
                          ("gnu" . "https://elpa.gnu.org/packages/")
                          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
@@ -14,65 +12,66 @@
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
+;; clean up org package issues
 (assq-delete-all 'org package--builtins)
 (assq-delete-all 'org package--builtin-versions)
 (unless package-archive-contents
  (package-refresh-contents))
 
-                                        ; Initialize use-package on non-Linux platforms
+;; Initialize use-package on non-Linux platforms
 
 (unless (package-installed-p 'use-package)
-   (package-install 'use-package))
+  (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
 
 (use-package mu4e
-   :ensure nil
-   ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
-   :config
-   ;; this si set to t to avoid mail syncing issues
-   (setq mu4e-change-filenames-when-moving t)
-   ;; refresh mail using isync every 10 minutes
-   (setq mu4e-update-interval (* 10 60))
-   (setq mu4e-get-mail-command "mbsync -a")
-   (setq mu4e-maildir "~/Mail")
+  :ensure nil
+  ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
+  :config
+  ;; this si set to t to avoid mail syncing issues
+  (setq mu4e-change-filenames-when-moving t)
+  ;; refresh mail using isync every 10 minutes
+  (setq mu4e-update-interval (* 10 60))
+  (setq mu4e-get-mail-command "mbsync -a")
+  (setq mu4e-maildir "~/Mail")
 
-   (setq mu4e-drafts-folder "/'[Gmail]'.Drafts")
-   (setq mu4e-sent-folder "/[Gmail].Sent Mail")
-   (setq mu4e-refile-folder "/[Gmail].All Mail")
-   (setq mu4e-trash-folder "/[Gmail].Trash")
+  (setq mu4e-drafts-folder "/'[Gmail]'.Drafts")
+  (setq mu4e-sent-folder "/[Gmail].Sent Mail")
+  (setq mu4e-refile-folder "/[Gmail].All Mail")
+  (setq mu4e-trash-folder "/[Gmail].Trash")
 
-   (setq mu4e-maildir-shortcuts
-   '(("/Inbox"                   . ?i)
-     ("/[Gmail].Sent Mail"       . ?s)
-     ("/[Gmail].Trash"           . ?t)
-     ("/[Gmail].Drafts"          . ?d)
-     ("/[Gmail].All Mail"        . ?a))))
+  (setq mu4e-maildir-shortcuts
+        '(("/Inbox"                   . ?i)
+          ("/[Gmail].Sent Mail"       . ?s)
+          ("/[Gmail].Trash"           . ?t)
+          ("/[Gmail].Drafts"          . ?d)
+          ("/[Gmail].All Mail"        . ?a))))
 
 (setq inhibit-startup-message t)
 
-  (scroll-bar-mode -1) ;Disable visible scrollbar
-  (tool-bar-mode -1)   ;DIsable toolbar
-  (tooltip-mode -1)    ;disable tooltips11
-  (set-fringe-mode 10) ;give some breathing room
+(scroll-bar-mode -1) ;Disable visible scrollbar
+(tool-bar-mode -1)   ;DIsable toolbar
+(tooltip-mode -1)    ;disable tooltips11
+(set-fringe-mode 10) ;give some breathing room
 
-  (menu-bar-mode -1)   ;disable menu bar
+(menu-bar-mode -1)   ;disable menu bar
 
-; setup the visible bell
+                                        ; setup the visible bell
 
-  (setq visible-bell t)
+(setq visible-bell t)
 
-;set font
+                                        ;set font
 
-  (set-face-attribute 'default nil :font "Fira Code Retina" :height 140)
-; load theme note this passes an object denoted by a leading `
-
-
-  (load-theme 'tango-dark)
+(set-face-attribute 'default nil :font "Fira Code Retina" :height 140)
+                                        ; load theme note this passes an object denoted by a leading `
 
 
-  (desktop-save-mode 1)
+(load-theme 'tango-dark)
+
+
+(desktop-save-mode 1)
 
 ;set doom themes
 (use-package doom-themes
@@ -126,27 +125,27 @@
 
 ;; story)))
 
-  ;;        (use-package ivy-richt
-    ;;        :init
-      ;;      (ivy-rich-mode 1))
+;;        (use-package ivy-richt
+;;        :init
+;;      (ivy-rich-mode 1))
 
-          (use-package vertico
-            :ensure t
-            :custom
-            (vertico-cycle t)
-            :init
-            (vertico-mode))
-  (use-package savehist
-    :init
-    (savehist-mode))
+(use-package vertico
+  :ensure t
+  :custom
+  (vertico-cycle t)
+  :init
+  (vertico-mode))
+(use-package savehist
+  :init
+  (savehist-mode))
 
-  (use-package marginalia
-    :after vertico
-    :ensure t
-    :custom
-    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :init
-    (marginalia-mode))
+(use-package marginalia
+  :after vertico
+  :ensure t
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
 
 (yas-global-mode 1)
 
@@ -224,53 +223,53 @@
            "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
 
                                         ; hotkey bindings
-  (define-key global-map (kbd "C-c o")
-    (lambda () (interactive) (org-capture)))
+(define-key global-map (kbd "C-c o")
+  (lambda () (interactive) (org-capture)))
 
-  (define-key global-map (kbd "C-c j")
+(define-key global-map (kbd "C-c j")
   (lambda () (interactive) (org-capture nil "jj")))
 
-  (define-key global-map (kbd "C-c t")
+(define-key global-map (kbd "C-c t")
   (lambda () (interactive) (org-capture nil "tt")))
 
-  (global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c a") 'org-agenda)
 
 
                                         ; refile targets
 
 
-  (setq org-refile-targets
-        '(("archive.org" :maxlevel . 1)
-          ("tasks.org" :maxlevel . 1)))
+(setq org-refile-targets
+      '(("archive.org" :maxlevel . 1)
+        ("tasks.org" :maxlevel . 1)))
                                         ; load org habits
-  (require 'org-habit)
-   (add-to-list 'org-modules 'org-habit)
-   (setq org-habit-graph-column 60)
+(require 'org-habit)
+(add-to-list 'org-modules 'org-habit)
+(setq org-habit-graph-column 60)
 
 
 
 ;;;;; end org mode setup ;;;;;
 
 (dolist (face '((org-level-1 . 1.2)
-                  (org-level-2 . 1.1)
-                  (org-level-3 . 1.05)
-                  (org-level-4 . 1.0)
-                  (org-level-5 . 1.1)
-                  (org-level-6 . 1.1)
-                  (org-level-7 . 1.1)
-                  (org-level-8 . 1.1)))
-    (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
-                                          ; keep a few things fixed pitch as they should be for line ups
+                (org-level-2 . 1.1)
+                (org-level-3 . 1.05)
+                (org-level-4 . 1.0)
+                (org-level-5 . 1.1)
+                (org-level-6 . 1.1)
+                (org-level-7 . 1.1)
+                (org-level-8 . 1.1)))
+  (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+                                        ; keep a few things fixed pitch as they should be for line ups
 
 (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-;  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+                                        ;  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
 
 (use-package org-bullets
   :after org
@@ -279,18 +278,18 @@
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 
-					;replace dashes with dots
+                                        ;replace dashes with dots
 
 (font-lock-add-keywords 'org-mode
-                         '(("^ *\\([-]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+                        '(("^ *\\([-]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
 ;; This is needed as of Org 9.2
-;  (require 'org-tempo)
- ;  (with-eval-after-load 'org-tempo
-       (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-      (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")) 
-       (add-to-list 'org-structure-template-alist '("py" . "src python"))
+                                        ;  (require 'org-tempo)
+                                        ;  (with-eval-after-load 'org-tempo
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")) 
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -299,13 +298,13 @@
    (python .t)))
 
 ;;auto tangle my emacs config file
-  (defun emacsone/org-babel-tangle-config()
-    (when (string-equal (buffer-file-name)
-		        (expand-file-name "~/Projects/emacsone/OrgFiles/emacsconf.org"))
-      ;; dynamic scoping
-      (let ((org-confirm-babel-evaluate nil))
-	(org-babel-tangle))))
-    (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'emacsone/org-babel-tangle-config)))
+(defun emacsone/org-babel-tangle-config()
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "~/Projects/emacsone/OrgFiles/emacsconf.org"))
+    ;; dynamic scoping
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'emacsone/org-babel-tangle-config)))
 
 (defun org-mode-visual-fill()
   (setq visual-fill-column-width 150 visual-fill-column-center-text t)
@@ -318,75 +317,75 @@
 (setq org-clock-sound "~/Downloads/cheer.wav")
 
 (use-package org-roam
-          :ensure t
-          :init
-          (setq org-roam-v2-act t)
-          :custom
-          (org-roam-directory "~/RoamNotes")
-          (org-roam-completion-everywhere t)
-          ( org-agenda-todo-list-sublevels nil)        
+  :ensure t
+  :init
+  (setq org-roam-v2-act t)
+  :custom
+  (org-roam-directory "~/RoamNotes")
+  (org-roam-completion-everywhere t)
+  ( org-agenda-todo-list-sublevels nil)        
 
-          :bind
-          (("C-c n l" . org-roam-buffer-toggle)
-           ("C-c n f" . org-roam-node-find)
-           ("C-c n i" . org-roam-node-insert)
-           ("C-c n i" . org-id-get-create)
-           ("C-c n a" . org-roam-alias-add)
-           ("C-c n t" . org-roam-tag-add)
-           ("C-c n r" . org-roam-ref-add)
-           ("C-c n x a" . org-roam-alias-remove)
-           ("C-c n x r" . org-roam-ref-remove)
-           ("C-c n x t" . org-roam-tag-remove)
+  :bind
+  (("C-c n l" . org-roam-buffer-toggle)
+   ("C-c n f" . org-roam-node-find)
+   ("C-c n i" . org-roam-node-insert)
+   ("C-c n i" . org-id-get-create)
+   ("C-c n a" . org-roam-alias-add)
+   ("C-c n t" . org-roam-tag-add)
+   ("C-c n r" . org-roam-ref-add)
+   ("C-c n x a" . org-roam-alias-remove)
+   ("C-c n x r" . org-roam-ref-remove)
+   ("C-c n x t" . org-roam-tag-remove)
 
-           ("C-c n I" . org-roam-node-insert-immediate)
-           :map org-mode-map
-           ("C-c n b" . org-mark-ring-goto)
-           :map org-roam-dailies-map
-           ("Y" . org-roam-dailies-capture-yesterday)
-           ("T" . org-roam-dailies-capture-tomorrow))
+   ("C-c n I" . org-roam-node-insert-immediate)
+   :map org-mode-map
+   ("C-c n b" . org-mark-ring-goto)
+   :map org-roam-dailies-map
+   ("Y" . org-roam-dailies-capture-yesterday)
+   ("T" . org-roam-dailies-capture-tomorrow))
 
-           :bind-keymap
-           ("C-c n d" . org-roam-dailies-map)
-           :config
-           (require 'org-roam-dailies)
-           (org-roam-db-autosync-mode))
+  :bind-keymap
+  ("C-c n d" . org-roam-dailies-map)
+  :config
+  (require 'org-roam-dailies)
+  (org-roam-db-autosync-mode))
 
-    ;;  Bind this to C-c n I
-      (defun org-roam-node-insert-immediate (arg &rest args)
-        (interactive "P")
-        (let ((args (cons arg args))
-              (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                        '(:immediate-finish t)))))
-          (apply #'org-roam-node-insert args)))  
+;;  Bind this to C-c n I
+(defun org-roam-node-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (cons arg args))
+        (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                  '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)))  
 
 
 
-          (with-eval-after-load "org-roam" 
-            (setq org-roam-capture-templates
-                  '(("d" "default" plain
-                     "%?"
-                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                     :unnarrowed t)
-                    ;; programming language
-                    ("l" "programming language" plain
-                     "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
-                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                     :unnarrowed t)
-                    ;; programming insight - javascript
-                    ("i" "Programming Insights" plain
-                    "* Problem\n\n* Insight:\n\n* Solution:\n\n* Refactoring:\n\n* Fig1:\n\n#+BEGIN_SRC javascript\n\n\n#+END_SRC"
-                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-                     :unnarrowed t)
-                    ("b" "book notes" plain
-                     "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
-                     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
-                     :unnarrowed t))))
+(with-eval-after-load "org-roam" 
+  (setq org-roam-capture-templates
+        '(("d" "default" plain
+           "%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+           :unnarrowed t)
+          ;; programming language
+          ("l" "programming language" plain
+           "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+           :unnarrowed t)
+          ;; programming insight - javascript
+          ("i" "Programming Insights" plain
+           "* Problem\n\n* Insight:\n\n* Solution:\n\n* Refactoring:\n\n* Fig1:\n\n#+BEGIN_SRC javascript\n\n\n#+END_SRC"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+           :unnarrowed t)
+          ("b" "book notes" plain
+           "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\nest")
+           :unnarrowed t))))
 
 
 (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:15}" 'face 'org-tag)))
 
-          (use-package org-roam-ui
-            :bind ("s-r" . org-roam-ui-open))
+(use-package org-roam-ui
+  :bind ("s-r" . org-roam-ui-open))
 
 (use-package ledger-mode
   :ensure t
@@ -394,16 +393,16 @@
   (setq ledger-clear-whole-transactions 1)
   :bind (
          :map ledger-mode-map
-          ("s-n" . ledger-navigate-next-uncleared)
-          ("s-p" . ledger-navigate-previous-uncleared))
+         ("s-n" . ledger-navigate-next-uncleared)
+         ("s-p" . ledger-navigate-previous-uncleared))
   :mode "\\.dat\\'")
 
-  (setq ledger-reports
-        '(("bal"            "%(binary) -f %(ledger-file) bal")
-          ("bal this month" "%(binary) -f %(ledger-file) bal -p %(month) -S amount")
-          ("bal this year"  "%(binary) -f %(ledger-file) bal -p 'this year'")
-          ("net worth"      "%(binary) -f %(ledger-file) bal Assets Liabilities")
-          ("account"        "%(binary) -f %(ledger-file) reg %(account)")))
+(setq ledger-reports
+      '(("bal"            "%(binary) -f %(ledger-file) bal")
+        ("bal this month" "%(binary) -f %(ledger-file) bal -p %(month) -S amount")
+        ("bal this year"  "%(binary) -f %(ledger-file) bal -p 'this year'")
+        ("net worth"      "%(binary) -f %(ledger-file) bal Assets Liabilities")
+        ("account"        "%(binary) -f %(ledger-file) reg %(account)")))
 
 (use-package magit
   :commands (magit-status magit-get-current-branch)
@@ -510,7 +509,7 @@
 (use-package web-mode)
 (setq web-mode-enable-current-column-highlight t)
 (setq web-mode-enable-current-element-highlight t)
-; hook into web mode for file types
+                                        ; hook into web mode for file types
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
@@ -521,35 +520,35 @@
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 ;;using rsjx mode
 ;;(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-;(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+                                        ;(add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
 ;; using rsjx mode
 ;;(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
 
-; set company completions vocab to css and html
+                                        ; set company completions vocab to css and html
 
 (setq web-mode-enable-engine-detection t)
 
 (use-package emmet-mode
-:bind
-("M-n" . emmet-next-edit-point)
-("M-p" . emmet-prev-edit-point))
-; use emmet in all web-mode docs
+  :bind
+  ("M-n" . emmet-next-edit-point)
+  ("M-p" . emmet-prev-edit-point))
+                                        ; use emmet in all web-mode docs
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook 'emmet-mode)
 
-; enable mode switching between css and java
+                                        ; enable mode switching between css and java
 (add-hook 'web-mode-before-auto-complete-hooks
-    '(lambda ()
-     (let ((web-mode-cur-language
-  	    (web-mode-language-at-pos)))
+          '(lambda ()
+             (let ((web-mode-cur-language
+                    (web-mode-language-at-pos)))
                (if (string= web-mode-cur-language "php")
-    	   (yas-activate-extra-mode 'php-mode)
-      	 (yas-deactivate-extra-mode 'php-mode))
+                   (yas-activate-extra-mode 'php-mode)
+                 (yas-deactivate-extra-mode 'php-mode))
                (if (string= web-mode-cur-language "css")
-    	   (setq emmet-use-css-transform t)
-      	 (setq emmet-use-css-transform nil)))))
+                   (setq emmet-use-css-transform t)
+                 (setq emmet-use-css-transform nil)))))
 
 
 
@@ -559,24 +558,24 @@
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode))
 
-  (use-package lsp-mode
-    :commands (lsp lsp-deffered)
-    :hook (lsp-mode . lsp-mode-setup)
-    :init
-    (setq lsp-keymap-prefix "C-c l")
-    :config
-    (lsp-enable-which-key-integration t))
-  ; turn on lsp ui
+(use-package lsp-mode
+  :commands (lsp lsp-deffered)
+  :hook (lsp-mode . lsp-mode-setup)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (lsp-enable-which-key-integration t))
+                                        ; turn on lsp ui
 
-  (use-package lsp-ui
-    :after lsp
-    :hook (lsp-mode . lsp-ui-mode)
-    :config
-    (setq lsp-ui-doc-position 'bottom))
+(use-package lsp-ui
+  :after lsp
+  :hook (lsp-mode . lsp-ui-mode)
+  :config
+  (setq lsp-ui-doc-position 'bottom))
 
-  (use-package lsp-treemacs
-    :after lsp)
-  (setq treemacs-select-when-already-in-treemacs 'close)
+(use-package lsp-treemacs
+  :after lsp)
+(setq treemacs-select-when-already-in-treemacs 'close)
 
 (use-package typescript-mode
   :mode "\\.ts\\'"
@@ -594,7 +593,7 @@
         js-indent-level 2)
   ;; (setq-local flycheck-disabled-checkers (cl-union flycheck-disabled-checkers
   ;;                                                  '(javascript-jshint))) ; jshint doesn't work for JSX
-   (electric-pair-mode 1))
+  (electric-pair-mode 1))
 
 (use-package add-node-modules-path
   :defer t
@@ -676,19 +675,19 @@
   (battle-haxe-immediate-completion nil "Toggle this if you want to immediately trigger completion when typing '.' and other relevant prefixes."))
 
 (use-package company
-    :after lsp-mode
-    :hook ((lsp-mode web-mode) . company-mode)
-    :bind (:map company-active-map
-                ( "<tab>" . company-complete-selection))
-    (:map lsp-mode-map
-          ("<tab>" . company-indent-or-complete-common)) 
-)
-    (setq company-minimum-prefix-length 2)
+  :after lsp-mode
+  :hook ((lsp-mode web-mode) . company-mode)
+  :bind (:map company-active-map
+              ( "<tab>" . company-complete-selection))
+  (:map lsp-mode-map
+        ("<tab>" . company-indent-or-complete-common)) 
+  )
+(setq company-minimum-prefix-length 2)
 
 
 
-  (use-package company-web
-:after company)
+(use-package company-web
+  :after company)
 
 
 (defun my-web-mode-hook ()
@@ -698,21 +697,21 @@
 
 ;; Company mode for yas
 (global-set-key (kbd "<C-tab>") 'company-yasnippet)
-  ;  (use-ackage company-box
-   ;   :hook (company-mode . company-box-mode))
+                                        ;  (use-ackage company-box
+                                        ;   :hook (company-mode . company-box-mode))
 
 (global-set-key (kbd "M-=") 'dabbrev-expand
                 )
 (global-set-key (kbd "M-C-=") 'dabbrev-completion)
 
 (defun next-tag()
-    (interactive)
-      (web-mode-element-next)
-      (web-mode-tag-end))
+  (interactive)
+  (web-mode-element-next)
+  (web-mode-tag-end))
 
 
 
-  (global-set-key  (kbd "C-x t") 'next-tag)
+(global-set-key  (kbd "C-x t") 'next-tag)
 
 ;; timer controls
 (global-set-key (kbd "H-t t") 'org-timer-set-timer)
@@ -721,12 +720,12 @@
 (global-set-key (kbd "H-t z") 'org-timer-pause-or-continue)
 
 
-  ;; set ctrl z to undo
-  (global-set-key (kbd "C-z") 'undo)
+;; set ctrl z to undo
+(global-set-key (kbd "C-z") 'undo)
 
 ;; Macros
 (fset 'buffer-quick-switch
- (kmacro-lambda-form [?\C-x ?b return] 0 "%d"))
+      (kmacro-lambda-form [?\C-x ?b return] 0 "%d"))
 
 
 ;; Bindings
@@ -753,9 +752,9 @@
 (global-set-key (kbd "M-o") 'insert-line-above-and-go)
 
 ;;
-;
+                                        ;
 
-; ;
+                                        ; ;
 
 ;; move C-j to C-; indent-new-comment-line
 (global-set-key (kbd "C-;") 'indent-new-comment-line)
@@ -770,7 +769,7 @@
   (mark-sexp) 
   (insert-parentheses))
 
-  (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
+(global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
 
 
 (global-set-key (kbd "s-a") 'ace-jump-word-mode)
@@ -783,14 +782,14 @@
   (kill-word 1)
   (backward-kill-word 1))
 
-  (global-set-key (kbd "M-DEL") 'kill-word-at-point)
+(global-set-key (kbd "M-DEL") 'kill-word-at-point)
 
 (defun kill-line-at-point()
   (interactive)
   (back-to-indentation)
   (kill-line))
-  
-  (global-set-key (kbd "s-l") 'kill-line-at-point)
+
+(global-set-key (kbd "s-l") 'kill-line-at-point)
 
 (defun duplicate-current-line()
   "Duplicates the entire line under point. Repetable with 'd' "
@@ -802,24 +801,24 @@
   (indent-for-tab-command)
   (yank)
   (set-temporary-overlay-map
-    (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "d") 'duplicate-current-line)
-      map)))
+   (let ((map (make-sparse-keymap)))
+     (define-key map (kbd "d") 'duplicate-current-line)
+     map)))
 
 (defun duplicate-line-up-to-point()
- "Duplicates a line from start of indentation up to point. May be repeated with single 'd' presses."
+  "Duplicates a line from start of indentation up to point. May be repeated with single 'd' presses."
   (interactive)
   (set-mark-command nil)
   (back-to-indentation)
   (kill-ring-save (region-beginning) (region-end))
   (end-of-line)
   (newline)
-;; example of single key repeat functionality
+  ;; example of single key repeat functionality
   (yank)
   (set-temporary-overlay-map
-    (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "d") 'duplicate-line-up-to-point)
-      map)))
+   (let ((map (make-sparse-keymap)))
+     (define-key map (kbd "d") 'duplicate-line-up-to-point)
+     map)))
 
 
 (global-set-key (kbd "H-s-d") 'duplicate-current-line
@@ -838,7 +837,7 @@
 (use-package dired-single)
 
 (use-package all-the-icons-dired
-:hook (dired-mode . all-the-icons-dired-mode))
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 ;(use-package dired-open) look into this package if you end up needing it.
 
@@ -852,9 +851,9 @@
 (add-hook 'dired-mode-hook #'my-dired-mode-hook)
 
 (use-package dashboard
-:ensure t
-:config
-(dashboard-setup-startup-hook))
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
 
 ;;set load path for person elisp
 (add-to-list 'load-path "~/.emacs.d/lisp")
@@ -875,8 +874,6 @@
 (fset 'yank-and-add-line-numbers
       (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
 (global-set-key (kbd "s-k") 'yank-and-add-line-numbers) 
-
-;; insert todays date
 
 
 (fset 'agenda-fullscreen

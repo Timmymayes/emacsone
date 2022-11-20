@@ -22,5 +22,12 @@
 |                                    |                     |                                      |             |
 
 
+* Current Top of Mind
+| action                    | key     |
+|---------------------------+---------|
+| org jump                  | C-c C-j |
+| org next block            | C-c M-f |
+| org next visible headline | C-c C-n |
+
 
 
