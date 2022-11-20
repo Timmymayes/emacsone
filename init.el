@@ -738,8 +738,9 @@
 (global-set-key (kbd "H-2") 'split-window-below)
 (global-set-key (kbd "H-3") 'split-window-right)
 (global-set-key (kbd "C-H-b") 'buffer-menu)
-(global-set-key (kbd "H-b") 'buffer-quick-switch)
+(global-set-key (kbd "H-b") 'buffer-quick-switc)
 (global-set-key (kbd "C-H-g") 'list-bookmarks)
+(global-set-key (kbd "C-H-t") 'dired-jump)
 
 (defun insert-line-above-and-go ()
   ;;insert a line above the current one and move the cursor there

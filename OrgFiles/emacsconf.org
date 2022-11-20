@@ -1,8 +1,20 @@
 #+Title: Emacs US Config
 #+PROPERTY: header-args:emacs-lisp :tangle ~/Projects/emacsone/init.el
 
+* Config Overview
+This config is my personal config and is evolving over time. You can find the updated version here: [[https://github.com/Timmymayes/emacsone/blob/main/OrgFiles/emacsconf.org][Emacsone]].
 
-* Init
+
+* Initialization
+Initiilization commands for emacs.
+** UTF-8 buffer revert comand
+On the rare occasion utf-8 encoding is lost there is a hotkey for it. 
+*** Related Keymap
+| Hotkey  | Command      | Desc                            |
+|---------+--------------+---------------------------------|
+| C-c x e | encode-utf-8 | Revert buffer encoding to utf-8 |
+
+
 #+BEGIN_SRC emacs-lisp
   (fset 'encode-utf-8
    (kmacro-lambda-form [?\M-x ?r ?e ?v ?e ?r ?t ?- ?b ?u ?f ?f ?e ?r ?- ?w ?i ?t ?h ?- ?c ?o ?d tab return ?u ?t ?f ?- ?8 return ?y ?e ?s return] 0 "%d"))
@@ -1078,14 +1090,15 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
   (global-set-key (kbd "H-2") 'split-window-below)
   (global-set-key (kbd "H-3") 'split-window-right)
   (global-set-key (kbd "C-H-b") 'buffer-menu)
-  (global-set-key (kbd "H-b") 'buffer-quick-switch)
+  (global-set-key (kbd "H-b") 'buffer-quick-switc)
   (global-set-key (kbd "C-H-g") 'list-bookmarks)
+  (global-set-key (kbd "C-H-t") 'dired-jump)
 
 
 #+END_SRC
 
 #+RESULTS:
-: list-bookmarks
+: dired-jump
 
 ** TODO Cursor Movement
 #+BEGIN_SRC emacs-lisp
