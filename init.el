@@ -49,29 +49,41 @@
           ("/[Gmail].Drafts"          . ?d)
           ("/[Gmail].All Mail"        . ?a))))
 
-(setq inhibit-startup-message t)
+(setq
+ user-mail-address "Timmymayes@gmail.com"
+ user-full-name "Timothy Tyler Mayes"
+ mu4e-compose-signature
+ (concat
+  "Best Regards,\n"
+  "Tyler Mayes"))
+;; Not working atm
+(require 'smtpmail)
+(setq message-send-mail-function 'smtpmail-send-it
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials
+      '(("smtp.gmail.com" 587 "Timmymayes@gmail.com" nil))
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587)
 
-(scroll-bar-mode -1) ;Disable visible scrollbar
-(tool-bar-mode -1)   ;DIsable toolbar
-(tooltip-mode -1)    ;disable tooltips11
-(set-fringe-mode 10) ;give some breathing room
+(setq inhibit-startup-message t) ;inhibit start up
+(scroll-bar-mode -1)   ;Disable visible scrollbar
+(tool-bar-mode -1)     ;DIsable toolbar
+(tooltip-mode -1)      ;disable tooltips11
+(set-fringe-mode 10)   ;give some breathing room
+(menu-bar-mode -1)     ;disable menu bar
 
-(menu-bar-mode -1)   ;disable menu bar
-
-                                        ; setup the visible bell
-
-(setq visible-bell t)
-
-                                        ;set font
-
-(set-face-attribute 'default nil :font "Fira Code Retina" :height 140)
-                                        ; load theme note this passes an object denoted by a leading `
+(setq visible-bell t)  ; setup the visible bell
 
 
-(load-theme 'tango-dark)
 
 
-(desktop-save-mode 1)
+
+(set-face-attribute
+ 'default nil :font "Fira Code Retina" :height 140)  ; set font
+(load-theme 'tango-dark)                             ; load theme
+(desktop-save-mode 1)                                ; enable desktop saving
 
 ;set doom themes
 (use-package doom-themes
@@ -723,9 +735,10 @@
 ;; set ctrl z to undo
 (global-set-key (kbd "C-z") 'undo)
 
-;; Macros
+;; Macros & commands
 (fset 'buffer-quick-switch
       (kmacro-lambda-form [?\C-x ?b return] 0 "%d"))
+
 
 
 ;; Bindings
@@ -737,9 +750,10 @@
 (global-set-key (kbd "H-2") 'split-window-below)
 (global-set-key (kbd "H-3") 'split-window-right)
 (global-set-key (kbd "C-H-b") 'buffer-menu)
-(global-set-key (kbd "H-b") 'buffer-quick-switc)
+(global-set-key (kbd "H-b") 'buffer-quick-switch)
 (global-set-key (kbd "C-H-g") 'list-bookmarks)
 (global-set-key (kbd "C-H-t") 'dired-jump)
+(global-set-key (kbd "H-k") 'kill-current-buffer)
 
 (defun insert-line-above-and-go ()
   ;;insert a line above the current one and move the cursor there

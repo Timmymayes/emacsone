@@ -1,7 +1,7 @@
-* Movement
+a* Movement
 ** Global
 | Command Group (and command notes)  | Command             | Description                          | Primary key |
-|------------------------------------+---------------------+--------------------------------------+-------------|
+|------------------------------------+---------------------+--------------------------------------+------------- |
 | Mark Ring Based Movement           | ---                 | ---                                  | ---         |
 |------------------------------------+---------------------+--------------------------------------+-------------|
 | *Do 2x to mark and remove highlight* | set-mark-command    | Set Mark                             | "C-SPC"     |
@@ -23,11 +23,12 @@
 
 
 * Current Top of Mind
-| action                    | key     |
-|---------------------------+---------|
-| org jump                  | C-c C-j |
-| org next block            | C-c M-f |
-| org next visible headline | C-c C-n |
+| action                        | key              |
+|-------------------------------+------------------|
+| org jump                      | C-c C-j          |
+| org next block                | C-c M-f          |
+| org next visible headline     | C-c C-n          |
+| Scroll other window up / down | M-Prior / M-Next |
 
 
 
