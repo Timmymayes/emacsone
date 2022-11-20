@@ -150,37 +150,38 @@ Setup gmail to use mu4e
 | g   | mu4e-rerun-search                   | Rerun current search                           |
 
 
-* Basic UI Config
+* UI Config
+** Basic UI Config
 Basic setup for cleaning up the ui.
 
 #+begin_src emacs-lisp
 
-    (setq inhibit-startup-message t) ;inhibit start up
-    (scroll-bar-mode -1)   ;Disable visible scrollbar
-    (tool-bar-mode -1)     ;DIsable toolbar
-    (tooltip-mode -1)      ;disable tooltips11
-    (set-fringe-mode 10)   ;give some breathing room
-    (menu-bar-mode -1)     ;disable menu bar
+  (setq inhibit-startup-message t) ;inhibit start up
+  (scroll-bar-mode -1)   ;Disable visible scrollbar
+  (tool-bar-mode -1)     ;DIsable toolbar
+  (tooltip-mode -1)      ;disable tooltips11
+  (set-fringe-mode 10)   ;give some breathing room
+  (menu-bar-mode -1)     ;disable menu bar
 
-    (setq visible-bell t)  ; setup the visible bell
-
-
+  (setq visible-bell t)  ; setup the visible bell
 
 
 
-    (set-face-attribute
-     'default nil :font "Fira Code Retina" :height 140)  ; set font
-    (load-theme 'tango-dark)                             ; load theme
-    (desktop-save-mode 1)                                ; enable desktop saving
 
-#+end_src
+
+  (set-face-attribute
+   'default nil :font "Fira Code Retina" :height 140)  ; set font
+  (load-theme 'tango-dark)                             ; load theme
+  (desktop-save-mode 1)                                ; enable desktop saving
+
+    #+end_src
 
 #+RESULTS:
 : t
 
 ** Themes
 #+begin_src emacs-lisp
-                                          ;set doom themes
+  ;;set doom themes
   (use-package doom-themes
     :ensure t
     :config
@@ -190,16 +191,22 @@ Basic setup for cleaning up the ui.
   (use-package doom-modeline
     :ensure t
     :init (doom-modeline-mode 1)
-    :config 
+    :config
+    ;; consider adding a mu4e alert
+    (setq doom-modeline-mu4e t)
+    (mu4e-alert-enable-mode-line-display)
     (setq doom-modeline-height 15))
+
+  ;; display time
+  (display-time-mode)
 
 #+end_src
 
 #+RESULTS:
 : t
 
-** DONE Transparency
-CLOSED: [2022-06-01 Wed 13:18]
+** Transparency
+Transparnecy toggle for when you want to have a cool hacker mode.
 #+BEGIN_SRC emacs-lisp
   (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
   (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
@@ -216,12 +223,15 @@ CLOSED: [2022-06-01 Wed 13:18]
                 100)
            '(85 . 50) '(100 . 100)))))
   (global-set-key (kbd "C-c x t") 'toggle-transparency)
+  ;; testing if this works to set transparency to full on startup
+  (toggle-transparency)
 
 #+END_SRC
 
 #+RESULTS:
 
 * Emacs Usability
+Packages that make emacs a little easiler to use. Finding out more about commands, completion and command descriptions in autocomplete buffer.
 ** Helpful
 #+begin_src emacs-lisp
   (use-package helpful
@@ -252,78 +262,93 @@ CLOSED: [2022-06-01 Wed 13:18]
 : t
 
 ** Completion
+I've recently switched from counsel to vertico. 
 #+begin_src emacs-lisp
+
+    ;;           (use-package counsel
+    ;;             :bind (("M-x" . counsel-M-x)
+    ;;                    ("C-x b" . counsel-ibuffer)
+
+
+    ;; story)))
+
+    ;;        (use-package ivy-richt
+    ;;        :init
+    ;;      (ivy-rich-mode 1))
+
+    (use-package vertico
+      :ensure t
+      :custom
+      (vertico-cycle nil)
+      (vertico-count 13)
+      (vertico-resize t)
+      :init
+      (vertico-mode))
   
-  ;;           (use-package counsel
-  ;;             :bind (("M-x" . counsel-M-x)
-  ;;                    ("C-x b" . counsel-ibuffer)
+    (use-package savehist
+      :init
+      (savehist-mode))
 
+    (use-package marginalia
+      :after vertico
+      :ensure t
+      :custom
+      (marginalia-max-relative-age 0)
+      (marginalia-align 'center)
+      (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+      :init
+      (marginalia-mode))
 
-  ;; story)))
-
-  ;;        (use-package ivy-richt
-  ;;        :init
-  ;;      (ivy-rich-mode 1))
-
-  (use-package vertico
-    :ensure t
-    :custom
-    (vertico-cycle t)
+    ;; turn on all the icons for completions
+  (use-package all-the-icons-completion
+    :after(marginalia all-the-icons)
+    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
     :init
-    (vertico-mode))
-  (use-package savehist
-    :init
-    (savehist-mode))
-
-  (use-package marginalia
-    :after vertico
-    :ensure t
-    :custom
-    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :init
-    (marginalia-mode))
+    (all-the-icons-completion-mode))
 
 
 
 #+end_src
 
 #+RESULTS:
+| all-the-icons-completion-marginalia-setup |
 
 ** Yas Mode
-#+BEGIN_SRC emacs-lisp
+Turn on Yas global mode
 
+#+BEGIN_SRC emacs-lisp
   (yas-global-mode 1)
 #+END_SRC
 
 #+RESULTS:
 : t
+** Scale Minibuffer Text
+#+BEGIN_SRC emacs-lisp
+  
+#+END_SRC
 
-
+#+RESULTS:
+: my-minibuffer-setup
 
 * Window Control
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window)
-
-
-
   (custom-set-faces
    '(aw-leading-char-face
      ((t (:inherit ace-jump-face-foreground :height 3.0)))))
-
-
-
-  (global-set-key (kbd "C-M-]") 'avy-goto-word-or-subword-1)
+  ;; 
+  (global-set-key (kbd "M-s .") 'avy-goto-word-or-subword-1)
   ;; unbund c-] from abort-recursive-edit
   (global-set-key (kbd "C-+") 'smartscan-symbol-go-backward)
   (global-set-key (kbd "C-=") 'smartscan-symbol-go-forward)
-  (global-set-key (kbd "M-RET") 'counsel-ibuffer)
+
 
 
 
 #+END_SRC
 
 #+RESULTS:
-: counsel-ibuffer
+: smartscan-symbol-go-forward
 
 #+RESULTS:[]
 : counsel-ibuffer
@@ -1089,8 +1114,6 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
   (fset 'buffer-quick-switch
         (kmacro-lambda-form [?\C-x ?b return] 0 "%d"))
 
-
-
   ;; Bindings
   (global-set-key (kbd "M-+") 'other-window)
   (global-set-key (kbd "M-[") 'ace-window)
@@ -1111,7 +1134,7 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 #+RESULTS:
 : kill-current-buffer
 
-** TODO Cursor Movement
+** Cursor Movement
 #+BEGIN_SRC emacs-lisp
   (defun insert-line-above-and-go ()
     ;;insert a line above the current one and move the cursor there
@@ -1155,6 +1178,7 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 #+RESULTS:
 | lambda | (&optional arg) | Keyboard macro. | (interactive p) | (kmacro-exec-ring-item '([21 24 24] 0 %d) arg) |
+
 ** Delete at cursor
 #+BEGIN_SRC emacs-lisp
   (defun kill-word-at-point()

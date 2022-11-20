@@ -85,7 +85,7 @@
 (load-theme 'tango-dark)                             ; load theme
 (desktop-save-mode 1)                                ; enable desktop saving
 
-;set doom themes
+;;set doom themes
 (use-package doom-themes
   :ensure t
   :config
@@ -95,8 +95,14 @@
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1)
-  :config 
+  :config
+  ;; consider adding a mu4e alert
+  (setq doom-modeline-mu4e t)
+  (mu4e-alert-enable-mode-line-display)
   (setq doom-modeline-height 15))
+
+;; display time
+(display-time-mode)
 
 (set-frame-parameter (selected-frame) 'alpha '(85 . 50))
 (add-to-list 'default-frame-alist '(alpha . (85 . 50)))
@@ -113,6 +119,8 @@
               100)
          '(85 . 50) '(100 . 100)))))
 (global-set-key (kbd "C-c x t") 'toggle-transparency)
+;; testing if this works to set transparency to full on startup
+(toggle-transparency)
 
 (use-package helpful
   :custom
@@ -131,51 +139,59 @@
   (setq which-key-idle-delay 1))
 
 ;;           (use-package counsel
-;;             :bind (("M-x" . counsel-M-x)
-;;                    ("C-x b" . counsel-ibuffer)
+  ;;             :bind (("M-x" . counsel-M-x)
+  ;;                    ("C-x b" . counsel-ibuffer)
 
 
-;; story)))
+  ;; story)))
 
-;;        (use-package ivy-richt
-;;        :init
-;;      (ivy-rich-mode 1))
+  ;;        (use-package ivy-richt
+  ;;        :init
+  ;;      (ivy-rich-mode 1))
 
-(use-package vertico
-  :ensure t
-  :custom
-  (vertico-cycle t)
+  (use-package vertico
+    :ensure t
+    :custom
+    (vertico-cycle nil)
+    (vertico-count 13)
+    (vertico-resize t)
+    :init
+    (vertico-mode))
+
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  (use-package marginalia
+    :after vertico
+    :ensure t
+    :custom
+    (marginalia-max-relative-age 0)
+    (marginalia-align 'center)
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+
+  ;; turn on all the icons for completions
+(use-package all-the-icons-completion
+  :after(marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
   :init
-  (vertico-mode))
-(use-package savehist
-  :init
-  (savehist-mode))
-
-(use-package marginalia
-  :after vertico
-  :ensure t
-  :custom
-  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-  :init
-  (marginalia-mode))
+  (all-the-icons-completion-mode))
 
 (yas-global-mode 1)
 
+
+
 (use-package ace-window)
-
-
-
 (custom-set-faces
  '(aw-leading-char-face
    ((t (:inherit ace-jump-face-foreground :height 3.0)))))
-
-
-
-(global-set-key (kbd "C-M-]") 'avy-goto-word-or-subword-1)
+;; 
+(global-set-key (kbd "M-s .") 'avy-goto-word-or-subword-1)
 ;; unbund c-] from abort-recursive-edit
 (global-set-key (kbd "C-+") 'smartscan-symbol-go-backward)
 (global-set-key (kbd "C-=") 'smartscan-symbol-go-forward)
-(global-set-key (kbd "M-RET") 'counsel-ibuffer)
 
 ;;;;; Org mode setup ;;;;;
 
@@ -738,8 +754,6 @@
 ;; Macros & commands
 (fset 'buffer-quick-switch
       (kmacro-lambda-form [?\C-x ?b return] 0 "%d"))
-
-
 
 ;; Bindings
 (global-set-key (kbd "M-+") 'other-window)
