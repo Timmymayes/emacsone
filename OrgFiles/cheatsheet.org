@@ -1,7 +1,8 @@
-a* Movement
+* Movement
 ** Global
+
 | Command Group (and command notes)  | Command             | Description                          | Primary key |
-|------------------------------------+---------------------+--------------------------------------+------------- |
+|------------------------------------+---------------------+--------------------------------------+-------------|
 | Mark Ring Based Movement           | ---                 | ---                                  | ---         |
 |------------------------------------+---------------------+--------------------------------------+-------------|
 | *Do 2x to mark and remove highlight* | set-mark-command    | Set Mark                             | "C-SPC"     |
@@ -19,6 +20,8 @@ a* Movement
 |                                    | buffer-quick-switch | Swap to last buffer                  | "H-b"       |
 |                                    | buffer-menu         | Load buffer Menu                     | "C-H-b"     |
 |                                    | list-bookmarks      | Load list of bookmarks               | "C-H-g"     |
+|                                    |                     |                                      |             |
+|                                    |                     |                                      |             |
 |                                    |                     |                                      |             |
 
 

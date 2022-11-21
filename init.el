@@ -104,8 +104,8 @@
 ;; display time
 (display-time-mode)
 
-(set-frame-parameter (selected-frame) 'alpha '(85 . 50))
-(add-to-list 'default-frame-alist '(alpha . (85 . 50)))
+(set-frame-parameter (selected-frame) 'alpha '(90 . 60))
+(add-to-list 'default-frame-alist '(alpha . (90 . 60)))
 
 (defun toggle-transparency ()
   (interactive)
@@ -117,7 +117,7 @@
                     ;; Also handle undocumented (<active> <inactive>) form.
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
-         '(85 . 50) '(100 . 100)))))
+         '(90 . 60) '(100 . 100)))))
 (global-set-key (kbd "C-c x t") 'toggle-transparency)
 ;; testing if this works to set transparency to full on startup
 (toggle-transparency)
@@ -188,7 +188,8 @@
  '(aw-leading-char-face
    ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 ;; 
-(global-set-key (kbd "M-s .") 'avy-goto-word-or-subword-1)
+(global-set-key (kbd "M-.") 'avy-goto-char-2)
+(global-set-key (kbd "M-,") 'avy-goto-char-timer)
 ;; unbund c-] from abort-recursive-edit
 (global-set-key (kbd "C-+") 'smartscan-symbol-go-backward)
 (global-set-key (kbd "C-=") 'smartscan-symbol-go-forward)
@@ -554,29 +555,32 @@
 ;;(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
 
+
+
                                         ; set company completions vocab to css and html
 
 (setq web-mode-enable-engine-detection t)
 
 (use-package emmet-mode
-  :bind
-  ("M-n" . emmet-next-edit-point)
-  ("M-p" . emmet-prev-edit-point))
+  :bind (
+         :map emmet-mode-keymap
+         ("M-n" . emmet-next-edit-point)
+         ("M-p" . emmet-prev-edit-point)))
                                         ; use emmet in all web-mode docs
-(add-hook 'web-mode-hook 'emmet-mode)
-(add-hook 'css-mode-hook 'emmet-mode)
+  (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'css-mode-hook 'emmet-mode)
 
                                         ; enable mode switching between css and java
-(add-hook 'web-mode-before-auto-complete-hooks
-          '(lambda ()
-             (let ((web-mode-cur-language
-                    (web-mode-language-at-pos)))
-               (if (string= web-mode-cur-language "php")
-                   (yas-activate-extra-mode 'php-mode)
-                 (yas-deactivate-extra-mode 'php-mode))
-               (if (string= web-mode-cur-language "css")
-                   (setq emmet-use-css-transform t)
-                 (setq emmet-use-css-transform nil)))))
+  (add-hook 'web-mode-before-auto-complete-hooks
+            '(lambda ()
+               (let ((web-mode-cur-language
+                      (web-mode-language-at-pos)))
+                 (if (string= web-mode-cur-language "php")
+                     (yas-activate-extra-mode 'php-mode)
+                   (yas-deactivate-extra-mode 'php-mode))
+                 (if (string= web-mode-cur-language "css")
+                     (setq emmet-use-css-transform t)
+                   (setq emmet-use-css-transform nil)))))
 
 
 
@@ -621,6 +625,7 @@
         js-indent-level 2)
   ;; (setq-local flycheck-disabled-checkers (cl-union flycheck-disabled-checkers
   ;;                                                  '(javascript-jshint))) ; jshint doesn't work for JSX
+  (show-paren-mode 1)
   (electric-pair-mode 1))
 
 (use-package add-node-modules-path
@@ -779,10 +784,6 @@
 
 (global-set-key (kbd "M-o") 'insert-line-above-and-go)
 
-;;
-                                        ;
-
-                                        ; ;
 
 ;; move C-j to C-; indent-new-comment-line
 (global-set-key (kbd "C-;") 'indent-new-comment-line)
@@ -799,8 +800,6 @@
 
 (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
 
-
-(global-set-key (kbd "s-a") 'ace-jump-word-mode)
 
 
 (global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
@@ -891,8 +890,7 @@
 ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
 (global-set-key (kbd "M-i") 'back-to-indentation)
 ;; rebind "M-m" iy-go-to-char
-(global-set-key (kbd "s-n") 'iy-go-to-char)
-;;unbind C-m from return  
+;;Unbind C-m from return  
 (global-set-key (kbd "s-h") 'iy-go-up-to-char)
 (global-set-key (kbd "s-b") 'iy-go-to-char-backward)
 (global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
@@ -910,9 +908,6 @@
 (global-set-key (kbd "<f13>") 'agenda-fullscreen)
 (global-set-key (kbd "<f14>") 'browse-url-of-buffer)
 
-(require 'calfw-org)
-(global-set-key (kbd "H-a") 'avy-goto-char-timer)
-
 (defvar active-harpoon)
 (setq active-harpoon 102)
 
@@ -920,60 +915,68 @@
   (and (eq (marker-buffer marker) (current-buffer))))  
 
 (defun harpoon-f ()
+  "Update point if in an a harpooned register and jump to the point harpooned in the 'f' register."
   (interactive)
   (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
   (jump-to-register 102)
   (setq active-harpoon 102))
 
 (defun set-harpoon-f ()
+  "Harpoon the current buffer in the 'f' register"
   (interactive)
   (point-to-register 102)
   (setq active-harpoon 102)    
   )
 
 (defun harpoon-d ()
+  "Update point if in an a harpooned register and jump to the point harpooned in the 'd' register."    
   (interactive)
   (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
   (jump-to-register 100)
   (setq active-harpoon 100))
 
 (defun set-harpoon-d ()
+  "Harpoon the current buffer in the 'd' register"
   (interactive)
   (point-to-register 100)
   (setq active-harpoon 100)    
   )
 
 (defun harpoon-a ()
+  "Update point if in an a harpooned register and jump to the point harpooned in the 'a' register."    
   (interactive)
   (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
   (jump-to-register 97)
   (setq active-harpoon 97))
 
 (defun set-harpoon-a ()
+  "Harpoon the current buffer in the 'a' register"
   (interactive)
   (point-to-register 97)
   (setq active-harpoon 97)    
   )
 
 (defun harpoon-s ()
+  "Update point if in an a harpooned register and jump to the point harpooned in the 'f' register."
   (interactive)
   (if (current-buffer-is-harpooned (get-register active-harpoon)) (point-to-register active-harpoon))
   (jump-to-register 115)
   (setq active-harpoon 115))
 
 (defun set-harpoon-s ()
+  "Harpoon the current buffer in the 's' register"    
   (interactive)
   (point-to-register 115)
   (setq active-harpoon 115)
   )
 
 (global-set-key (kbd "H-a") 'harpoon-a)
-(global-set-key (kbd "C-H-a") 'set-harpoon-a)
+(global-set-key (kbd "s-a") 'set-harpoon-a)
 (global-set-key (kbd "H-s") 'harpoon-s)
-(global-set-key (kbd "C-H-s") 'set-harpoon-s)
+(global-set-key (kbd "s-s") 'set-harpoon-s)
 (global-set-key (kbd "H-d") 'harpoon-d)
-(global-set-key (kbd "C-H-d") 'set-harpoon-d)
+(global-set-key (kbd "s-d") 'set-harpoon-d)
 (global-set-key (kbd "H-f") 'harpoon-f)
-(global-set-key (kbd "C-H-f") 'set-harpoon-f)
+(global-set-key (kbd "s-f") 'set-harpoon-f)
 
 (desktop-read)
