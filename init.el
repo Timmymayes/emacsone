@@ -191,7 +191,7 @@
 
 (use-package avy
   :config (progn
-            (setq avy-background t)
+            (setq avy-background nil)
             (setq avy-styles-alist '((avy-goto-char-2 . at)
                                      (avy-goto-char-timer . at)))))
 
