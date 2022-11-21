@@ -187,7 +187,17 @@
 (custom-set-faces
  '(aw-leading-char-face
    ((t (:inherit ace-jump-face-foreground :height 3.0)))))
-;; 
+;;
+
+(use-package avy
+  :config (progn
+            (setq avy-background t)
+            (setq avy-styles-alist '((avy-goto-char-2 . at)
+                                     (avy-goto-char-timer . at)))))
+
+
+
+
 (global-set-key (kbd "M-.") 'avy-goto-char-2)
 (global-set-key (kbd "M-,") 'avy-goto-char-timer)
 ;; unbund c-] from abort-recursive-edit
@@ -765,6 +775,7 @@
 (global-set-key (kbd "M-[") 'ace-window)
 (global-set-key (kbd "M-]") 'treemacs-select-window)
 (global-set-key (kbd "C-c s t") 'treemacs)
+(global-set-key (kbd "H-<escape>") 'delete-window)
 (global-set-key (kbd "H-1") 'delete-other-windows)
 (global-set-key (kbd "H-2") 'split-window-below)
 (global-set-key (kbd "H-3") 'split-window-right)
