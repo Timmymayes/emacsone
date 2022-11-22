@@ -1,6 +1,9 @@
 #+Title: Emacs US Config
 #+PROPERTY: header-args:emacs-lisp :tangle ~/Projects/emacsone/init.el
 
+
+[[Install]]
+
 * Config Overview
 This config is my personal config and is evolving over time. You can find the updated version here: [[https://github.com/Timmymayes/emacsone/blob/main/OrgFiles/emacsconf.org][Emacsone]].
 
@@ -46,7 +49,7 @@ Require package and setup all package archives. Note changes to org-mode reposit
 #+END_SRC
 
 ** Use Package Setup
-Install use-package and enable ':ensure t' globally. the ':ensusre' keyword causes the package(s) within use-package statements to be installed automatically if not already present on your system. To avoid having to add it to every statement we use use-package-always-ensure.
+<<Install>> use-package and enable ':ensure t' globally. the ':ensusre' keyword causes the package(s) within use-package statements to be installed automatically if not already present on your system. To avoid having to add it to every statement we use use-package-always-ensure.
 
 #+begin_src emacs-lisp
 
@@ -391,6 +394,7 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
+    (setq org-startup-with-inline-images t)
     (setq org-ellipsis " ▾"
           org-hide-emphasis-markers t)
     (setq org-capture-babel-evaluate t)
@@ -517,12 +521,15 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
    'org-babel-load-languages
    '((emacs-lisp .t )
      (js .t)
+     (dot . t)
      (plantuml . t)
      (python .t)))
 
 #+end_src
 
 #+RESULTS:
+
+
 
 ** Auto-Tangle Config Files
 #+begin_src emacs-lisp
@@ -648,8 +655,7 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
 * ob-napkin (UML support for org-mode)
 Install info here: https://github.com/pinetr2e/ob-napkin
 #+BEGIN_SRC emacs-lisp
-  (with-eval-after-load 'ob
-    ((require 'ob-napkin))
+
 #+END_SRC
 
 * Ledger-Mode
@@ -914,7 +920,7 @@ http://xahlee.info/emacs/emacs/xah-css-mode.html
 #+END_SRC
 
 #+RESULTS:
-| lambda | nil | (let ((web-mode-cur-language (web-mode-language-at-pos))) (if (string= web-mode-cur-language php) (yas-activate-extra-mode 'php-mode) (yas-deactivate-extra-mode 'php-mode)) (if (string= web-mode-cur-language css) (setq emmet-use-css-transform t) (setq emmet-use-css-transform nil))) |
+| lambda | nil | (let ((web-mode-cur-language (web-model-anguage-at-pos))) (if (string= web-mode-cur-language php) (yas-activate-extra-mode 'php-mode) (yas-deactivate-extra-mode 'php-mode)) (if (string= web-mode-cur-language css) (setq emmet-use-css-transform t) (setq emmet-use-css-transform nil))) |
 **** css-mode
 #+BEGIN_SRC emacs-lisp
 
@@ -1386,14 +1392,17 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
   (global-set-key (kbd "<f13>") 'agenda-fullscreen)
   (global-set-key (kbd "<f14>") 'browse-url-of-buffer)
 
+  (fset 'org-load-inline-images
+   (kmacro-lambda-form [?\C-c ?\C-x ?\C-v ?\C-c ?\C-x ?\C-v] 0 "%d"))
 
+  (global-set-key (kbd "s-i") 'org-load-inline-images)
 
 
 
 #+END_SRC
 
 #+RESULTS:
-: browse-url-of-buffer
+: org-load-inline-images
 
 * Homebrew Harpoon
 #+BEGIN_SRC emacs-lisp
@@ -1483,7 +1492,7 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
       ;;(desktop-read)
 #+END_SRC
 
-#+begin_src napkin :file hello.png
+#+begin_src napkin :file .svg
   def seq_diagram(c):
       user = c.object('user')
       world = c.object('world')
@@ -1491,5 +1500,75 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
           world.hello()
 #+end_src
 
+* UML & Graphing
+#+BEGIN_SRC emacs-lisp
+      (use-package graphviz-dot-mode
+        :ensure t
+        :config
+        (setq graphviz-dot-indent-width 4))
 
-[[file:hello.png]]
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
+#+begin_src napkin :file test.png
+  def seq_diagram(c):
+      user = c.object('user')
+      world = c.object('world')
+      with user:
+          world.hello()
+
+          #+end_src
+
+          #+RESULTS:
+          file:test.png
+
+#+name: dot-eg-table
+| a | Hello  |
+| b | World! |
+
+          
+#+NAME: make-dot
+#+BEGIN_SRC emacs-lisp :var table=dot-eg-table :results output :exports none
+  (mapcar #'(lambda (x)
+              (princ (format "%s [label =\"%s\", shape = \"box\"];\n"
+                             (first x) (second x)))) table)
+  (princ (format "%s -- %s;\n" (first (first table)) (first (second table))))
+  #+END_SRC
+
+  #+RESULTS: make-dot
+  : a [label ="Hello", shape = "box"];
+  : b [label ="World!", shape = "box"];
+  : a -- b;
+
+ 
+
+#+BEGIN_SRC dot :file images/test-dot.png :var input=make-dot :exports results
+  graph {
+      $input
+  }
+  #+END_SRC
+
+  #+RESULTS:
+  [[file:images/test-dot.png]]
+
+#+BEGIN_SRC dot :file images/test-dot.svg :var input=make-dot :exports results
+    graph {
+        north -- East;
+        
+        north -- Island;
+        north -- Island;
+
+        Island -- East;        
+        south --  Island;
+        south -- Island;
+        south -- East;
+
+
+  }
+  #+END_SRC
+
+  #+RESULTS:
+  [[file:images/test-dot.svg]]

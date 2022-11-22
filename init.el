@@ -225,6 +225,7 @@
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
+  (setq org-startup-with-inline-images t)
   (setq org-ellipsis " ▾"
         org-hide-emphasis-markers t)
   (setq org-capture-babel-evaluate t)
@@ -334,6 +335,7 @@
  'org-babel-load-languages
  '((emacs-lisp .t )
    (js .t)
+   (dot . t)
    (plantuml . t)
    (python .t)))
 
@@ -432,8 +434,7 @@
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t))
 
-(with-eval-after-load 'ob
-  ((require 'ob-napkin))
+
 
 (use-package ledger-mode
   :ensure t
@@ -928,6 +929,11 @@
 (global-set-key (kbd "<f13>") 'agenda-fullscreen)
 (global-set-key (kbd "<f14>") 'browse-url-of-buffer)
 
+(fset 'org-load-inline-images
+ (kmacro-lambda-form [?\C-c ?\C-x ?\C-v ?\C-c ?\C-x ?\C-v] 0 "%d"))
+
+(global-set-key (kbd "s-i") 'org-load-inline-images)
+
 (defvar active-harpoon)
 (setq active-harpoon 102)
 
@@ -1000,3 +1006,15 @@
 (global-set-key (kbd "s-f") 'set-harpoon-f)
 
 ;;(desktop-read)
+
+(use-package graphviz-dot-mode
+  :ensure t
+  :config
+  (setq graphviz-dot-indent-width 4))
+
+(let ((table '(("a" "Hello") ("b" "World!"))))
+(mapcar #'(lambda (x)
+            (princ (format "%s [label =\"%s\", shape = \"box\"];\n"
+                           (first x) (second x)))) table)
+(princ (format "%s -- %s;\n" (first (first table)) (first (second table))))
+)
