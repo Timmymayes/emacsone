@@ -1470,3 +1470,4 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
       (desktop-read)
 #+END_SRC
 
+[[./images/photo-01.jpg]]
