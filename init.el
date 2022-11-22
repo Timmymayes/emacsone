@@ -83,7 +83,7 @@
 (set-face-attribute
  'default nil :font "Fira Code Retina" :height 140)  ; set font
 (load-theme 'tango-dark)                             ; load theme
-(desktop-save-mode 1)                                ; enable desktop saving
+;;(desktop-save-mode 1)                                ; enable desktop saving
 
 ;;set doom themes
 (use-package doom-themes
@@ -285,7 +285,7 @@
 (add-to-list 'org-modules 'org-habit)
 (setq org-habit-graph-column 60)
 
-
+(add-to-list  'org-src-lang-modes '("plantuml" . plantuml))
 
 ;;;;; end org mode setup ;;;;;
 
@@ -334,6 +334,7 @@
  'org-babel-load-languages
  '((emacs-lisp .t )
    (js .t)
+   (plantuml . t)
    (python .t)))
 
 ;;auto tangle my emacs config file
@@ -424,7 +425,15 @@
 (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:15}" 'face 'org-tag)))
 
 (use-package org-roam-ui
-  :bind ("s-r" . org-roam-ui-open))
+  :bind ("s-r" . org-roam-ui-open)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
+
+(with-eval-after-load 'ob
+  ((require 'ob-napkin))
 
 (use-package ledger-mode
   :ensure t
@@ -990,4 +999,4 @@
 (global-set-key (kbd "H-f") 'harpoon-f)
 (global-set-key (kbd "s-f") 'set-harpoon-f)
 
-(desktop-read)
+;;(desktop-read)
