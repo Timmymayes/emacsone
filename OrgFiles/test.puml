@@ -1,0 +1,6 @@
+@startuml
+participant user
+participant world
+
+user -> world : hello()
+@enduml
