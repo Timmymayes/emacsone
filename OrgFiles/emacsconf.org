@@ -1491,5 +1491,5 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
           world.hello()
 #+end_src
 
-#+RESULTS:
+
 [[file:hello.png]]
