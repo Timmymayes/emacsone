@@ -49,8 +49,8 @@ Require package and setup all package archives. Note changes to org-mode reposit
 #+END_SRC
 
 ** Use Package Setup
-<<Install>> use-package and enable ':ensure t' globally. the ':ensusre' keyword causes the package(s) within use-package statements to be installed automatically if not already present on your system. To avoid having to add it to every statement we use use-package-always-ensure.
-
+Install use-package and enable ':ensure t' globally. the ':ensusre' keyword causes the package(s) within use-package statements to be installed automatically if not already present on your system. To avoid having to add it to every statement we use use-package-always-ensure.
+#+NAME: Install
 #+begin_src emacs-lisp
 
   ;; Initialize use-package on non-Linux platforms
