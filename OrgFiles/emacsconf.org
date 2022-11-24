@@ -1471,8 +1471,7 @@ Managing Windows, buffers etc
 #+END_SRC
 
 #+RESULTS:
-| my-dired-mode-hook | all-the-icons-dired-mode | dired-hide-dotfiles-mode | dired-hide-dotfiles | doom-modeline-set-project-modeline |
-|                    |                          |                          |                     |                                    |
+| my-dired-mode-hook | doom-modeline-set-project-modeline |
 * Testing
 #+BEGIN_SRC emacs-lisp
 
@@ -1495,10 +1494,13 @@ Managing Windows, buffers etc
    (global-set-key (kbd "<f13>") 'agenda-fullscreen)
    (global-set-key (kbd "<f14>") 'browse-url-of-buffer)
 
+  ;;Calendar keys
+  (global-set-key (kbd "s-c") 'calendar);
+
 #+END_SRC
 
 #+RESULTS:
-: org-load-inline-images
+: calendar
 * Xah Lee Implementations
 Tried out Xah-fly-keys and didn't love his command mode but he has some really good helper functions. Borrowing those below
 ** Hotkey Map

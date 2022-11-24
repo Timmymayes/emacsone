@@ -34,4 +34,20 @@
 | Scroll other window up / down | M-Prior / M-Next |
 
 
+* Forge:
+| key     | command                 | info |
+| C-c C-w | (forge-browse-TYPE)     |      |
+| C-c C-w | (forge-browse-dwim)     |  jump to what you're hovering, specific issue or the issue directory for example |
+| N b r   | (forge-browse-remote)   |      |
+| N b I   | (forge-browse-issues)   |      |
+| N b P   | (forge-browse-pullreqs) |      |
+| N b t   | (forge-browse-topic)    |      |
+| N b i   | (forge-browse-issue)    |      |
+| N b p   | (forge-browse-pullreq)  |      |
+
+
+
+
+
+
 

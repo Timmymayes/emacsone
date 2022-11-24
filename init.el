@@ -991,6 +991,9 @@
  (global-set-key (kbd "<f13>") 'agenda-fullscreen)
  (global-set-key (kbd "<f14>") 'browse-url-of-buffer)
 
+;;Calendar keys
+(global-set-key (kbd "s-c") 'calendar);
+
 (defun xah-beginning-of-line-or-block ()
   "Move cursor to beginning of line or previous block.
 
