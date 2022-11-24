@@ -795,6 +795,11 @@
 (global-set-key (kbd "C-H-t") 'dired-jump)
 (global-set-key (kbd "H-k") 'kill-current-buffer)
 
+(global-set-key (kbd "C-,") 'point-to-register)
+(global-set-key (kbd "C-.") 'jump-to-register)
+(global-set-key (kbd "H-s") 'bookmark-set)
+(global-set-key (kbd "H-j") 'bookmark-jump)
+
 (defun my/pop-local-mark-ring ()
   "Move cursor to last mark position of current buffer, repeat calls will cycle"
   (interactive)
@@ -832,11 +837,6 @@
 (global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
 ;; cycle marks
 (global-set-key (kbd "H-m") 'my/pop-local-mark-ring)
-
-(global-set-key (kbd "C-,") 'point-to-register)
-(global-set-key (kbd "C-.") 'jump-to-register)
-(global-set-key (kbd "H-s") 'bookmark-set)
-(global-set-key (kbd "H-j") 'bookmark-jump)
 
 (defun kill-word-at-point()
   (interactive)

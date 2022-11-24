@@ -1146,6 +1146,26 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 #+RESULTS::
 : next-tag
 ** Window Movement
+Managing Windows, buffers etc
+*** General movement
+**** Keymap
+| action                  | key        |
+|-------------------------+------------|
+| other-window            | M-+        |
+| 'ace-window             | M-[        |
+| 'treemacs-select-window | M-]        |
+| 'treemacs               | C-c s t    |
+| 'delete-window          | H-<escape> |
+| 'delete-other-windows   | H-1        |
+| 'split-window-below     | H-2        |
+| 'split-window-right     | H-3        |
+| 'buffer-menu            | C-H        |
+| 'buffer-quick-switch    | H-b        |
+| 'list-bookmarks         | C-H-g      |
+| 'dired-jump             | C-H-t      |
+| 'kill-current-buffer    | H-k        |
+
+**** Bindings
 #+BEGIN_SRC emacs-lisp
   ;; Macros & commands
   (fset 'buffer-quick-switch
@@ -1172,6 +1192,19 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 #+RESULTS:
 : kill-current-buffer
 
+*** Register manipulation
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-,") 'point-to-register)
+  (global-set-key (kbd "C-.") 'jump-to-register)
+  (global-set-key (kbd "H-s") 'bookmark-set)
+  (global-set-key (kbd "H-j") 'bookmark-jump)
+
+
+
+#+END_SRC
+
+#+RESULTS:
+: bookmark-jump
 ** Cursor Movement
 *** Keylist
 |-------------------------------------+-----|
@@ -1243,19 +1276,6 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 #+RESULTS:
 : my/pop-local-mark-ring
 
-*** Register manipulation
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-,") 'point-to-register)
-  (global-set-key (kbd "C-.") 'jump-to-register)
-  (global-set-key (kbd "H-s") 'bookmark-set)
-  (global-set-key (kbd "H-j") 'bookmark-jump)
-
-
-
-#+END_SRC
-
-#+RESULTS:
-: bookmark-jump
 ** Editing Text
 *** Functions
 **** Delete at cursor
