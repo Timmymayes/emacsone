@@ -230,6 +230,7 @@
         org-hide-emphasis-markers t)
   (setq org-capture-babel-evaluate t)
   (setq org-startup-with-inline-images t)
+  :bind
 
                                         ; org capture
 
@@ -870,8 +871,18 @@
   (interactive)
   (set-mark-command t))
 
+(defun my/pop-global-mark-ring()
+  "move cursor to last mark in global ring, repeat calls will cycle"
+  (interactive)
+  (pop-global-mark)
+  (set-temporary-overlay-map
+   (let ((map (make-sparse-keymap)))
+     (define-key map (kbd "m") 'my/pop-global-mark-ring)
+     map))
+  )
 
-(defun my/insert-line-above-and-go ()
+
+(DEFUN my/insert-line-above-and-go ()
   ;;insert a line above the current one and move the cursor there
   (interactive)
   (previous-line nil)
@@ -898,6 +909,7 @@
 (global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
 ;; cycle marks
 (global-set-key (kbd "H-m") 'my/pop-local-mark-ring)
+(global-set-key (kbd "C-H-m") 'my/pop-global-mark-ring)
 ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
 (global-set-key (kbd "M-i") 'back-to-indentation)
 
