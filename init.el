@@ -795,16 +795,28 @@
 (global-set-key (kbd "C-H-t") 'dired-jump)
 (global-set-key (kbd "H-k") 'kill-current-buffer)
 
-(defun insert-line-above-and-go ()
-  ;;insert a line above the current one and move the cursor there
+(defun my/pop-local-mark-ring ()
+  "Move cursor to last mark position of current buffer, repeat calls will cycle"
   (interactive)
-  (previous-line nil)
-  (move-end-of-line nil)
-  (electric-newline-and-maybe-indent)
-  (indent-relative-first-indent-point))
+  (set-mark-command t))
 
-(global-set-key (kbd "M-o") 'insert-line-above-and-go)
+  (defun my/insert-line-above-and-go ()
+   ;;insert a line above the current one and move the cursor there
+   (interactive)
+   (previous-line nil)
+   (move-end-of-line nil)
+   (electric-newline-and-maybe-indent)
+   (indent-relative-first-indent-point))
 
+
+ (defun wrap-sexp-backward-with-parenthesis()
+   "wrap the current expression backwards with parenthesis"
+   (interactive)
+   (backward-sexp)
+   (mark-sexp) 
+   (insert-parentheses))
+
+(global-set-key (kbd "M-o") 'my/insert-line-above-and-go)
 
 ;; move C-j to C-; indent-new-comment-line
 (global-set-key (kbd "C-;") 'indent-new-comment-line)
@@ -813,17 +825,13 @@
 (global-set-key (kbd "H-[") 'xref-go-back)
 (global-set-key (kbd "H-g") 'goto-line)
 
-(defun wrap-sexp-backward-with-parenthesis()
-  (interactive)
-  (backward-sexp)
-  (mark-sexp) 
-  (insert-parentheses))
-
 (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
+()
 
-
-
+;; swap point and mark
 (global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
+;; cycle marks
+(global-set-key (kbd "H-m") 'my/pop-local-mark-ring)
 
 (defun kill-word-at-point()
   (interactive)
@@ -933,6 +941,54 @@
  (kmacro-lambda-form [?\C-c ?\C-x ?\C-v ?\C-c ?\C-x ?\C-v] 0 "%d"))
 
 (global-set-key (kbd "s-i") 'org-load-inline-images)
+
+(defun xah-beginning-of-line-or-block ()
+  "Move cursor to beginning of line or previous block.
+
+• When called first time, move cursor to beginning of char in current line. (if already, move to beginning of line.)
+• When called again, move cursor backward by jumping over any sequence of whitespaces containing 2 blank lines.
+• if `visual-line-mode' is on, beginning of line means visual line.
+
+URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+Version: 2018-06-04 2021-03-16 2022-03-30 2022-07-03 2022-07-06"
+  (interactive)
+  (let (($p (point)))
+    (if (or (equal (point) (line-beginning-position))
+            (eq last-command this-command))
+        (when
+            (re-search-backward "\n[\t\n ]*\n+" nil 1)
+          (skip-chars-backward "\n\t ")
+          (forward-char))
+      (if visual-line-mode
+          (beginning-of-visual-line)
+        (if (eq major-mode 'eshell-mode)
+            (progn
+              (declare-function eshell-bol "esh-mode.el" ())
+              (eshell-bol))
+          (back-to-indentation)
+          (when (eq $p (point))
+            (beginning-of-line)))))))
+
+
+(defun xah-end-of-line-or-block ()
+  "Move cursor to end of line or next block.
+
+• When called first time, move cursor to end of line.
+• When called again, move cursor forward by jumping over any sequence of whitespaces containing 2 blank lines.
+• if `visual-line-mode' is on, end of line means visual line.
+
+URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+Version: 2018-06-04 2021-03-16 2022-03-05"
+  (interactive)
+  (if (or (equal (point) (line-end-position))
+          (eq last-command this-command))
+      (re-search-forward "\n[\t\n ]*\n+" nil 1)
+    (if visual-line-mode
+        (end-of-visual-line)
+      (end-of-line))))
+
+(global-set-key (kbd "M-p") 'xah-beginning-of-line-or-block)
+(global-set-key (kbd "M-n") 'xah-end-of-line-or-block)
 
 (defvar active-harpoon)
 (setq active-harpoon 102)

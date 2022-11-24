@@ -2,7 +2,7 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ~/Projects/emacsone/init.el
 
 
-[[Install]]
+
 
 * Config Overview
 This config is my personal config and is evolving over time. You can find the updated version here: [[https://github.com/Timmymayes/emacsone/blob/main/OrgFiles/emacsconf.org][Emacsone]].
@@ -1173,17 +1173,54 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 : kill-current-buffer
 
 ** Cursor Movement
+*** Keylist
+|-------------------------------------+-----|
+| Action                              | Key |
+|-------------------------------------+-----|
+| insert-line-above-and-go            | M-o |
+| indent-new-comment-line             | C-; |
+|-------------------------------------+-----|
+| xref-find-references                | H-] |
+| xref-go-back                        | H-[ |
+| goto-line                           | H-g |
+| wrap-sexp-backward-with-parenthesis | C-( |
+| swap-point-and-mark (macro)         | M-m |
+| my/pop-local-mark-ring              | H-m |
+
+*** Function Definitions
 #+BEGIN_SRC emacs-lisp
-  (defun insert-line-above-and-go ()
-    ;;insert a line above the current one and move the cursor there
+  (defun my/pop-local-mark-ring ()
+    "Move cursor to last mark position of current buffer, repeat calls will cycle"
     (interactive)
-    (previous-line nil)
-    (move-end-of-line nil)
-    (electric-newline-and-maybe-indent)
-    (indent-relative-first-indent-point))
+    (set-mark-command t))
 
-  (global-set-key (kbd "M-o") 'insert-line-above-and-go)
+    (defun my/insert-line-above-and-go ()
+     ;;insert a line above the current one and move the cursor there
+     (interactive)
+     (previous-line nil)
+     (move-end-of-line nil)
+     (electric-newline-and-maybe-indent)
+     (indent-relative-first-indent-point))
 
+
+   (defun wrap-sexp-backward-with-parenthesis()
+     "wrap the current expression backwards with parenthesis"
+     (interactive)
+     (backward-sexp)
+     (mark-sexp) 
+     (insert-parentheses))
+
+
+#+END_SRC
+
+#+RESULTS:
+: wrap-sexp-backward-with-parenthesis
+*** Key binding
+
+#+BEGIN_SRC emacs-lisp
+
+
+  (global-set-key (kbd "M-o") 'my/insert-line-above-and-go)
 
   ;; move C-j to C-; indent-new-comment-line
   (global-set-key (kbd "C-;") 'indent-new-comment-line)
@@ -1192,24 +1229,19 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
   (global-set-key (kbd "H-[") 'xref-go-back)
   (global-set-key (kbd "H-g") 'goto-line)
 
-  (defun wrap-sexp-backward-with-parenthesis()
-    (interactive)
-    (backward-sexp)
-    (mark-sexp) 
-    (insert-parentheses))
-
   (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
+  ()
 
-
-
+  ;; swap point and mark
   (global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
-
+  ;; cycle marks
+  (global-set-key (kbd "H-m") 'my/pop-local-mark-ring)
 
 
 #+End_SRC
 
 #+RESULTS:
-| lambda | (&optional arg) | Keyboard macro. | (interactive p) | (kmacro-exec-ring-item '([21 24 24] 0 %d) arg) |
+: my/pop-local-mark-ring
 
 ** Delete at cursor
 #+BEGIN_SRC emacs-lisp
@@ -1403,7 +1435,66 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 #+RESULTS:
 : org-load-inline-images
+* Xah Lee Implementations
+Tried out Xah-fly-keys and didn't love his command mode but he has some really good helper functions. Borrowing those below
+** Hotkey Map
+| Action                     | Key   |
+|----------------------------+-------|
+| Beginning of line or block | "M-p" |
+| End of line or block       | "M-n" |
+|                            |       |
+** Function definitions
+#+BEGIN_SRC emacs-lisp
+(defun xah-beginning-of-line-or-block ()
+  "Move cursor to beginning of line or previous block.
 
+• When called first time, move cursor to beginning of char in current line. (if already, move to beginning of line.)
+• When called again, move cursor backward by jumping over any sequence of whitespaces containing 2 blank lines.
+• if `visual-line-mode' is on, beginning of line means visual line.
+
+URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+Version: 2018-06-04 2021-03-16 2022-03-30 2022-07-03 2022-07-06"
+  (interactive)
+  (let (($p (point)))
+    (if (or (equal (point) (line-beginning-position))
+            (eq last-command this-command))
+        (when
+            (re-search-backward "\n[\t\n ]*\n+" nil 1)
+          (skip-chars-backward "\n\t ")
+          (forward-char))
+      (if visual-line-mode
+          (beginning-of-visual-line)
+        (if (eq major-mode 'eshell-mode)
+            (progn
+              (declare-function eshell-bol "esh-mode.el" ())
+              (eshell-bol))
+          (back-to-indentation)
+          (when (eq $p (point))
+            (beginning-of-line)))))))
+
+
+(defun xah-end-of-line-or-block ()
+  "Move cursor to end of line or next block.
+
+• When called first time, move cursor to end of line.
+• When called again, move cursor forward by jumping over any sequence of whitespaces containing 2 blank lines.
+• if `visual-line-mode' is on, end of line means visual line.
+
+URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+Version: 2018-06-04 2021-03-16 2022-03-05"
+  (interactive)
+  (if (or (equal (point) (line-end-position))
+          (eq last-command this-command))
+      (re-search-forward "\n[\t\n ]*\n+" nil 1)
+    (if visual-line-mode
+        (end-of-visual-line)
+      (end-of-line))))
+#+END_SRC
+** Bindings
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-p") 'xah-beginning-of-line-or-block)
+  (global-set-key (kbd "M-n") 'xah-end-of-line-or-block)
+#+END_SRC
 * Homebrew Harpoon
 #+BEGIN_SRC emacs-lisp
 
