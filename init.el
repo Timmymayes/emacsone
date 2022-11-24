@@ -891,10 +891,10 @@
 
 (global-set-key (kbd "M-o") 'my/insert-line-above-and-go)
 ;; move C-j to C-; indent-new-comment-line
-(global-set-key (kbd "C-;") 'indent-new-comment-
+(global-set-key (kbd "C-;") 'indent-new-comment)                      
 (global-set-key (kbd "H-]") 'xref-find-references)
 (global-set-key (kbd "H-[") 'xref-go-back)
-(global-set-key (kbd "H-g") 'goto-
+(global-set-key (kbd "H-g") 'goto-line)
 (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
 ;; swap point and mark
 (global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
@@ -956,12 +956,10 @@
 (setq dired-listing-switches "-agho --group-directories-first")
 (setq dired-dwim-target t)
 
-(use-package dired-single)
+;;  (use-package dired-single)
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
-
-;(use-package dired-open) look into this package if you end up needing it.
 
 (defun my-dired-mode-hook ()
   "My `dired' mode hook."

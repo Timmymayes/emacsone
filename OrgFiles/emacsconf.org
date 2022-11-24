@@ -1328,10 +1328,10 @@ Managing Windows, buffers etc
 
   (global-set-key (kbd "M-o") 'my/insert-line-above-and-go)
   ;; move C-j to C-; indent-new-comment-line
-  (global-set-key (kbd "C-;") 'indent-new-comment-
+  (global-set-key (kbd "C-;") 'indent-new-comment)                      
   (global-set-key (kbd "H-]") 'xref-find-references)
   (global-set-key (kbd "H-[") 'xref-go-back)
-  (global-set-key (kbd "H-g") 'goto-
+  (global-set-key (kbd "H-g") 'goto-line)
   (global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
   ;; swap point and mark
   (global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
@@ -1339,13 +1339,13 @@ Managing Windows, buffers etc
   (global-set-key (kbd "H-m") 'my/pop-local-mark-ring)
   ;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
   (global-set-key (kbd "M-i") 'back-to-indentation)
-  
+
 
 
 #+End_SRC
 
 #+RESULTS:
-: my/pop-local-mark-ring
+: back-to-indentation
 
 ** Editing Text
 *** Function Definitions
@@ -1440,7 +1440,7 @@ Managing Windows, buffers etc
 : t
 ** SIngle Dired Buffer
 #+BEGIN_SRC emacs-lisp
-  (use-package dired-single)
+;;  (use-package dired-single)
 #+END_SRC
 ** Icons
 #+BEGIN_SRC emacs-lisp
@@ -1450,12 +1450,6 @@ Managing Windows, buffers etc
 
 #+RESULTS:
 | all-the-icons-dired-mode | dired-hide-dotfiles-mode | dired-hide-dotfiles | doom-modeline-set-project-modeline |
-** Dired-Open
-#+BEGIN_SRC emacs-lisp
-
-                                          ;(use-package dired-open) look into this package if you end up needing it.
-
-#+END_SRC
 ** Hide Dot Files
 - hotkey: . (dot)
 #+BEGIN_SRC emacs-lisp
