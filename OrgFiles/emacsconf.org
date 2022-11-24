@@ -1243,7 +1243,22 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 #+RESULTS:
 : my/pop-local-mark-ring
 
-** Delete at cursor
+*** Register manipulation
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-,") 'point-to-register)
+  (global-set-key (kbd "C-.") 'jump-to-register)
+  (global-set-key (kbd "H-s") 'bookmark-set)
+  (global-set-key (kbd "H-j") 'bookmark-jump)
+
+
+
+#+END_SRC
+
+#+RESULTS:
+: bookmark-jump
+** Editing Text
+*** Functions
+**** Delete at cursor
 #+BEGIN_SRC emacs-lisp
   (defun kill-word-at-point()
     (interactive)
@@ -1266,7 +1281,7 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 : kill-line-at-point
 
 #+-
-**  Duplicate Lines
+****  Duplicate Lines
 #+BEGIN_SRC emacs-lisp
   (defun duplicate-current-line()
     "Duplicates the entire line under point. Repetable with 'd' "
@@ -1314,31 +1329,21 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 #+RESULTS:
 : duplicate-line-up-to-point
-** Register manipulation
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-,") 'point-to-register)
-  (global-set-key (kbd "C-.") 'jump-to-register)
-  (global-set-key (kbd "H-s") 'bookmark-set)
-  (global-set-key (kbd "H-j") 'bookmark-jump)
-
-
-
-#+END_SRC
-
-#+RESULTS:
-: bookmark-jump
 * dired
-** Hotkeys to remember
-- m: mark files
-- u: umark files
-- U: unmark all files
-- % -> m: reg expession mark
-- * : mark by type
-- ( : expand or collapse details
-- k : kill marked files ( will kill from view but not delete)
-- g : reload buffer
-- * t: invert marked files
-- S : create sym link
+** Keymap
+| key    | flag meaning               |
+|--------+----------------------------|
+| m      | mark file                  |
+| u      | unmark file                |
+| U      | unmark all files           |
+| % -> m | Regex mark matching files  |
+| *      | Mark by type               |
+| (      | expand or collapse details |
+| k      | kill marked files          |
+| g      | reload buffer              |
+| * t    | invert marked files        |
+| S      | create symbolic link       |
+
 ** config
 #+BEGIN_SRC emacs-lisp
                                           ; list directories first

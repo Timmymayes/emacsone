@@ -833,6 +833,11 @@
 ;; cycle marks
 (global-set-key (kbd "H-m") 'my/pop-local-mark-ring)
 
+(global-set-key (kbd "C-,") 'point-to-register)
+(global-set-key (kbd "C-.") 'jump-to-register)
+(global-set-key (kbd "H-s") 'bookmark-set)
+(global-set-key (kbd "H-j") 'bookmark-jump)
+
 (defun kill-word-at-point()
   (interactive)
   (kill-word 1)
@@ -880,11 +885,6 @@
 (global-set-key (kbd "H-s-d") 'duplicate-current-line
                 )
 (global-set-key (kbd "H-d") 'duplicate-line-up-to-point)
-
-(global-set-key (kbd "C-,") 'point-to-register)
-(global-set-key (kbd "C-.") 'jump-to-register)
-(global-set-key (kbd "H-s") 'bookmark-set)
-(global-set-key (kbd "H-j") 'bookmark-jump)
 
 ; list directories first
 (setq dired-listing-switches "-agho --group-directories-first")
