@@ -274,6 +274,11 @@
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 
+ (fset 'org-load-inline-images
+  (kmacro-lambda-form [?\C-c ?\C-x ?\C-v ?\C-c ?\C-x ?\C-v] 0 "%d"))
+
+(global-set-key (kbd "s-i") 'org-load-inline-images)  
+
 
                                         ; refile targets
 
@@ -433,8 +438,6 @@
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t))
-
-
 
 (use-package ledger-mode
   :ensure t
@@ -897,6 +900,8 @@
 (global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
 ;; cycle marks
 (global-set-key (kbd "H-m") 'my/pop-local-mark-ring)
+;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
+(global-set-key (kbd "M-i") 'back-to-indentation)
 
 (defun duplicate-current-line()
   "Duplicates the entire line under point. Repetable with 'd' "
@@ -969,34 +974,22 @@
 
 ;;set load path for person elisp
 (add-to-list 'load-path "~/.emacs.d/lisp")
+;; Removing iy-go-to-char
+                                       ;load the package iy-go-to-char
+                                       ;(load "iy-go-to-char")
+ ;;Unbind C-m from return  
 
-;; load the package iy-go-to-char
-(load "iy-go-to-char")
-;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
-(global-set-key (kbd "M-i") 'back-to-indentation)
-;; rebind "M-m" iy-go-to-char
-;;Unbind C-m from return  
-(global-set-key (kbd "s-h") 'iy-go-up-to-char)
-(global-set-key (kbd "s-b") 'iy-go-to-char-backward)
-(global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
-
-;; Line to copy - start with a macro
-;; eventually make this your first fully functional lisp
-(fset 'yank-and-add-line-numbers
-      (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
-(global-set-key (kbd "H-s-k") 'yank-and-add-line-numbers) 
+ ;; eventually make this your first fully functional lisp
+ (fset 'yank-and-add-line-numbers
+       (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
+ (global-set-key (kbd "H-s-k") 'yank-and-add-line-numbers) 
 
 
-(fset 'agenda-fullscreen
-      (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
+ (fset 'agenda-fullscreen
+       (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
 
-(global-set-key (kbd "<f13>") 'agenda-fullscreen)
-(global-set-key (kbd "<f14>") 'browse-url-of-buffer)
-
-(fset 'org-load-inline-images
- (kmacro-lambda-form [?\C-c ?\C-x ?\C-v ?\C-c ?\C-x ?\C-v] 0 "%d"))
-
-(global-set-key (kbd "s-i") 'org-load-inline-images)
+ (global-set-key (kbd "<f13>") 'agenda-fullscreen)
+ (global-set-key (kbd "<f14>") 'browse-url-of-buffer)
 
 (defun xah-beginning-of-line-or-block ()
   "Move cursor to beginning of line or previous block.
