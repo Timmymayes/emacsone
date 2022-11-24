@@ -274,10 +274,8 @@
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 
- (fset 'org-load-inline-images
-  (kmacro-lambda-form [?\C-c ?\C-x ?\C-v ?\C-c ?\C-x ?\C-v] 0 "%d"))
 
-(global-set-key (kbd "s-i") 'org-load-inline-images)  
+(global-set-key (kbd "s-i") 'org-toggle-inline-images)  
 
 
                                         ; refile targets
@@ -986,11 +984,17 @@
  (fset 'agenda-fullscreen
        (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
 
+(fset 'agenda-with-tasks-fullscreen
+ (kmacro-lambda-form [?\C-c ?a ?n ?\H-1] 0 "%d"))
+
+
  (global-set-key (kbd "<f13>") 'agenda-fullscreen)
- (global-set-key (kbd "<f14>") 'browse-url-of-buffer)
+ (global-set-key (kbd "<f14>") 'agenda-with-tasks-fullscreen)
+(global-set-key (kbd "<f6>") 'browse-url-of-buffer)
 
 ;;Calendar keys
-(global-set-key (kbd "s-c") 'calendar);
+(global-set-key (kbd "s-c") 'calendar)
+(global-set-key (kbd "C-H-d") 'magit-dispatch)
 
 (defun xah-beginning-of-line-or-block ()
   "Move cursor to beginning of line or previous block.

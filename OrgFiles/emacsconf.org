@@ -441,10 +441,8 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
 
   (global-set-key (kbd "C-c a") 'org-agenda)
   
-   (fset 'org-load-inline-images
-    (kmacro-lambda-form [?\C-c ?\C-x ?\C-v ?\C-c ?\C-x ?\C-v] 0 "%d"))
 
-  (global-set-key (kbd "s-i") 'org-load-inline-images)  
+  (global-set-key (kbd "s-i") 'org-toggle-inline-images)  
 
 
                                           ; refile targets
@@ -465,7 +463,7 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
 #+end_src
 
 #+RESULTS:
-: ((plantuml . plantuml) (C . c) (C++ . c++) (asymptote . asy) (bash . sh) (beamer . latex) (calc . fundamental) (cpp . c++) (ditaa . artist) (dot . fundamental) (elisp . emacs-lisp) (ocaml . tuareg) (screen . shell-script) (shell . sh) (sqlite . sql))
+: ((dot . graphviz-dot) (plantuml . plantuml) (C . c) (C++ . c++) (asymptote . asy) (bash . sh) (beamer . latex) (calc . fundamental) (cpp . c++) (ditaa . artist) (dot . fundamental) (elisp . emacs-lisp) (ocaml . tuareg) (screen . shell-script) (shell . sh) (sqlite . sql))
 
 ** Font Configuration
 #+begin_src emacs-lisp
@@ -1485,16 +1483,22 @@ Managing Windows, buffers etc
    (fset 'agenda-fullscreen
          (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
 
+  (fset 'agenda-with-tasks-fullscreen
+   (kmacro-lambda-form [?\C-c ?a ?n ?\H-1] 0 "%d"))
+
+
    (global-set-key (kbd "<f13>") 'agenda-fullscreen)
-   (global-set-key (kbd "<f14>") 'browse-url-of-buffer)
+   (global-set-key (kbd "<f14>") 'agenda-with-tasks-fullscreen)
+  (global-set-key (kbd "<f6>") 'browse-url-of-buffer)
 
   ;;Calendar keys
-  (global-set-key (kbd "s-c") 'calendar);
+  (global-set-key (kbd "s-c") 'calendar)
+  (global-set-key (kbd "C-H-d") 'magit-dispatch)
 
 #+END_SRC
 
 #+RESULTS:
-: calendar
+: magit-dispatch
 * Xah Lee Implementations
 Tried out Xah-fly-keys and didn't love his command mode but he has some really good helper functions. Borrowing those below
 ** Hotkey Map
