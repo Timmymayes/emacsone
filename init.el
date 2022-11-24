@@ -753,9 +753,7 @@
                                         ;  (use-ackage company-box
                                         ;   :hook (company-mode . company-box-mode))
 
-(global-set-key (kbd "M-=") 'dabbrev-expand
-                )
-(global-set-key (kbd "M-C-=") 'dabbrev-completion)
+
 
 (defun next-tag()
   (interactive)
@@ -794,201 +792,6 @@
 (global-set-key (kbd "C-H-g") 'list-bookmarks)
 (global-set-key (kbd "C-H-t") 'dired-jump)
 (global-set-key (kbd "H-k") 'kill-current-buffer)
-
-(global-set-key (kbd "C-,") 'point-to-register)
-(global-set-key (kbd "C-.") 'jump-to-register)
-(global-set-key (kbd "H-s") 'bookmark-set)
-(global-set-key (kbd "H-j") 'bookmark-jump)
-
-(defun my/pop-local-mark-ring ()
-  "Move cursor to last mark position of current buffer, repeat calls will cycle"
-  (interactive)
-  (set-mark-command t))
-
-  (defun my/insert-line-above-and-go ()
-   ;;insert a line above the current one and move the cursor there
-   (interactive)
-   (previous-line nil)
-   (move-end-of-line nil)
-   (electric-newline-and-maybe-indent)
-   (indent-relative-first-indent-point))
-
-
- (defun wrap-sexp-backward-with-parenthesis()
-   "wrap the current expression backwards with parenthesis"
-   (interactive)
-   (backward-sexp)
-   (mark-sexp) 
-   (insert-parentheses))
-
-(global-set-key (kbd "M-o") 'my/insert-line-above-and-go)
-
-;; move C-j to C-; indent-new-comment-line
-(global-set-key (kbd "C-;") 'indent-new-comment-line)
-
-(global-set-key (kbd "H-]") 'xref-find-references)
-(global-set-key (kbd "H-[") 'xref-go-back)
-(global-set-key (kbd "H-g") 'goto-line)
-
-(global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
-()
-
-;; swap point and mark
-(global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
-;; cycle marks
-(global-set-key (kbd "H-m") 'my/pop-local-mark-ring)
-
-(defun kill-word-at-point()
-  (interactive)
-  (kill-word 1)
-  (backward-kill-word 1))
-
-(global-set-key (kbd "M-DEL") 'kill-word-at-point)
-
-(defun kill-line-at-point()
-  (interactive)
-  (back-to-indentation)
-  (kill-line))
-
-(global-set-key (kbd "s-l") 'kill-line-at-point)
-
-(defun duplicate-current-line()
-  "Duplicates the entire line under point. Repetable with 'd' "
-  (interactive)
-  (back-to-indentation)
-  (kill-line)
-  (yank)
-  (newline)
-  (indent-for-tab-command)
-  (yank)
-  (set-temporary-overlay-map
-   (let ((map (make-sparse-keymap)))
-     (define-key map (kbd "d") 'duplicate-current-line)
-     map)))
-
-(defun duplicate-line-up-to-point()
-  "Duplicates a line from start of indentation up to point. May be repeated with single 'd' presses."
-  (interactive)
-  (set-mark-command nil)
-  (back-to-indentation)
-  (kill-ring-save (region-beginning) (region-end))
-  (end-of-line)
-  (newline)
-  ;; example of single key repeat functionality
-  (yank)
-  (set-temporary-overlay-map
-   (let ((map (make-sparse-keymap)))
-     (define-key map (kbd "d") 'duplicate-line-up-to-point)
-     map)))
-
-
-(global-set-key (kbd "H-s-d") 'duplicate-current-line
-                )
-(global-set-key (kbd "H-d") 'duplicate-line-up-to-point)
-
-; list directories first
-(setq dired-listing-switches "-agho --group-directories-first")
-(setq dired-dwim-target t)
-
-(use-package dired-single)
-
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
-
-;(use-package dired-open) look into this package if you end up needing it.
-
-(defun my-dired-mode-hook ()
-  "My `dired' mode hook."
-  ;; To hide dot-files by default
-  (dired-hide-dotfiles-mode))
-
-;; To toggle hiding
-(define-key dired-mode-map "." #'dired-hide-dotfiles-mode)
-(add-hook 'dired-mode-hook #'my-dired-mode-hook)
-
-(use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook))
-
-;;set load path for person elisp
-(add-to-list 'load-path "~/.emacs.d/lisp")
-(global-set-key (kbd "C-M-i") 'indent-region)
-;; load the package iy-go-to-char
-(load "iy-go-to-char")
-;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
-(global-set-key (kbd "M-i") 'back-to-indentation)
-;; rebind "M-m" iy-go-to-char
-;;Unbind C-m from return  
-(global-set-key (kbd "s-h") 'iy-go-up-to-char)
-(global-set-key (kbd "s-b") 'iy-go-to-char-backward)
-(global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
-
-;; Line to copy - start with a macro
-;; eventually make this your first fully functional lisp
-(fset 'yank-and-add-line-numbers
-      (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
-(global-set-key (kbd "s-k") 'yank-and-add-line-numbers) 
-
-
-(fset 'agenda-fullscreen
-      (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
-
-(global-set-key (kbd "<f13>") 'agenda-fullscreen)
-(global-set-key (kbd "<f14>") 'browse-url-of-buffer)
-
-(fset 'org-load-inline-images
- (kmacro-lambda-form [?\C-c ?\C-x ?\C-v ?\C-c ?\C-x ?\C-v] 0 "%d"))
-
-(global-set-key (kbd "s-i") 'org-load-inline-images)
-
-(defun xah-beginning-of-line-or-block ()
-  "Move cursor to beginning of line or previous block.
-
-• When called first time, move cursor to beginning of char in current line. (if already, move to beginning of line.)
-• When called again, move cursor backward by jumping over any sequence of whitespaces containing 2 blank lines.
-• if `visual-line-mode' is on, beginning of line means visual line.
-
-URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
-Version: 2018-06-04 2021-03-16 2022-03-30 2022-07-03 2022-07-06"
-  (interactive)
-  (let (($p (point)))
-    (if (or (equal (point) (line-beginning-position))
-            (eq last-command this-command))
-        (when
-            (re-search-backward "\n[\t\n ]*\n+" nil 1)
-          (skip-chars-backward "\n\t ")
-          (forward-char))
-      (if visual-line-mode
-          (beginning-of-visual-line)
-        (if (eq major-mode 'eshell-mode)
-            (progn
-              (declare-function eshell-bol "esh-mode.el" ())
-              (eshell-bol))
-          (back-to-indentation)
-          (when (eq $p (point))
-            (beginning-of-line)))))))
-
-
-(defun xah-end-of-line-or-block ()
-  "Move cursor to end of line or next block.
-
-• When called first time, move cursor to end of line.
-• When called again, move cursor forward by jumping over any sequence of whitespaces containing 2 blank lines.
-• if `visual-line-mode' is on, end of line means visual line.
-
-URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
-Version: 2018-06-04 2021-03-16 2022-03-05"
-  (interactive)
-  (if (or (equal (point) (line-end-position))
-          (eq last-command this-command))
-      (re-search-forward "\n[\t\n ]*\n+" nil 1)
-    (if visual-line-mode
-        (end-of-visual-line)
-      (end-of-line))))
-
-(global-set-key (kbd "M-p") 'xah-beginning-of-line-or-block)
-(global-set-key (kbd "M-n") 'xah-end-of-line-or-block)
 
 (defvar active-harpoon)
 (setq active-harpoon 102)
@@ -1060,6 +863,188 @@ Version: 2018-06-04 2021-03-16 2022-03-05"
 (global-set-key (kbd "s-d") 'set-harpoon-d)
 (global-set-key (kbd "H-f") 'harpoon-f)
 (global-set-key (kbd "s-f") 'set-harpoon-f)
+
+(defun my/pop-local-mark-ring ()
+  "Move cursor to last mark position of current buffer, repeat calls will cycle"
+  (interactive)
+  (set-mark-command t))
+
+
+(defun my/insert-line-above-and-go ()
+  ;;insert a line above the current one and move the cursor there
+  (interactive)
+  (previous-line nil)
+  (move-end-of-line nil)
+  (electric-newline-and-maybe-indent)
+  (indent-relative-first-indent-point))
+
+
+(defun wrap-sexp-backward-with-parenthesis()
+  "wrap the current expression backwards with parenthesis"
+  (interactive)
+  (backward-sexp)
+  (mark-sexp) 
+  (insert-parentheses))
+
+(global-set-key (kbd "M-o") 'my/insert-line-above-and-go)
+;; move C-j to C-; indent-new-comment-line
+(global-set-key (kbd "C-;") 'indent-new-comment-
+(global-set-key (kbd "H-]") 'xref-find-references)
+(global-set-key (kbd "H-[") 'xref-go-back)
+(global-set-key (kbd "H-g") 'goto-
+(global-set-key (kbd "C-(") 'wrap-sexp-backward-with-parenthesis)
+;; swap point and mark
+(global-set-key (kbd "M-m")  (kmacro-lambda-form [?\C-u ?\C-x ?\C-x] 0 "%d"))
+;; cycle marks
+(global-set-key (kbd "H-m") 'my/pop-local-mark-ring)
+
+(defun duplicate-current-line()
+  "Duplicates the entire line under point. Repetable with 'd' "
+  (interactive)
+  (back-to-indentation)
+  (kill-line)
+  (yank)
+  (newline)
+  (indent-for-tab-command)
+  (yank)
+  (set-temporary-overlay-map
+   (let ((map (make-sparse-keymap)))
+     (define-key map (kbd "d") 'duplicate-current-line)
+     map)))
+
+(defun duplicate-line-up-to-point()
+  "Duplicates a line from start of indentation up to point. May be repeated with single 'd' presses."
+  (interactive)
+  (set-mark-command nil)
+  (back-to-indentation)
+  (kill-ring-save (region-beginning) (region-end))
+  (end-of-line)
+  (newline)
+  ;; example of single key repeat functionality
+  (yank)
+  (set-temporary-overlay-map
+   (let ((map (make-sparse-keymap)))
+     (define-key map (kbd "d") 'duplicate-line-up-to-point)
+     map)))
+
+(defun kill-word-at-point()
+  "Kill the full word at point"
+  (interactive)
+  (kill-word 1)
+  (backward-kill-word 1))
+
+(defun kill-line-at-point()
+  "Kill full lilne at point"
+  asdfsafd  adf asdas asdfasdf
+  (interactive)
+  (back-to-indentation)
+  (kill-line))
+
+(global-set-key (kbd "C-M-i") 'indent-region)
+(global-set-key (kbd "M-DEL") 'kill-word-at-point)
+(global-set-key (kbd "M-k") 'kill-line-at-point)
+(global-set-key (kbd "s-k") 'kill-sentence)
+(global-set-key (kbd "H-s-d") 'duplicate-current-line)
+(global-set-key (kbd "s-d") 'duplicate-line-up-to-point)
+
+; list directories first
+(setq dired-listing-switches "-agho --group-directories-first")
+(setq dired-dwim-target t)
+
+(use-package dired-single)
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+;(use-package dired-open) look into this package if you end up needing it.
+
+(defun my-dired-mode-hook ()
+  "My `dired' mode hook."
+  ;; To hide dot-files by default
+  (dired-hide-dotfiles-mode))
+
+;; To toggle hiding
+(define-key dired-mode-map "." #'dired-hide-dotfiles-mode)
+(add-hook 'dired-mode-hook #'my-dired-mode-hook)
+
+;;set load path for person elisp
+(add-to-list 'load-path "~/.emacs.d/lisp")
+
+;; load the package iy-go-to-char
+(load "iy-go-to-char")
+;; rebind back-to-indentation to "M-i" NOTE this unbinds!! tab-to-tab-stop
+(global-set-key (kbd "M-i") 'back-to-indentation)
+;; rebind "M-m" iy-go-to-char
+;;Unbind C-m from return  
+(global-set-key (kbd "s-h") 'iy-go-up-to-char)
+(global-set-key (kbd "s-b") 'iy-go-to-char-backward)
+(global-set-key (kbd "s-g") 'iy-go-up-to-char-backward)
+
+;; Line to copy - start with a macro
+;; eventually make this your first fully functional lisp
+(fset 'yank-and-add-line-numbers
+      (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
+(global-set-key (kbd "H-s-k") 'yank-and-add-line-numbers) 
+
+
+(fset 'agenda-fullscreen
+      (kmacro-lambda-form [?\C-c ?a ?a ?\C-x ?1] 0 "%d"))
+
+(global-set-key (kbd "<f13>") 'agenda-fullscreen)
+(global-set-key (kbd "<f14>") 'browse-url-of-buffer)
+
+(fset 'org-load-inline-images
+ (kmacro-lambda-form [?\C-c ?\C-x ?\C-v ?\C-c ?\C-x ?\C-v] 0 "%d"))
+
+(global-set-key (kbd "s-i") 'org-load-inline-images)
+
+(defun xah-beginning-of-line-or-block ()
+  "Move cursor to beginning of line or previous block.
+
+• When called first time, move cursor to beginning of char in current line. (if already, move to beginning of line.)
+• When called again, move cursor backward by jumping over any sequence of whitespaces containing 2 blank lines.
+• if `visual-line-mode' is on, beginning of line means visual line.
+
+URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+Version: 2018-06-04 2021-03-16 2022-03-30 2022-07-03 2022-07-06"
+  (interactive)
+  (let (($p (point)))
+    (if (or (equal (point) (line-beginning-position))
+            (eq last-command this-command))
+        (when
+            (re-search-backward "\n[\t\n ]*\n+" nil 1)
+          (skip-chars-backward "\n\t ")
+          (forward-char))
+      (if visual-line-mode
+          (beginning-of-visual-line)
+        (if (eq major-mode 'eshell-mode)
+            (progn
+              (declare-function eshell-bol "esh-mode.el" ())
+              (eshell-bol))
+          (back-to-indentation)
+          (when (eq $p (point))
+            (beginning-of-line)))))))
+
+
+(defun xah-end-of-line-or-block ()
+  "Move cursor to end of line or next block.
+
+• When called first time, move cursor to end of line.
+• When called again, move cursor forward by jumping over any sequence of whitespaces containing 2 blank lines.
+• if `visual-line-mode' is on, end of line means visual line.
+
+URL `http://xahlee.info/emacs/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+Version: 2018-06-04 2021-03-16 2022-03-05"
+  (interactive)
+  (if (or (equal (point) (line-end-position))
+          (eq last-command this-command))
+      (re-search-forward "\n[\t\n ]*\n+" nil 1)
+    (if visual-line-mode
+        (end-of-visual-line)
+      (end-of-line))))
+
+(global-set-key (kbd "M-p") 'xah-beginning-of-line-or-block)
+(global-set-key (kbd "M-n") 'xah-end-of-line-or-block)
 
 ;;(desktop-read)
 
