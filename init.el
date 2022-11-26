@@ -961,8 +961,8 @@
 (global-set-key (kbd "M-DEL") 'kill-word-at-point)
 (global-set-key (kbd "M-k") 'kill-line-at-point)
 (global-set-key (kbd "s-k") 'kill-sentence)
-(global-set-key (kbd "H-s-d") 'duplicate-current-line)
-(global-set-key (kbd "s-d") 'duplicate-line-up-to-point)
+(global-set-key (kbd "s-y") 'duplicate-current-line)
+(global-set-key (kbd "H-y") 'duplicate-line-up-to-point)
 
 ; list directories first
 (setq dired-listing-switches "-agho --group-directories-first")
