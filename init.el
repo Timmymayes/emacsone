@@ -76,7 +76,7 @@
 
 (setq visible-bell t)  ; setup the visible bell
 
-
+(use-package hydra)
 
 
 
@@ -181,7 +181,10 @@
 
 (yas-global-mode 1)
 
-
+(defhydra hydra-zoom (global-map "<f17>")
+  "Zoom"
+  ("+" text-scale-increase "in")
+  ("=" text-scale-decrease))
 
 (use-package ace-window)
 (custom-set-faces
@@ -230,7 +233,6 @@
         org-hide-emphasis-markers t)
   (setq org-capture-babel-evaluate t)
   (setq org-startup-with-inline-images t)
-  :bind
 
                                         ; org capture
 
@@ -882,7 +884,7 @@
   )
 
 
-(DEFUN my/insert-line-above-and-go ()
+(defun my/insert-line-above-and-go ()
   ;;insert a line above the current one and move the cursor there
   (interactive)
   (previous-line nil)
@@ -1008,11 +1010,32 @@
 (global-set-key (kbd "s-c") 'calendar)
 (global-set-key (kbd "C-H-d") 'magit-dispatch)
 
+;; open
+
+(defun play-retro-sax ()
+    "Launch a retro sax 3 hour video"
+  (interactive)
+  (browse-url "https://www.youtube.com/watch?v=001hXHNo-3w"))
+
+(defun play-high-bpm-trance ()
+  "Launch high bpm trance video"
+  (interactive)
+  (browse-url "https://youtu.be/q7gv9B4Kw44"))
+
+
+(defhydra Music (global-map "<f7>")
+  "Music Player"
+  ("s" play-retro-sax "Retro-Sax")
+  ("h" play-high-bpm-trance "High BPM Trance"))
+
 (fset 'my/dired-create-game-design-structure
      (kmacro-lambda-form [?\M-x ?m ?k ?d ?i ?r return ?d ?e ?s ?i ?g ?n return ?\M-x ?m ?d ?k backspace backspace ?k ?d ?i ?r return ?d ?e ?v ?e ?l ?o ?p ?m ?e ?n ?t return ?\M-x ?m ?k ?d ?i ?r return ?d ?o ?c ?u ?m ?e ?n ?t ?a ?t ?i ?o ?n return ?\M-x ?m ?k ?d ?i ?r return ?i ?m ?a ?g ?e ?s return ?\M-x ?m ?k ?d ?i ?r ?  ?p ?l ?a ?y ?t ?e ?s ?t ?s return backspace backspace backspace backspace backspace backspace backspace backspace backspace backspace return ?p ?l ?a ?y ?t ?e ?s ?t ?s return] 0 "%d"))
 
 (fset 'my/dired-populate-design-docs
    (kmacro-lambda-form [?\C-x ?\C-f ?R ?E ?A ?D ?M ?E ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?g ?\C-x ?\C-f ?d ?e ?s ?i ?g ?n ?/ ?D ?e ?s ?i ?g ?n ?- ?L ?o ?g ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?\C-x ?\C-f ?d tab ?D ?e ?s ?i ?g backspace backspace backspace backspace backspace ?M ?a ?s ?t ?e ?r ?- ?D ?e ?s ?i ?g ?n ?- ?D ?o ?c ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?\C-x ?\C-f ?p ?l ?a ?y tab ?P ?l ?a ?y ?t ?e ?s ?t ?s ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?\C-s ?\C-f ?\C-x ?\C-f ?d ?o ?c ?u tab ?R ?u ?l ?e ?s ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k] 0 "%d"))
+
+(fset 'my/create-new-design
+ (kmacro-lambda-form [?\M-x ?m ?y ?/ return ?g ?\M-x ?m ?y ?/ ?\C-n ?\C-n ?\C-n ?\C-n return ?g] 0 "%d"))
 
 (defun xah-beginning-of-line-or-block ()
   "Move cursor to beginning of line or previous block.

@@ -166,7 +166,7 @@ Basic setup for cleaning up the ui.
 
   (setq visible-bell t)  ; setup the visible bell
 
-
+  (use-package hydra)
 
 
 
@@ -323,13 +323,16 @@ Turn on Yas global mode
 
 #+RESULTS:
 : t
-** Scale Minibuffer Text
+** Scale Text Hydra
 #+BEGIN_SRC emacs-lisp
-  
+        (defhydra hydra-zoom (global-map "<f17>")
+          "Zoom"
+          ("+" text-scale-increase "in")
+          ("=" text-scale-decrease))
 #+END_SRC
 
 #+RESULTS:
-: my-minibuffer-setup
+: hydra-zoom/body
 
 * Window Control
 
@@ -397,7 +400,6 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
           org-hide-emphasis-markers t)
     (setq org-capture-babel-evaluate t)
     (setq org-startup-with-inline-images t)
-    :bind
 
                                           ; org capture
 
@@ -464,7 +466,7 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
 #+end_src
 
 #+RESULTS:
-: ((dot . graphviz-dot) (plantuml . plantuml) (C . c) (C++ . c++) (asymptote . asy) (bash . sh) (beamer . latex) (calc . fundamental) (cpp . c++) (ditaa . artist) (dot . fundamental) (elisp . emacs-lisp) (ocaml . tuareg) (screen . shell-script) (shell . sh) (sqlite . sql))
+: ((plantuml . plantuml) (C . c) (C++ . c++) (asymptote . asy) (bash . sh) (beamer . latex) (calc . fundamental) (cpp . c++) (ditaa . artist) (dot . fundamental) (elisp . emacs-lisp) (ocaml . tuareg) (screen . shell-script) (shell . sh) (sqlite . sql))
 
 ** Font Configuration
 #+begin_src emacs-lisp
@@ -1273,7 +1275,8 @@ Managing Windows, buffers etc
 #+RESULTS:
 : set-harpoon-f
 
-#+RESULTS:
+
+#+RESULTS:
 : set-harpoon-f
 
 ** Cursor Movement
@@ -1310,7 +1313,7 @@ Managing Windows, buffers etc
     )
 
 
-  (DEFUN my/insert-line-above-and-go ()
+  (defun my/insert-line-above-and-go ()
     ;;insert a line above the current one and move the cursor there
     (interactive)
     (previous-line nil)
@@ -1508,21 +1511,55 @@ Managing Windows, buffers etc
   (global-set-key (kbd "s-c") 'calendar)
   (global-set-key (kbd "C-H-d") 'magit-dispatch)
 
+  ;; open
+  
+
 #+END_SRC
+
+* Load Music
+#+BEGIN_SRC emacs-lisp
+
+          (defun play-retro-sax ()
+              "Launch a retro sax 3 hour video"
+            (interactive)
+            (browse-url "https://www.youtube.com/watch?v=001hXHNo-3w"))
+
+          (defun play-high-bpm-trance ()
+            "Launch high bpm trance video"
+            (interactive)
+            (browse-url "https://youtu.be/q7gv9B4Kw44"))
+  
+
+          (defhydra Music (global-map "<f7>")
+            "Music Player"
+            ("s" play-retro-sax "Retro-Sax")
+            ("h" play-high-bpm-trance "High BPM Trance"))
+
+
+
+
+#+END_SRC
+
+#+RESULTS:
+: Music/body
 
 * Design Document Creation
 #+BEGIN_SRC emacs-lisp
-  (fset 'my/dired-create-game-design-structure
-     (kmacro-lambda-form [?\M-x ?m ?k ?d ?i ?r return ?d ?e ?s ?i ?g ?n return ?\M-x ?m ?d ?k backspace backspace ?k ?d ?i ?r return ?d ?e ?v ?e ?l ?o ?p ?m ?e ?n ?t return ?\M-x ?m ?k ?d ?i ?r return ?d ?o ?c ?u ?m ?e ?n ?t ?a ?t ?i ?o ?n return ?\M-x ?m ?k ?d ?i ?r return ?i ?m ?a ?g ?e ?s return ?\M-x ?m ?k ?d ?i ?r ?  ?p ?l ?a ?y ?t ?e ?s ?t ?s return backspace backspace backspace backspace backspace backspace backspace backspace backspace backspace return ?p ?l ?a ?y ?t ?e ?s ?t ?s return] 0 "%d"))
+    (fset 'my/dired-create-game-design-structure
+       (kmacro-lambda-form [?\M-x ?m ?k ?d ?i ?r return ?d ?e ?s ?i ?g ?n return ?\M-x ?m ?d ?k backspace backspace ?k ?d ?i ?r return ?d ?e ?v ?e ?l ?o ?p ?m ?e ?n ?t return ?\M-x ?m ?k ?d ?i ?r return ?d ?o ?c ?u ?m ?e ?n ?t ?a ?t ?i ?o ?n return ?\M-x ?m ?k ?d ?i ?r return ?i ?m ?a ?g ?e ?s return ?\M-x ?m ?k ?d ?i ?r ?  ?p ?l ?a ?y ?t ?e ?s ?t ?s return backspace backspace backspace backspace backspace backspace backspace backspace backspace backspace return ?p ?l ?a ?y ?t ?e ?s ?t ?s return] 0 "%d"))
 
-(fset 'my/dired-populate-design-docs
-   (kmacro-lambda-form [?\C-x ?\C-f ?R ?E ?A ?D ?M ?E ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?g ?\C-x ?\C-f ?d ?e ?s ?i ?g ?n ?/ ?D ?e ?s ?i ?g ?n ?- ?L ?o ?g ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?\C-x ?\C-f ?d tab ?D ?e ?s ?i ?g backspace backspace backspace backspace backspace ?M ?a ?s ?t ?e ?r ?- ?D ?e ?s ?i ?g ?n ?- ?D ?o ?c ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?\C-x ?\C-f ?p ?l ?a ?y tab ?P ?l ?a ?y ?t ?e ?s ?t ?s ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?\C-s ?\C-f ?\C-x ?\C-f ?d ?o ?c ?u tab ?R ?u ?l ?e ?s ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k] 0 "%d"))
+  (fset 'my/dired-populate-design-docs
+     (kmacro-lambda-form [?\C-x ?\C-f ?R ?E ?A ?D ?M ?E ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?g ?\C-x ?\C-f ?d ?e ?s ?i ?g ?n ?/ ?D ?e ?s ?i ?g ?n ?- ?L ?o ?g ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?\C-x ?\C-f ?d tab ?D ?e ?s ?i ?g backspace backspace backspace backspace backspace ?M ?a ?s ?t ?e ?r ?- ?D ?e ?s ?i ?g ?n ?- ?D ?o ?c ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?\C-x ?\C-f ?p ?l ?a ?y tab ?P ?l ?a ?y ?t ?e ?s ?t ?s ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k ?\C-s ?\C-f ?\C-x ?\C-f ?d ?o ?c ?u tab ?R ?u ?l ?e ?s ?. ?o ?r ?g return ?\C-x ?\C-s ?\H-k] 0 "%d"))
+
+  (fset 'my/create-new-design
+   (kmacro-lambda-form [?\M-x ?m ?y ?/ return ?g ?\M-x ?m ?y ?/ ?\C-n ?\C-n ?\C-n ?\C-n return ?g] 0 "%d"))
+
 
 #+END_SRC
 
 
 #+RESULTS:
-: magit-dispatch
+| lambda | (&optional arg) | Keyboard macro. | (interactive p) | (kmacro-exec-ring-item '([134217848 109 121 47 return 103 134217848 109 121 47 14 14 14 14 return 103] 0 %d) arg) |
 * Xah Lee Implementations
 Tried out Xah-fly-keys and didn't love his command mode but he has some really good helper functions. Borrowing those below
 ** Hotkey Map
@@ -1668,5 +1705,5 @@ Version: 2018-06-04 2021-03-16 2022-03-05"
 
   #+RESULTS:
   [[file:images/test-dot.svg]]
-
+p
   
