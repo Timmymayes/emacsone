@@ -215,7 +215,8 @@
   (org-indent-mode)
   (variable-pitch-mode 1)
   (auto-fill-mode 0)
-  (visual-line-mode 1))
+  (visual-line-mode 1)
+  (org-image-actual-width nil))
 
 
 (use-package org
@@ -271,6 +272,9 @@
 
 (define-key global-map (kbd "C-c j")
   (lambda () (interactive) (org-capture nil "jj")))
+
+(define-key global-map (kbd "C-c m")
+  (lambda () (interactive) (org-capture nil "jm")))  
 
 (define-key global-map (kbd "C-c t")
   (lambda () (interactive) (org-capture nil "tt")))
@@ -757,7 +761,8 @@
                                         ;  (use-ackage company-box
                                         ;   :hook (company-mode . company-box-mode))
 
-
+(global-set-key (kbd "M-=") 'dabbrev-expand)
+(global-set-key (kbd "C-M-=") 'dabbrev-complete)
 
 (defun next-tag()
   (interactive)

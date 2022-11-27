@@ -272,7 +272,7 @@ I've recently switched from counsel to vertico.
 
 
     ;; story)))
-
+ 
     ;;        (use-package ivy-richt
     ;;        :init
     ;;      (ivy-rich-mode 1))
@@ -285,7 +285,7 @@ I've recently switched from counsel to vertico.
       (vertico-resize t)
       :init
       (vertico-mode))
-  
+
     (use-package savehist
       :init
       (savehist-mode))
@@ -374,99 +374,103 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
 * Org Config Setup
 ** initial package setup
 #+begin_src emacs-lisp
-  ;;;;; Org mode setup ;;;;;
+    ;;;;; Org mode setup ;;;;;
 
-                                          ;require tempo
+                                            ;require tempo
 
-  (defun org-mode-setup()
-    (org-indent-mode)
-    (variable-pitch-mode 1)
-    (auto-fill-mode 0)
-    (visual-line-mode 1))
-
-
-  (use-package org
-    :hook (org-mode . org-mode-setup)
-    :config
-    (setq org-agenda-files
-          '("~/Orgfiles/tasks.org"
-            "~/Orgfiles/habits.org"))
-
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-startup-with-inline-images t)
-    (setq org-ellipsis " ▾"
-          org-hide-emphasis-markers t)
-    (setq org-capture-babel-evaluate t)
-    (setq org-startup-with-inline-images t)
-
-                                          ; org capture
-
-    (setq org-capture-templates
-          '(("t" "Tasks / Projects")
-            ("tt" "Task" entry (file+olp "~/Orgfiles/tasks.org" "Inbox")
-             "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
-            ("ts" "Clockked Entry Subtask" entry (clock)
-             "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
-
-            ("j" "Journal Entries")
-            ("jj" "Journal" entry
-             (file+olp+datetree "~/Orgfiles/journal.org")
-             "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-             ;;
-             :clock-in :clock-resume
-             :empty-lines 1)
-            ("jm" "Meeting" entry
-             (file+olp+datetree "~/Orgfiles/journal.org")
-             "* %<%I:%M %P> - %a :meetings:\n\n%?\n\n"
-             :clock-in :clock-resume
-             :empty-lines 1)
-
-            ("w" "Workflows")
-            ("we" "Checking Email" entry (file+olp+datetree "~/Orgfiles/journal.org")
-             "* Checking Email :email:\n\n%?" :clockin :clock-resume :empty-lines 1)
-
-            ("m" "Metrics Capture")
-
-            ("mw" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
-             "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
-
-                                          ; hotkey bindings
-  (define-key global-map (kbd "C-c o")
-    (lambda () (interactive) (org-capture)))
-
-  (define-key global-map (kbd "C-c j")
-    (lambda () (interactive) (org-capture nil "jj")))
-
-  (define-key global-map (kbd "C-c t")
-    (lambda () (interactive) (org-capture nil "tt")))
-
-  (global-set-key (kbd "C-c a") 'org-agenda)
+    (defun org-mode-setup()
+      (org-indent-mode)
+      (variable-pitch-mode 1)
+      (auto-fill-mode 0)
+      (visual-line-mode 1)
+      (org-image-actual-width nil))
 
 
-  (global-set-key (kbd "s-i") 'org-toggle-inline-images)  
+    (use-package org
+      :hook (org-mode . org-mode-setup)
+      :config
+      (setq org-agenda-files
+            '("~/Orgfiles/tasks.org"
+              "~/Orgfiles/habits.org"))
+
+      (setq org-agenda-start-with-log-mode t)
+      (setq org-log-done 'time)
+      (setq org-log-into-drawer t)
+      (setq org-startup-with-inline-images t)
+      (setq org-ellipsis " ▾"
+            org-hide-emphasis-markers t)
+      (setq org-capture-babel-evaluate t)
+      (setq org-startup-with-inline-images t)
+
+                                            ; org capture
+
+      (setq org-capture-templates
+            '(("t" "Tasks / Projects")
+              ("tt" "Task" entry (file+olp "~/Orgfiles/tasks.org" "Inbox")
+               "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
+              ("ts" "Clockked Entry Subtask" entry (clock)
+               "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
+
+              ("j" "Journal Entries")
+              ("jj" "Journal" entry
+               (file+olp+datetree "~/Orgfiles/journal.org")
+               "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+               ;;
+               :clock-in :clock-resume
+               :empty-lines 1)
+              ("jm" "Meeting" entry
+               (file+olp+datetree "~/Orgfiles/journal.org")
+               "* %<%I:%M %P> - %a :meetings:\n\n%?\n\n"
+               :clock-in :clock-resume
+               :empty-lines 1)
+
+              ("w" "Workflows")
+              ("we" "Checking Email" entry (file+olp+datetree "~/Orgfiles/journal.org")
+               "* Checking Email :email:\n\n%?" :clockin :clock-resume :empty-lines 1)
+
+              ("m" "Metrics Capture")
+
+              ("mw" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
+               "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
+
+                                            ; hotkey bindings
+    (define-key global-map (kbd "C-c o")
+      (lambda () (interactive) (org-capture)))
+
+    (define-key global-map (kbd "C-c j")
+      (lambda () (interactive) (org-capture nil "jj")))
+
+    (define-key global-map (kbd "C-c m")
+      (lambda () (interactive) (org-capture nil "jm")))  
+
+    (define-key global-map (kbd "C-c t")
+      (lambda () (interactive) (org-capture nil "tt")))
+
+    (global-set-key (kbd "C-c a") 'org-agenda)
 
 
-                                          ; refile targets
+    (global-set-key (kbd "s-i") 'org-toggle-inline-images)  
 
 
-  (setq org-refile-targets
-        '(("archive.org" :maxlevel . 1)
-          ("tasks.org" :maxlevel . 1)))
-                                          ; load org habits
-  (require 'org-habit)
-  (add-to-list 'org-modules 'org-habit)
-  (setq org-habit-graph-column 60)
+                                            ; refile targets
 
-  (add-to-list  'org-src-lang-modes '("plantuml" . plantuml))
 
-  ;;;;; end org mode setup ;;;;; 
+    (setq org-refile-targets
+          '(("archive.org" :maxlevel . 1)
+            ("tasks.org" :maxlevel . 1)))
+                                            ; load org habits
+    (require 'org-habit)
+    (add-to-list 'org-modules 'org-habit)
+    (setq org-habit-graph-column 60)
+
+    (add-to-list  'org-src-lang-modes '("plantuml" . plantuml))
+
+    ;;;;; end org mode setup ;;;;; 
 
 #+end_src
 
 #+RESULTS:
-: ((plantuml . plantuml) (C . c) (C++ . c++) (asymptote . asy) (bash . sh) (beamer . latex) (calc . fundamental) (cpp . c++) (ditaa . artist) (dot . fundamental) (elisp . emacs-lisp) (ocaml . tuareg) (screen . shell-script) (shell . sh) (sqlite . sql))
+: ((dot . graphviz-dot) (plantuml . plantuml) (C . c) (C++ . c++) (asymptote . asy) (bash . sh) (beamer . latex) (calc . fundamental) (cpp . c++) (ditaa . artist) (dot . fundamental) (elisp . emacs-lisp) (ocaml . tuareg) (screen . shell-script) (shell . sh) (sqlite . sql))
 
 ** Font Configuration
 #+begin_src emacs-lisp
@@ -1112,8 +1116,13 @@ Dap mode here: https://www.youtube.com/watch?v=0bilcQVSlbM
 
 ** Dabbrev
 #+BEGIN_SRC emacs-lisp
-
+  (global-set-key (kbd "M-=") 'dabbrev-expand)
+  (global-set-key (kbd "C-M-=") 'dabbrev-complete)
 #+END_SRC
+
+#+RESULTS:
+: dabbrev-complete
+
 ** next-tag - "C-x t" - Move inside the next tag set in web-mode
 #+BEGIN_SRC emacs-lisp
   (defun next-tag()
