@@ -2,8 +2,6 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ~/Projects/emacsone/init.el
 
 
-
-
 * Config Overview
 This config is my personal config and is evolving over time. You can find the updated version here: [[https://github.com/Timmymayes/emacsone/blob/main/OrgFiles/emacsconf.org][Emacsone]].
 
@@ -16,11 +14,10 @@ On the rare occasion utf-8 encoding is lost there is a hotkey for it.
 |---------+--------------+---------------------------------|
 | C-c x e | encode-utf-8 | Revert buffer encoding to utf-8 |
 
-
 #+BEGIN_SRC emacs-lisp
   (fset 'encode-utf-8
-   (kmacro-lambda-form [?\M-x ?r ?e ?v ?e ?r ?t ?- ?b ?u ?f ?f ?e ?r ?- ?w ?i ?t ?h ?- ?c ?o ?d tab return ?u ?t ?f ?- ?8 return ?y ?e ?s return] 0 "%d"))
-(global-set-key (kbd "C-c x e") 'encode-utf-8)
+        (kmacro-lambda-form [?\M-x ?r ?e ?v ?e ?r ?t ?- ?b ?u ?f ?f ?e ?r ?- ?w ?i ?t ?h ?- ?c ?o ?d tab return ?u ?t ?f ?- ?8 return ?y ?e ?s return] 0 "%d"))
+  (global-set-key (kbd "C-c x e") 'encode-utf-8)
 #+END_SRC
 
 #+RESULTS:
@@ -44,7 +41,7 @@ Require package and setup all package archives. Note changes to org-mode reposit
   (assq-delete-all 'org package--builtins)
   (assq-delete-all 'org package--builtin-versions)
   (unless package-archive-contents
-   (package-refresh-contents))
+    (package-refresh-contents))
 #+END_SRC
 
 ** Use Package Setup
@@ -59,11 +56,19 @@ Install use-package and enable ':ensure t' globally. the ':ensusre' keyword caus
 
   (require 'use-package)
   (setq use-package-always-ensure t)
-  
+
 #+end_src
 
 #+RESULTS:
 : t
+
+** Keep Folders Clean
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist '(("." . "~/.emacs.d/tmp/backups/")))
+#+END_SRC
+
+#+RESULTS:
+: ((. . ~/.emacs.d/tmp/backups/))
 
 * Mail with mu4e
 Setup gmail to use mu4e
@@ -167,15 +172,15 @@ Basic setup for cleaning up the ui.
   (setq visible-bell t)  ; setup the visible bell
 
   (use-package hydra)
-
-
+  ;; setup window splitting so its side by side usually. 
+  (setq split-width-threshold 80)
 
   (set-face-attribute
    'default nil :font "Fira Code Retina" :height 140)  ; set font
   (load-theme 'tango-dark)                             ; load theme
   ;;(desktop-save-mode 1)                                ; enable desktop saving
 
-    #+end_src
+#+end_src
 
 #+RESULTS:
 : t
@@ -200,6 +205,8 @@ Basic setup for cleaning up the ui.
 
   ;; display time
   (display-time-mode)
+  (column-number-mode)
+
 
 #+end_src
 
@@ -266,41 +273,41 @@ Packages that make emacs a little easiler to use. Finding out more about command
 I've recently switched from counsel to vertico. 
 #+begin_src emacs-lisp
 
-    ;;           (use-package counsel
-    ;;             :bind (("M-x" . counsel-M-x)
-    ;;                    ("C-x b" . counsel-ibuffer)
+  ;;           (use-package counsel
+  ;;             :bind (("M-x" . counsel-M-x)
+  ;;                    ("C-x b" . counsel-ibuffer)
 
 
-    ;; story)))
- 
-    ;;        (use-package ivy-richt
-    ;;        :init
-    ;;      (ivy-rich-mode 1))
+  ;; story)))
 
-    (use-package vertico
-      :ensure t
-      :custom
-      (vertico-cycle nil)
-      (vertico-count 13)
-      (vertico-resize t)
-      :init
-      (vertico-mode))
+  ;;        (use-package ivy-richt
+  ;;        :init
+  ;;      (ivy-rich-mode 1))
 
-    (use-package savehist
-      :init
-      (savehist-mode))
+  (use-package vertico
+    :ensure t
+    :custom
+    (vertico-cycle nil)
+    (vertico-count 13)
+    (vertico-resize t)
+    :init
+    (vertico-mode))
 
-    (use-package marginalia
-      :after vertico
-      :ensure t
-      :custom
-      (marginalia-max-relative-age 0)
-      (marginalia-align 'center)
-      (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-      :init
-      (marginalia-mode))
+  (use-package savehist
+    :init
+    (savehist-mode))
 
-    ;; turn on all the icons for completions
+  (use-package marginalia
+    :after vertico
+    :ensure t
+    :custom
+    (marginalia-max-relative-age 0)
+    (marginalia-align 'center)
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+
+  ;; turn on all the icons for completions
   (use-package all-the-icons-completion
     :after(marginalia all-the-icons)
     :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
@@ -325,10 +332,10 @@ Turn on Yas global mode
 : t
 ** Scale Text Hydra
 #+BEGIN_SRC emacs-lisp
-        (defhydra hydra-zoom (global-map "<f17>")
-          "Zoom"
-          ("+" text-scale-increase "in")
-          ("=" text-scale-decrease))
+  (defhydra hydra-zoom (global-map "<f17>")
+    "Zoom"
+    ("+" text-scale-increase "in")
+    ("=" text-scale-decrease))
 #+END_SRC
 
 #+RESULTS:
@@ -350,7 +357,7 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
               (setq avy-background nil)
               (setq avy-styles-alist '((avy-goto-char-2 . at)
                                        (avy-goto-char-timer . at)))))
-    
+
 
 
 
@@ -374,103 +381,158 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
 * Org Config Setup
 ** initial package setup
 #+begin_src emacs-lisp
-    ;;;;; Org mode setup ;;;;;
+              ;;;;; Org mode setup ;;;;;
 
-                                            ;require tempo
+                                          ;require tempo
 
-    (defun org-mode-setup()
-      (org-indent-mode)
-      (variable-pitch-mode 1)
-      (auto-fill-mode 0)
-      (visual-line-mode 1)
-      (org-image-actual-width nil))
-
-
-    (use-package org
-      :hook (org-mode . org-mode-setup)
-      :config
-      (setq org-agenda-files
-            '("~/Orgfiles/tasks.org"
-              "~/Orgfiles/habits.org"))
-
-      (setq org-agenda-start-with-log-mode t)
-      (setq org-log-done 'time)
-      (setq org-log-into-drawer t)
-      (setq org-startup-with-inline-images t)
-      (setq org-ellipsis " ▾"
-            org-hide-emphasis-markers t)
-      (setq org-capture-babel-evaluate t)
-      (setq org-startup-with-inline-images t)
-
-                                            ; org capture
-
-      (setq org-capture-templates
-            '(("t" "Tasks / Projects")
-              ("tt" "Task" entry (file+olp "~/Orgfiles/tasks.org" "Inbox")
-               "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
-              ("ts" "Clockked Entry Subtask" entry (clock)
-               "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
-
-              ("j" "Journal Entries")
-              ("jj" "Journal" entry
-               (file+olp+datetree "~/Orgfiles/journal.org")
-               "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-               ;;
-               :clock-in :clock-resume
-               :empty-lines 1)
-              ("jm" "Meeting" entry
-               (file+olp+datetree "~/Orgfiles/journal.org")
-               "* %<%I:%M %P> - %a :meetings:\n\n%?\n\n"
-               :clock-in :clock-resume
-               :empty-lines 1)
-
-              ("w" "Workflows")
-              ("we" "Checking Email" entry (file+olp+datetree "~/Orgfiles/journal.org")
-               "* Checking Email :email:\n\n%?" :clockin :clock-resume :empty-lines 1)
-
-              ("m" "Metrics Capture")
-
-              ("mw" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
-               "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
-
-                                            ; hotkey bindings
-    (define-key global-map (kbd "C-c o")
-      (lambda () (interactive) (org-capture)))
-
-    (define-key global-map (kbd "C-c j")
-      (lambda () (interactive) (org-capture nil "jj")))
-
-    (define-key global-map (kbd "C-c m")
-      (lambda () (interactive) (org-capture nil "jm")))  
-
-    (define-key global-map (kbd "C-c t")
-      (lambda () (interactive) (org-capture nil "tt")))
-
-    (global-set-key (kbd "C-c a") 'org-agenda)
+  (defun org-mode-setup()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (auto-fill-mode 0)
+    (visual-line-mode 1))
 
 
-    (global-set-key (kbd "s-i") 'org-toggle-inline-images)  
+
+  (use-package org
+    :hook (org-mode . org-mode-setup)
+    :config
+    (setq org-agenda-files
+          (quote ("~/Orgfiles"
+                  )))
 
 
-                                            ; refile targets
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+    (setq org-startup-with-inline-images t)
+    (setq org-ellipsis " ▾"
+          org-hide-emphasis-markers t)
+    (setq org-capture-babel-evaluate t)
+    (setq org-todo-keywords
+          (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+
+    (setq org-todo-keyword-faces
+          (quote (("TODO" :foreground "red" :weight bold)
+                  ("NEXT" :foreground "blue" :weight bold)
+                  ("DONE" :foreground "forest green" :weight bold)
+                  ("WAITING" :foreground "orange" :weight bold)
+                  ("HOLD" :foreground "magenta" :weight bold)
+                  ("CANCELLED" :foreground "forest green" :weight bold)
+                  ("MEETING" :foreground "forest green" :weight bold)
+                  ("PHONE" :foreground "forest green" :weight bold))))
+
+    (setq org-todo-state-tags-triggers
+          (quote (("CANCELLED" ("CANCELLED" . t))
+                  ("WAITING" ("WAITING" . t))
+                  ("HOLD" ("WAITING") ("HOLD" . t))
+                  (done ("WAITING") ("HOLD"))
+                  ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                  ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+                  ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+    ;; s-Left & s-Right moves status
+    (setq org-treat-S-cursor-todo-selection-as-state-change nil)
 
 
-    (setq org-refile-targets
-          '(("archive.org" :maxlevel . 1)
-            ("tasks.org" :maxlevel . 1)))
-                                            ; load org habits
-    (require 'org-habit)
-    (add-to-list 'org-modules 'org-habit)
-    (setq org-habit-graph-column 60)
 
-    (add-to-list  'org-src-lang-modes '("plantuml" . plantuml))
+                                          ; org capture
 
-    ;;;;; end org mode setup ;;;;; 
+    (setq org-capture-templates
+          '(
+            ("t" "Task" entry (file "~/Orgfiles/refile.org")
+             "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
+            ("m" "Meeting" entry (file "~/Orgfiles/refile.org")
+             "* MEETING with %? :MEETING:\n%U")
+            ("ts" "Clocked Entry Subtask" entry (clock)
+             "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
+
+
+            ("g" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
+             "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
+
+                                          ; hotkey bindings
+  (define-key global-map (kbd "C-c c")
+    (lambda () (interactive) (org-capture)))
+
+  (define-key global-map (kbd "C-c m")
+    (lambda () (interactive) (org-capture nil "m")))  
+
+  (define-key global-map (kbd "C-c t")
+    (lambda () (interactive) (org-capture nil "t")))
+
+  (global-set-key (kbd "C-c a") 'org-agenda)
+
+
+  (global-set-key (kbd "s-i") 'org-toggle-inline-images)  
+
+
+                                          ; refile targets
+
+  (setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                   (org-agenda-files :maxlevel . 9))))
+
+                                          ; Use full outline paths for refile targets - we file directly with IDO
+  (setq org-refile-use-outline-path t)
+
+                                          ; Targets complete directly with IDO
+  (setq org-outline-path-complete-in-steps nil)
+
+                                          ; Allow refile to create parent tasks with confirmation
+  (setq org-refile-allow-creating-parent-nodes (quote confirm))
+
+                                          ; Use IDO for both buffer and file completion and ido-everywhere to t
+
+        ;;;; Refile settings
+                                          ; Exclude DONE state tasks from refile targets
+  (defun bh/verify-refile-target ()
+    "Exclude todo keywords with a done state from refile targets"
+    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+  (setq org-refile-target-verify-function 'bh/verify-refile-target)
+
+  ;; (setq org-refile-targets
+  ;;       '(("archive.org" :maxlevel . 1)
+  ;;         ("tasks.org" :maxlevel . 1)))
+                                          ; load org habits
+  (require 'org-habit)
+  (add-to-list 'org-modules 'org-habit)
+  (setq org-habit-graph-column 60)
+
+  (add-to-list  'org-src-lang-modes '("plantuml" . plantuml))
+
+  (global-set-key (kbd "C-c b") 'org-switchb)
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c H-a") 'org-archive-subtree)
+
+  ;; Remove empty LOGBOOK drawers on clock out
+
+              ;;;;; end org mode setup ;;;;;
+
+  ;; Org Agenda Setup
+  ;; Do not dim blocked tasks
+  (setq org-agenda-dim-blocked-tasks nil)
+
+  ;; Compact the block agenda view
+  (setq org-agenda-compact-blocks t)
+
+  (setq org-agenda-custom-commands
+        '(("h" "Agenda and vehicle-related tasks"
+           ((agenda "")
+            (tags-todo "vehicle")
+            (tags "garden")))
+          ("o" "Agenda and Odin-related tasks"
+           ((agenda "")
+            (tags-todo "odin")
+            (tags "office")))))
+
+
 
 #+end_src
 
 #+RESULTS:
-: ((dot . graphviz-dot) (plantuml . plantuml) (C . c) (C++ . c++) (asymptote . asy) (bash . sh) (beamer . latex) (calc . fundamental) (cpp . c++) (ditaa . artist) (dot . fundamental) (elisp . emacs-lisp) (ocaml . tuareg) (screen . shell-script) (shell . sh) (sqlite . sql))
+| h | Agenda and vehicle-related tasks | ((agenda ) (tags-todo vehicle) (tags garden)) |
+| o | Agenda and Odin-related tasks    | ((agenda ) (tags-todo odin) (tags office))    |
 
 ** Font Configuration
 #+begin_src emacs-lisp
@@ -815,25 +877,36 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
 #+END_SRC
 
 #+RESULTS:
-| electric-indent-mode | electric-pair-mode | my-display-numbers-hook | rainbow-delimiters-mode |
+| electric-indent-mode | electric-pair-mode | my-display-numbers-hook  | rainbow-delimiters-mode |
 |                      |                    |                                                  |
 ** Line Numbers
 #+begin_src emacs-lisp
   (setq display-line-numbers-type 'relative)
 
-  (defun my-display-numbers-hook ()
-    (display-line-numbers-mode t)
-    )
-  (add-hook 'prog-mode-hook 'my-display-numbers-hook)
-  (add-hook 'text-mode-hook 'my-display-numbers-hook)
-  (dolist (mode '(org-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  ;; (defun my-display-numbers-hook ()
+  ;;   (display-line-numbers-mode t)
+  ;; (add-hook 'prog-mode-hook 'my-display-numbers-hook)
+  ;; (add-hook 'text-mode-hook 'my-display-numbers-hook)
+  ;; (dolist (mode '(org-mode-hook))
+  ;;   (add-hook mode (lambda () (display-line-numbers-mode 0)))))
+
+  (dolist (mode '(text-mode-hook
+                prog-mode-hook
+                conf-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 1))))
+
+;; Override some modes which derive from the above
+(dolist (mode '(org-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+
 #+end_src
 
 #+RESULTS:
 ** subword mode
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode-hook 'subword-mode)
+  ;;removed for symbol searching
+  ;; (add-hook 'prog-mode-hook 'subword-mode)
 #+END_SRC
 
 #+RESULTS:
@@ -1208,7 +1281,14 @@ Managing Windows, buffers etc
 #+BEGIN_SRC emacs-lisp
 
 
-  (defvar active-harpoon)
+  ;; ascii codes for registers
+  ;; a = 97
+  ;; s = 115
+  ;; d = 100
+  ;; f = 102
+
+  (defvar
+    active-harpoon)
   (setq active-harpoon 102)
 
   (defun current-buffer-is-harpooned (marker)
@@ -1271,13 +1351,13 @@ Managing Windows, buffers etc
     )
 
   (global-set-key (kbd "H-a") 'harpoon-a)
-  (global-set-key (kbd "s-a") 'set-harpoon-a)
+  (global-set-key (kbd "H-s-a") 'set-harpoon-a)
   (global-set-key (kbd "H-s") 'harpoon-s)
-  (global-set-key (kbd "s-s") 'set-harpoon-s)
+  (global-set-key (kbd "H-s-s") 'set-harpoon-s)
   (global-set-key (kbd "H-d") 'harpoon-d)
-  (global-set-key (kbd "s-d") 'set-harpoon-d)
+  (global-set-key (kbd "H-s-d") 'set-harpoon-d)
   (global-set-key (kbd "H-f") 'harpoon-f)
-  (global-set-key (kbd "s-f") 'set-harpoon-f)
+  (global-set-key (kbd "H-s-f") 'set-harpoon-f)
 
 #+END_SRC
 
@@ -1499,6 +1579,29 @@ Managing Windows, buffers etc
                                          ;(load "iy-go-to-char")
    ;;Unbind C-m from return  
 
+
+  (org-agenda-category-icons!
+
+   :material
+   (repeat habits)
+   (group meeting)
+   (cake birthdays)
+   (event event)
+
+
+
+
+   :faicon
+   (cogs config)
+   (tasks tasks)
+   (code odin-proj)
+   (car vehicle)
+   (plus-square health)
+   (archive archive))
+
+
+
+
    ;; eventually make this your first fully functional lisp
    (fset 'yank-and-add-line-numbers
          (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
@@ -1512,6 +1615,7 @@ Managing Windows, buffers etc
    (kmacro-lambda-form [?\C-c ?a ?n ?\H-1] 0 "%d"))
 
 
+
    (global-set-key (kbd "<f13>") 'agenda-fullscreen)
    (global-set-key (kbd "<f14>") 'agenda-with-tasks-fullscreen)
   (global-set-key (kbd "<f6>") 'browse-url-of-buffer)
@@ -1521,9 +1625,16 @@ Managing Windows, buffers etc
   (global-set-key (kbd "C-H-d") 'magit-dispatch)
 
   ;; open
-  
+  (fset 'my/org-insert-clean-link
+   (kmacro-lambda-form [?\[ ?\[ ?\C-d ?\C-y ?\C-f ?\[ ?l ?i ?n ?k ?\C-e ?\]] 0 "%d"))
+
+  (global-set-key (kbd "s-l") 'my/org-insert-clean-link)
+  (global-set-key (kbd "C-M-.") 'counsel-git-grep)
 
 #+END_SRC
+
+#+RESULTS:
+: counsel-git-grep
 
 * Load Music
 #+BEGIN_SRC emacs-lisp
@@ -1624,11 +1735,19 @@ Version: 2018-06-04 2021-03-16 2022-03-05"
         (end-of-visual-line)
       (end-of-line))))
 #+END_SRC
+
+#+RESULTS:
+: xah-end-of-line-or-block
+
 ** Bindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-p") 'xah-beginning-of-line-or-block)
   (global-set-key (kbd "M-n") 'xah-end-of-line-or-block)
 #+END_SRC
+
+#+RESULTS:
+: xah-end-of-line-or-block
+
 * Read Desktop
 #+BEGIN_SRC emacs-lisp
       ;;(desktop-read)
@@ -1714,5 +1833,5 @@ Version: 2018-06-04 2021-03-16 2022-03-05"
 
   #+RESULTS:
   [[file:images/test-dot.svg]]
-p
+
   

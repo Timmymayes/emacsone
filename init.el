@@ -1,5 +1,5 @@
 (fset 'encode-utf-8
-   (kmacro-lambda-form [?\M-x ?r ?e ?v ?e ?r ?t ?- ?b ?u ?f ?f ?e ?r ?- ?w ?i ?t ?h ?- ?c ?o ?d tab return ?u ?t ?f ?- ?8 return ?y ?e ?s return] 0 "%d"))
+      (kmacro-lambda-form [?\M-x ?r ?e ?v ?e ?r ?t ?- ?b ?u ?f ?f ?e ?r ?- ?w ?i ?t ?h ?- ?c ?o ?d tab return ?u ?t ?f ?- ?8 return ?y ?e ?s return] 0 "%d"))
 (global-set-key (kbd "C-c x e") 'encode-utf-8)
 
 (require 'package)
@@ -16,7 +16,7 @@
 (assq-delete-all 'org package--builtins)
 (assq-delete-all 'org package--builtin-versions)
 (unless package-archive-contents
- (package-refresh-contents))
+  (package-refresh-contents))
 
 ;; Initialize use-package on non-Linux platforms
 
@@ -25,6 +25,8 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+(setq backup-directory-alist '(("." . "~/.emacs.d/tmp/backups/")))
 
 (use-package mu4e
   :ensure nil
@@ -77,8 +79,8 @@
 (setq visible-bell t)  ; setup the visible bell
 
 (use-package hydra)
-
-
+;; setup window splitting so its side by side usually. 
+(setq split-width-threshold 80)
 
 (set-face-attribute
  'default nil :font "Fira Code Retina" :height 140)  ; set font
@@ -103,6 +105,7 @@
 
 ;; display time
 (display-time-mode)
+(column-number-mode)
 
 (set-frame-parameter (selected-frame) 'alpha '(90 . 60))
 (add-to-list 'default-frame-alist '(alpha . (90 . 60)))
@@ -139,40 +142,40 @@
   (setq which-key-idle-delay 1))
 
 ;;           (use-package counsel
-  ;;             :bind (("M-x" . counsel-M-x)
-  ;;                    ("C-x b" . counsel-ibuffer)
+;;             :bind (("M-x" . counsel-M-x)
+;;                    ("C-x b" . counsel-ibuffer)
 
 
-  ;; story)))
+;; story)))
 
-  ;;        (use-package ivy-richt
-  ;;        :init
-  ;;      (ivy-rich-mode 1))
+;;        (use-package ivy-richt
+;;        :init
+;;      (ivy-rich-mode 1))
 
-  (use-package vertico
-    :ensure t
-    :custom
-    (vertico-cycle nil)
-    (vertico-count 13)
-    (vertico-resize t)
-    :init
-    (vertico-mode))
+(use-package vertico
+  :ensure t
+  :custom
+  (vertico-cycle nil)
+  (vertico-count 13)
+  (vertico-resize t)
+  :init
+  (vertico-mode))
 
-  (use-package savehist
-    :init
-    (savehist-mode))
+(use-package savehist
+  :init
+  (savehist-mode))
 
-  (use-package marginalia
-    :after vertico
-    :ensure t
-    :custom
-    (marginalia-max-relative-age 0)
-    (marginalia-align 'center)
-    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    :init
-    (marginalia-mode))
+(use-package marginalia
+  :after vertico
+  :ensure t
+  :custom
+  (marginalia-max-relative-age 0)
+  (marginalia-align 'center)
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
 
-  ;; turn on all the icons for completions
+;; turn on all the icons for completions
 (use-package all-the-icons-completion
   :after(marginalia all-the-icons)
   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
@@ -215,16 +218,17 @@
   (org-indent-mode)
   (variable-pitch-mode 1)
   (auto-fill-mode 0)
-  (visual-line-mode 1)
-  (org-image-actual-width nil))
+  (visual-line-mode 1))
+
 
 
 (use-package org
   :hook (org-mode . org-mode-setup)
   :config
   (setq org-agenda-files
-        '("~/Orgfiles/tasks.org"
-          "~/Orgfiles/habits.org"))
+        (quote ("~/Orgfiles"
+                )))
+
 
   (setq org-agenda-start-with-log-mode t)
   (setq org-log-done 'time)
@@ -233,51 +237,58 @@
   (setq org-ellipsis " ▾"
         org-hide-emphasis-markers t)
   (setq org-capture-babel-evaluate t)
-  (setq org-startup-with-inline-images t)
+  (setq org-todo-keywords
+        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("NEXT" :foreground "blue" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold)
+                ("MEETING" :foreground "forest green" :weight bold)
+                ("PHONE" :foreground "forest green" :weight bold))))
+
+  (setq org-todo-state-tags-triggers
+        (quote (("CANCELLED" ("CANCELLED" . t))
+                ("WAITING" ("WAITING" . t))
+                ("HOLD" ("WAITING") ("HOLD" . t))
+                (done ("WAITING") ("HOLD"))
+                ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+  ;; s-Left & s-Right moves status
+  (setq org-treat-S-cursor-todo-selection-as-state-change nil)
+
+
 
                                         ; org capture
 
   (setq org-capture-templates
-        '(("t" "Tasks / Projects")
-          ("tt" "Task" entry (file+olp "~/Orgfiles/tasks.org" "Inbox")
+        '(
+          ("t" "Task" entry (file "~/Orgfiles/refile.org")
            "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
-          ("ts" "Clockked Entry Subtask" entry (clock)
+          ("m" "Meeting" entry (file "~/Orgfiles/refile.org")
+           "* MEETING with %? :MEETING:\n%U")
+          ("ts" "Clocked Entry Subtask" entry (clock)
            "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
 
-          ("j" "Journal Entries")
-          ("jj" "Journal" entry
-           (file+olp+datetree "~/Orgfiles/journal.org")
-           "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-           ;;
-           :clock-in :clock-resume
-           :empty-lines 1)
-          ("jm" "Meeting" entry
-           (file+olp+datetree "~/Orgfiles/journal.org")
-           "* %<%I:%M %P> - %a :meetings:\n\n%?\n\n"
-           :clock-in :clock-resume
-           :empty-lines 1)
 
-          ("w" "Workflows")
-          ("we" "Checking Email" entry (file+olp+datetree "~/Orgfiles/journal.org")
-           "* Checking Email :email:\n\n%?" :clockin :clock-resume :empty-lines 1)
-
-          ("m" "Metrics Capture")
-
-          ("mw" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
+          ("g" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
            "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
 
                                         ; hotkey bindings
-(define-key global-map (kbd "C-c o")
+(define-key global-map (kbd "C-c c")
   (lambda () (interactive) (org-capture)))
 
-(define-key global-map (kbd "C-c j")
-  (lambda () (interactive) (org-capture nil "jj")))
-
 (define-key global-map (kbd "C-c m")
-  (lambda () (interactive) (org-capture nil "jm")))  
+  (lambda () (interactive) (org-capture nil "m")))  
 
 (define-key global-map (kbd "C-c t")
-  (lambda () (interactive) (org-capture nil "tt")))
+  (lambda () (interactive) (org-capture nil "t")))
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 
@@ -287,10 +298,31 @@
 
                                         ; refile targets
 
+(setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                 (org-agenda-files :maxlevel . 9))))
 
-(setq org-refile-targets
-      '(("archive.org" :maxlevel . 1)
-        ("tasks.org" :maxlevel . 1)))
+                                        ; Use full outline paths for refile targets - we file directly with IDO
+(setq org-refile-use-outline-path t)
+
+                                        ; Targets complete directly with IDO
+(setq org-outline-path-complete-in-steps nil)
+
+                                        ; Allow refile to create parent tasks with confirmation
+(setq org-refile-allow-creating-parent-nodes (quote confirm))
+
+                                        ; Use IDO for both buffer and file completion and ido-everywhere to t
+
+      ;;;; Refile settings
+                                        ; Exclude DONE state tasks from refile targets
+(defun bh/verify-refile-target ()
+  "Exclude todo keywords with a done state from refile targets"
+  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+(setq org-refile-target-verify-function 'bh/verify-refile-target)
+
+;; (setq org-refile-targets
+;;       '(("archive.org" :maxlevel . 1)
+;;         ("tasks.org" :maxlevel . 1)))
                                         ; load org habits
 (require 'org-habit)
 (add-to-list 'org-modules 'org-habit)
@@ -298,7 +330,30 @@
 
 (add-to-list  'org-src-lang-modes '("plantuml" . plantuml))
 
-;;;;; end org mode setup ;;;;;
+(global-set-key (kbd "C-c b") 'org-switchb)
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c H-a") 'org-archive-subtree)
+
+;; Remove empty LOGBOOK drawers on clock out
+
+            ;;;;; end org mode setup ;;;;;
+
+;; Org Agenda Setup
+;; Do not dim blocked tasks
+(setq org-agenda-dim-blocked-tasks nil)
+
+;; Compact the block agenda view
+(setq org-agenda-compact-blocks t)
+
+(setq org-agenda-custom-commands
+      '(("h" "Agenda and vehicle-related tasks"
+         ((agenda "")
+          (tags-todo "vehicle")
+          (tags "garden")))
+        ("o" "Agenda and Odin-related tasks"
+         ((agenda "")
+          (tags-todo "odin")
+          (tags "office")))))
 
 (dolist (face '((org-level-1 . 1.2)
                 (org-level-2 . 1.1)
@@ -544,15 +599,24 @@
 
 (setq display-line-numbers-type 'relative)
 
-(defun my-display-numbers-hook ()
-  (display-line-numbers-mode t)
-  )
-(add-hook 'prog-mode-hook 'my-display-numbers-hook)
-(add-hook 'text-mode-hook 'my-display-numbers-hook)
+  ;; (defun my-display-numbers-hook ()
+  ;;   (display-line-numbers-mode t)
+  ;; (add-hook 'prog-mode-hook 'my-display-numbers-hook)
+  ;; (add-hook 'text-mode-hook 'my-display-numbers-hook)
+  ;; (dolist (mode '(org-mode-hook))
+  ;;   (add-hook mode (lambda () (display-line-numbers-mode 0)))))
+
+  (dolist (mode '(text-mode-hook
+                prog-mode-hook
+                conf-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 1))))
+
+;; Override some modes which derive from the above
 (dolist (mode '(org-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-(add-hook 'prog-mode-hook 'subword-mode)
+;;removed for symbol searching
+;; (add-hook 'prog-mode-hook 'subword-mode)
 
 (use-package evil-nerd-commenter
   :bind ("M-;" . evilnc-comment-or-uncomment-lines))
@@ -802,7 +866,14 @@
 (global-set-key (kbd "C-H-t") 'dired-jump)
 (global-set-key (kbd "H-k") 'kill-current-buffer)
 
-(defvar active-harpoon)
+;; ascii codes for registers
+;; a = 97
+;; s = 115
+;; d = 100
+;; f = 102
+
+(defvar
+  active-harpoon)
 (setq active-harpoon 102)
 
 (defun current-buffer-is-harpooned (marker)
@@ -865,13 +936,13 @@
   )
 
 (global-set-key (kbd "H-a") 'harpoon-a)
-(global-set-key (kbd "s-a") 'set-harpoon-a)
+(global-set-key (kbd "H-s-a") 'set-harpoon-a)
 (global-set-key (kbd "H-s") 'harpoon-s)
-(global-set-key (kbd "s-s") 'set-harpoon-s)
+(global-set-key (kbd "H-s-s") 'set-harpoon-s)
 (global-set-key (kbd "H-d") 'harpoon-d)
-(global-set-key (kbd "s-d") 'set-harpoon-d)
+(global-set-key (kbd "H-s-d") 'set-harpoon-d)
 (global-set-key (kbd "H-f") 'harpoon-f)
-(global-set-key (kbd "s-f") 'set-harpoon-f)
+(global-set-key (kbd "H-s-f") 'set-harpoon-f)
 
 (defun my/pop-local-mark-ring ()
   "Move cursor to last mark position of current buffer, repeat calls will cycle"
@@ -994,6 +1065,29 @@
                                        ;(load "iy-go-to-char")
  ;;Unbind C-m from return  
 
+
+(org-agenda-category-icons!
+
+ :material
+ (repeat habits)
+ (group meeting)
+ (cake birthdays)
+ (event event)
+
+
+
+
+ :faicon
+ (cogs config)
+ (tasks tasks)
+ (code odin-proj)
+ (car vehicle)
+ (plus-square health)
+ (archive archive))
+
+
+
+
  ;; eventually make this your first fully functional lisp
  (fset 'yank-and-add-line-numbers
        (kmacro-lambda-form [?\C-x ?r ?N ?\C-x ?\C-x ?÷ ?\C-z] 0 "%d"))
@@ -1007,6 +1101,7 @@
  (kmacro-lambda-form [?\C-c ?a ?n ?\H-1] 0 "%d"))
 
 
+
  (global-set-key (kbd "<f13>") 'agenda-fullscreen)
  (global-set-key (kbd "<f14>") 'agenda-with-tasks-fullscreen)
 (global-set-key (kbd "<f6>") 'browse-url-of-buffer)
@@ -1016,6 +1111,11 @@
 (global-set-key (kbd "C-H-d") 'magit-dispatch)
 
 ;; open
+(fset 'my/org-insert-clean-link
+ (kmacro-lambda-form [?\[ ?\[ ?\C-d ?\C-y ?\C-f ?\[ ?l ?i ?n ?k ?\C-e ?\]] 0 "%d"))
+
+(global-set-key (kbd "s-l") 'my/org-insert-clean-link)
+(global-set-key (kbd "C-M-.") 'counsel-git-grep)
 
 (defun play-retro-sax ()
     "Launch a retro sax 3 hour video"
