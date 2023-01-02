@@ -275,7 +275,8 @@
            "* MEETING with %? :MEETING:\n%U")
           ("ts" "Clocked Entry Subtask" entry (clock)
            "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
-
+          ("n" "note" entry (file "~/Orgfiles/refile.org")
+           "* %? :NOTE:\n%u\n%a\n")
 
           ("g" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
            "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
@@ -345,15 +346,11 @@
 ;; Compact the block agenda view
 (setq org-agenda-compact-blocks t)
 
-(setq org-agenda-custom-commands
-      '(("h" "Agenda and vehicle-related tasks"
-         ((agenda "")
-          (tags-todo "vehicle")
-          (tags "garden")))
-        ("o" "Agenda and Odin-related tasks"
-         ((agenda "")
-          (tags-todo "odin")
-          (tags "office")))))
+;; (setq org-agenda-custom-commands
+;;       (quote ("h" "Habits" tags-todo "Style=\"habit\""
+;;          ((org-agenda-overriding-header "Habits")
+;;           (org-agenda-sorting-strategy
+;;            '(todo-state-down effort-up category-keep))))))
 
 (dolist (face '((org-level-1 . 1.2)
                 (org-level-2 . 1.1)
@@ -857,14 +854,18 @@
 (global-set-key (kbd "M-]") 'treemacs-select-window)
 (global-set-key (kbd "C-c s t") 'treemacs)
 (global-set-key (kbd "H-<escape>") 'delete-window)
+(global-set-key (kbd "C-H-<escape>") 'delete-frame)
 (global-set-key (kbd "H-1") 'delete-other-windows)
+(global-set-key (kbd "C-H-1") 'delete-other-frames)
 (global-set-key (kbd "H-2") 'split-window-below)
+(global-set-key (kbd "C-H-2") 'make-frame-command) 
 (global-set-key (kbd "H-3") 'split-window-right)
 (global-set-key (kbd "C-H-b") 'buffer-menu)
 (global-set-key (kbd "H-b") 'buffer-quick-switch)
 (global-set-key (kbd "C-H-g") 'list-bookmarks)
 (global-set-key (kbd "C-H-t") 'dired-jump)
 (global-set-key (kbd "H-k") 'kill-current-buffer)
+(global-set-key (kbd "H-+") 'other-frame)
 
 ;; ascii codes for registers
 ;; a = 97
@@ -1065,7 +1066,7 @@
                                        ;(load "iy-go-to-char")
  ;;Unbind C-m from return  
 
-
+(load "org-agenda-category-icons")
 (org-agenda-category-icons!
 
  :material
@@ -1116,6 +1117,10 @@
 
 (global-set-key (kbd "s-l") 'my/org-insert-clean-link)
 (global-set-key (kbd "C-M-.") 'counsel-git-grep)
+
+
+;;indenting commands
+(global-set-key (kbd "C-c i c") 'indent-to-column)
 
 (defun play-retro-sax ()
     "Launch a retro sax 3 hour video"
