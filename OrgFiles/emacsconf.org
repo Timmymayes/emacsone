@@ -5,23 +5,13 @@
 * Config Overview
 This config is my personal config and is evolving over time. You can find the updated version here: [[https://github.com/Timmymayes/emacsone/blob/main/OrgFiles/emacsconf.org][Emacsone]].
 
+This is my first run through configuring emacs so there is probably a lot of inefficiency in the layout and possibly some redundancy that needs cleaning up. That being said, this is a living document that will probably be evolving for some time before it gets a pure reboot. 
+
 * Initialization
-Initial setup for the core of Emacs.
+Initial setup for the core of Emacs. Mostly low level system type elements and package usage. 
 ** UTF-8 buffer revert comand
-On the rare occasion utf-8 encoding is lost there is a hotkey for it. 
-*** Related Keymap
-| Hotkey  | Command      | Desc                            |
-|---------+--------------+---------------------------------|
-| C-c x e | encode-utf-8 | Revert buffer encoding to utf-8 |
-
-#+BEGIN_SRC emacs-lisp
-  (fset 'encode-utf-8
-        (kmacro-lambda-form [?\M-x ?r ?e ?v ?e ?r ?t ?- ?b ?u ?f ?f ?e ?r ?- ?w ?i ?t ?h ?- ?c ?o ?d tab return ?u ?t ?f ?- ?8 return ?y ?e ?s return] 0 "%d"))
-  (global-set-key (kbd "C-c x e") 'encode-utf-8)
-#+END_SRC
-
-#+RESULTS:
-: encode-utf-8
+On the rare occasion utf-8 encoding is lost this is a note for myself on how to fix it.
+- (revert-buffer-with-coding-system (C-x ret r) then select utf-8
 
 ** Package Setup
 Require package and setup all package archives. Note changes to org-mode repositories has some adjusted code in there that may change. 
@@ -63,6 +53,7 @@ Install use-package and enable ':ensure t' globally. the ':ensusre' keyword caus
 : t
 
 ** Keep Folders Clean
+Move all backup files into a single directory. Another option is to turn off backups completely but I don't mind having backups in case I screw something up. 
 #+BEGIN_SRC emacs-lisp
   (setq backup-directory-alist '(("." . "~/.emacs.d/tmp/backups/")))
 #+END_SRC
@@ -71,14 +62,14 @@ Install use-package and enable ':ensure t' globally. the ':ensusre' keyword caus
 : ((. . ~/.emacs.d/tmp/backups/))
 
 * Mail with mu4e
-Setup gmail to use mu4e
+Setup gmail to use mu4e. Currently this only works on my main linux install on the home pc. Largely becuase I don't need to check my current work's email in emacs. I'd rather keep it seperate. 
 ** Config
 #+BEGIN_SRC emacs-lisp
   (use-package mu4e
     :ensure nil
     ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
     :config
-    ;; this si set to t to avoid mail syncing issues
+    ;; this is set to t to avoid mail syncing issues
     (setq mu4e-change-filenames-when-moving t)
     ;; refresh mail using isync every 10 minutes
     (setq mu4e-update-interval (* 10 60))
@@ -444,13 +435,10 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
              "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
             ("m" "Meeting" entry (file "~/Orgfiles/refile.org")
              "* MEETING with %? :MEETING:\n%U")
-            ("ts" "Clocked Entry Subtask" entry (clock)
-             "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
             ("n" "note" entry (file "~/Orgfiles/refile.org")
-             "* %? :NOTE:\n%u\n%a\n")
-
+             "* %? :NOTE:\n%u\n%a\n %i" :empty-lines 1)
             ("g" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
-             "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
+             "| %u | %^{Weight} | %^{Notes} |" :kill-buffer t))))
 
                                           ; hotkey bindings
   (define-key global-map (kbd "C-c c")
@@ -513,6 +501,7 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
   ;; Org Agenda Setup
   ;; Do not dim blocked tasks
   (setq org-agenda-dim-blocked-tasks nil)
+  (add-hook 'org-agenda-finalize-hook #'hl-line-mode)
 
   ;; Compact the block agenda view
   (setq org-agenda-compact-blocks t)
@@ -523,13 +512,15 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
   ;;           (org-agenda-sorting-strategy
   ;;            '(todo-state-down effort-up category-keep))))))
 
-
+  ;; setup v-align mode for tables
+  (use-package valign)
+  (add-hook 'org-mode-hook #'valign-mode)
 
 
 #+end_src
 
 #+RESULTS:
-: t
+| valign-mode | (lambda nil (display-line-numbers-mode 0)) | (closure (org-agenda-skip-regexp org-table1-hline-regexp org-table-tab-recognizes-table.el org-table-dataline-regexp org-table-any-border-regexp org-agenda-restriction-lock-overlay org-agenda-overriding-restriction org-agenda-diary-file org-complex-heading-regexp t) nil (setq imenu-create-index-function 'org-imenu-get-tree)) | org-mode-visual-fill | (lambda nil (add-hook 'after-save-hook #'emacsone/org-babel-tangle-config)) | org-bullets-mode | org-mode-setup | (closure (org--rds reftex-docstruct-symbol org-element-greater-elements visual-fill-column-width org-clock-history org-agenda-current-date org-with-time org-defdecode org-def org-read-date-inactive org-ans2 org-ans1 org-columns-current-fmt-compiled org-clock-current-task org-clock-effort org-agenda-skip-function org-agenda-skip-comment-trees org-agenda-archives-mode org-end-time-was-given org-time-was-given org-log-note-extra org-log-note-purpose org-log-post-message org-last-inserted-timestamp org-last-changed-timestamp org-entry-property-inherited-from org-blocked-by-checkboxes org-state org-agenda-headline-snapshot-before-repeat org-agenda-buffer-name org-agenda-start-on-weekday org-agenda-buffer-tmp-name org-priority-regexp org-mode-abbrev-table org-mode-syntax-table buffer-face-mode-face org-tbl-menu org-org-menu org-struct-menu org-entities org-last-state org-id-track-globally org-clock-start-time texmathp-why remember-data-file org-agenda-tags-todo-honor-ignore-options iswitchb-temp-buflist calc-embedded-open-mode calc-embedded-open-formula calc-embedded-close-formula align-mode-rules-list org-emphasis-alist org-emphasis-regexp-components org-export-registered-backends org-modules crm-separator org-babel-load-languages org-id-overriding-file-name org-indent-indentation-per-level org-element--timestamp-regexp org-element-paragraph-separate org-inlinetask-min-level t) nil (add-hook 'change-major-mode-hook 'org-show-all 'append 'local)) | (closure (org-src-window-setup *this* org-babel-confirm-evaluate-answer-no org-babel-tangle-uncomment-comments org-src-preserve-indentation org-src-lang-modes org-edit-src-content-indentation org-babel-library-of-babel t) nil (add-hook 'change-major-mode-hook #'org-babel-show-result-all 'append 'local)) | org-babel-result-hide-spec | org-babel-hide-all-hashes |
 
 ** Font Configuration
 #+begin_src emacs-lisp
@@ -671,7 +662,7 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
               (require 'org-roam-dailies)
               (org-roam-db-autosync-mode))
 
-            ;;  Bind this to C-c n I
+            ;;  Bind this to C-c n In
             (defun org-roam-node-insert-immediate (arg &rest args)
               (interactive "P")
               (let ((args (cons arg args))
@@ -718,6 +709,58 @@ Great article on Avy - https://karthinks.com/software/avy-can-do-anything/
 
 #+RESULTS:
 : org-roam-ui-open
+
+* Org-Remark
+#+BEGIN_SRC emacs-lisp
+
+    (use-package org-remark)
+    (org-remark-global-tracking-mode 1)
+    (with-eval-after-load 'org-remark
+      (define-key org-remark-mode-map (kbd "C-c r o") #'org-remark-open) 
+      (define-key org-remark-mode-map (kbd "C-c r b m") #'org-remark-mark-yellow) 
+      (define-key org-remark-mode-map (kbd "C-c r b o") #'org-remark-mark-orange-bg) 
+      (define-key org-remark-mode-map (kbd "C-c r b b") #'org-remark-mark-blue-bg) 
+      (define-key org-remark-mode-map (kbd "C-c r b g") #'org-remark-mark-grey-bg) 
+      (define-key org-remark-mode-map (kbd "C-c r b l b") #'org-remark-mark-light-blue-bg) 
+      (define-key org-remark-mode-map (kbd "C-c r f o") #'org-remark-mark-orange-fg) 
+      (define-key org-remark-mode-map (kbd "C-c r f c") #'org-remark-mark-cyan-fg) 
+      (define-key org-remark-mode-map (kbd "C-c r f b") #'org-remark-mark-blue-fg) 
+      (define-key org-remark-mode-map (kbd "C-c r f g") #'org-remark-mark-grey-fg) 
+      (define-key org-remark-mode-map (kbd "C-c r f p") #'org-remark-mark-pink-fg)
+      (define-key org-remark-mode-map (kbd "C-c r h o") #'org-remark-mark-orange-bg-bold)       
+      (define-key org-remark-mode-map (kbd "C-c r d t") #'org-remark-mark-typo) 
+      (define-key org-remark-mode-map (kbd "C-c r ]") #'org-remark-view-next) 
+      (define-key org-remark-mode-map (kbd "C-c r [") #'org-remark-view-prev) 
+      (define-key org-remark-mode-map (kbd "C-c r r") #'org-remark-remove))
+
+
+  (org-remark-create "typo"
+                     '(:underline (:color "#8f0075" :style wave))
+                     '(help-echo "Fix the typo"))
+  (org-remark-create "grey-bg"
+                     '(doom-modeline-battery-normal))
+  (org-remark-create "orange-bg-bold"
+                     '(isearch))
+  (org-remark-create "orange-bg"
+                     '(:background "chocolate" :foreground "cornsilk"))
+  (org-remark-create "blue-fg"
+                     '(gnus-group-mail-2))
+  (org-remark-create "orange-fg"
+                     '(alert-high-face))
+  (org-remark-create "cyan-fg"
+                     '(:foreground "turquoise"))
+  (org-remark-create "grey-fg"
+                     '(file-name-shadow))
+  (org-remark-create "pink-fg"
+                     '(gnus-group-news-4))
+  (org-remark-create "blue-bg"
+                     '(smerge-refined-changed))
+  (org-remark-create "light-blue-bg"
+                     '(avy-goto-char-timer-face))
+
+#+END_SRC
+
+#+RESULTS:
 
 * Ledger-Mode
 #+BEGIN_SRC emacs-lisp
@@ -1100,7 +1143,7 @@ Following setup from here: https://www.chadstovern.com/javascript-in-emacs-revis
     (interactive)
     (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
     (local-set-key (kbd"C-c b") 'js-send-buffer)
-    (local-set-key (kbd"C-c r") 'js-send-region)
+    ;;(local-set-key (kbd"C-c r") 'js-send-region)
     (local-set-key (kbd"C-c C-r") 'js-send-region-and-go))
 
 

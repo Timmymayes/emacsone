@@ -1,7 +1,3 @@
-(fset 'encode-utf-8
-      (kmacro-lambda-form [?\M-x ?r ?e ?v ?e ?r ?t ?- ?b ?u ?f ?f ?e ?r ?- ?w ?i ?t ?h ?- ?c ?o ?d tab return ?u ?t ?f ?- ?8 return ?y ?e ?s return] 0 "%d"))
-(global-set-key (kbd "C-c x e") 'encode-utf-8)
-
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ;; old org link commented out for deprication 
@@ -32,7 +28,7 @@
   :ensure nil
   ;; :load-path "/usr/share/emacs/site-lisp/mu4e/"
   :config
-  ;; this si set to t to avoid mail syncing issues
+  ;; this is set to t to avoid mail syncing issues
   (setq mu4e-change-filenames-when-moving t)
   ;; refresh mail using isync every 10 minutes
   (setq mu4e-update-interval (* 10 60))
@@ -273,13 +269,10 @@
            "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
           ("m" "Meeting" entry (file "~/Orgfiles/refile.org")
            "* MEETING with %? :MEETING:\n%U")
-          ("ts" "Clocked Entry Subtask" entry (clock)
-           "* TODO %?\n %U\n %a\n %i" :empty-lines 1)
           ("n" "note" entry (file "~/Orgfiles/refile.org")
-           "* %? :NOTE:\n%u\n%a\n")
-
+           "* %? :NOTE:\n%u\n%a\n %i" :empty-lines 1)
           ("g" "Weight" table-line (file+headline "~/Orgfiles/metrics.org" "Weight")
-           "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t))))
+           "| %u | %^{Weight} | %^{Notes} |" :kill-buffer t))))
 
                                         ; hotkey bindings
 (define-key global-map (kbd "C-c c")
@@ -342,6 +335,7 @@
 ;; Org Agenda Setup
 ;; Do not dim blocked tasks
 (setq org-agenda-dim-blocked-tasks nil)
+(add-hook 'org-agenda-finalize-hook #'hl-line-mode)
 
 ;; Compact the block agenda view
 (setq org-agenda-compact-blocks t)
@@ -351,6 +345,10 @@
 ;;          ((org-agenda-overriding-header "Habits")
 ;;           (org-agenda-sorting-strategy
 ;;            '(todo-state-down effort-up category-keep))))))
+
+;; setup v-align mode for tables
+(use-package valign)
+(add-hook 'org-mode-hook #'valign-mode)
 
 (dolist (face '((org-level-1 . 1.2)
                 (org-level-2 . 1.1)
@@ -454,7 +452,7 @@
   (require 'org-roam-dailies)
   (org-roam-db-autosync-mode))
 
-;;  Bind this to C-c n I
+;;  Bind this to C-c n In
 (defun org-roam-node-insert-immediate (arg &rest args)
   (interactive "P")
   (let ((args (cons arg args))
@@ -495,6 +493,51 @@
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t))
+
+(use-package org-remark)
+  (org-remark-global-tracking-mode 1)
+  (with-eval-after-load 'org-remark
+    (define-key org-remark-mode-map (kbd "C-c r o") #'org-remark-open) 
+    (define-key org-remark-mode-map (kbd "C-c r b m") #'org-remark-mark-yellow) 
+    (define-key org-remark-mode-map (kbd "C-c r b o") #'org-remark-mark-orange-bg) 
+    (define-key org-remark-mode-map (kbd "C-c r b b") #'org-remark-mark-blue-bg) 
+    (define-key org-remark-mode-map (kbd "C-c r b g") #'org-remark-mark-grey-bg) 
+    (define-key org-remark-mode-map (kbd "C-c r b l b") #'org-remark-mark-light-blue-bg) 
+    (define-key org-remark-mode-map (kbd "C-c r f o") #'org-remark-mark-orange-fg) 
+    (define-key org-remark-mode-map (kbd "C-c r f c") #'org-remark-mark-cyan-fg) 
+    (define-key org-remark-mode-map (kbd "C-c r f b") #'org-remark-mark-blue-fg) 
+    (define-key org-remark-mode-map (kbd "C-c r f g") #'org-remark-mark-grey-fg) 
+    (define-key org-remark-mode-map (kbd "C-c r f p") #'org-remark-mark-pink-fg)
+    (define-key org-remark-mode-map (kbd "C-c r h o") #'org-remark-mark-orange-bg-bold)       
+    (define-key org-remark-mode-map (kbd "C-c r d t") #'org-remark-mark-typo) 
+    (define-key org-remark-mode-map (kbd "C-c r ]") #'org-remark-view-next) 
+    (define-key org-remark-mode-map (kbd "C-c r [") #'org-remark-view-prev) 
+    (define-key org-remark-mode-map (kbd "C-c r r") #'org-remark-remove))
+
+
+(org-remark-create "typo"
+                   '(:underline (:color "#8f0075" :style wave))
+                   '(help-echo "Fix the typo"))
+(org-remark-create "grey-bg"
+                   '(doom-modeline-battery-normal))
+(org-remark-create "orange-bg-bold"
+                   '(isearch))
+(org-remark-create "orange-bg"
+                   '(:background "chocolate" :foreground "cornsilk"))
+(org-remark-create "blue-fg"
+                   '(gnus-group-mail-2))
+(org-remark-create "orange-fg"
+                   '(alert-high-face))
+(org-remark-create "cyan-fg"
+                   '(:foreground "turquoise"))
+(org-remark-create "grey-fg"
+                   '(file-name-shadow))
+(org-remark-create "pink-fg"
+                   '(gnus-group-news-4))
+(org-remark-create "blue-bg"
+                   '(smerge-refined-changed))
+(org-remark-create "light-blue-bg"
+                   '(avy-goto-char-timer-face))
 
 (use-package ledger-mode
   :ensure t
@@ -761,7 +804,7 @@
   (interactive)
   (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
   (local-set-key (kbd"C-c b") 'js-send-buffer)
-  (local-set-key (kbd"C-c r") 'js-send-region)
+  ;;(local-set-key (kbd"C-c r") 'js-send-region)
   (local-set-key (kbd"C-c C-r") 'js-send-region-and-go))
 
 
